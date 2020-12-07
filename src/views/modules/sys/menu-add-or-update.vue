@@ -127,7 +127,9 @@
     },
     methods: {
       init (id) {
+        console.log(id)
         this.dataForm.id = id || 0
+        console.log(this.dataForm.id)
         this.$http({
           url: this.$http.adornUrl('/sys/menu/select'),
           method: 'get',
@@ -182,10 +184,10 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : '`update`'}`),
               method: 'post',
               data: this.$http.adornData({
-                'menuId': this.dataForm.id || undefined,
+                'menuId': this.dataForm.id,
                 'type': this.dataForm.type,
                 'name': this.dataForm.name,
                 'parentId': this.dataForm.parentId,
