@@ -20,8 +20,8 @@
       {{dataForm.userCount}}
     </el-form-item>
     <el-form-item label="是否计划内：">
-      <span v-if="dataForm.isPlan === 0">是</span>
-      <span v-if="dataForm.isPlan === 1">否</span>
+      <span v-if="!dataForm.isPlan">否</span>
+      <span v-if="dataForm.isPlan">是</span>
     </el-form-item>
     <el-form-item label="停电原因：">
       {{dataForm.reason}}
@@ -29,11 +29,11 @@
     <el-form-item label="近两个月停电次数：">
       {{dataForm.blackoutCount}}
     </el-form-item>
-    <el-form-item label="台区信息：">
-   <br>
+      <h4>台区信息</h4>
+    <br>
       <el-table
         :data="tableData"
-        style="width: 80%">
+        style="width: 100%">
         <el-table-column
           prop="date"
           label="序号"
@@ -55,7 +55,6 @@
           width="180">
         </el-table-column>
       </el-table>
-    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">确定</el-button>
@@ -78,9 +77,7 @@
           userCount: '',
           isPlan: '',
           reason: '',
-          blackoutCount: '',
-          gmtCreate: '',
-          gmtModified: ''
+          blackoutCount: ''
         },
         tableData: [{
           date: '2016-05-02',
