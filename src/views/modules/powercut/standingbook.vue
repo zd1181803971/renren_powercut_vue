@@ -7,7 +7,7 @@
         </span>
         <el-input
           placeholder="请输入单位名称"
-          v-model="dataForm.input1"
+          v-model="dataForm.station"
           clearable>
         </el-input>
       </el-form-item>
@@ -18,7 +18,7 @@
       </span>
      <div class="block">
           <el-date-picker
-            v-model="dataForm.value2"
+            v-model="dataForm.startTime"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -34,7 +34,7 @@
           停电原因:
         </span>
         <div>
-          <el-select v-model="dataForm.value" placeholder="请选择">
+          <el-select v-model="dataForm.reason" placeholder="请选择">
             <el-option
               v-for="item in dataForm.options"
               :key="item.value"
@@ -49,7 +49,7 @@
         <span>
           台区经理:
         </span>
-        <el-input v-model="dataForm.input2" placeholder="请输入台区经理"></el-input>
+        <el-input v-model="dataForm.manager" placeholder="请输入台区经理"></el-input>
       </el-form-item>
 
     </el-form>
@@ -57,7 +57,7 @@
     <el-form>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="">清空</el-button>
+        <el-button @click="clear()">清空</el-button>
         <el-button @click="">导出</el-button>
         <el-button v-if="isAuth('powercut:standingbook:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
@@ -165,9 +165,9 @@
       return {
         dataForm: {
           // 单位名称
-          input1: '',
+          station: '',
           // 台区经理
-          input2: '',
+          manager: '',
           // pickerOptions日期时间
           pickerOptions: {
             shortcuts: [{
@@ -197,7 +197,7 @@
             }]
           },
           value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
-          value2: '',
+          startTime: '',
           // 停电原因
           options: [{
             value: '选项1',
@@ -215,7 +215,7 @@
             value: '选项5',
             label: '韩国欧巴'
           }],
-          value: ''
+          reason: ''
         },
         ids: 1,
         addOrUpdateVisible: false,
@@ -234,6 +234,12 @@
       this.getDataList()
     },
     methods: {
+      clear () {
+        this.dataForm.station = null
+        this.dataForm.startTime = null
+        this.dataForm.reason = null
+        this.dataForm.manager = null
+      },
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {

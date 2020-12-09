@@ -3,7 +3,7 @@
 
       <el-tag size="big">总体情况</el-tag>
    <h2>
-     ①至②，公司共发生台区停电③台次,涉及10千伏线路④条，其中公变台区停电⑤台次、专变台区停电⑥台次，计划停电⑦台次、故障停电⑧台次。
+     {{ getDate() }}至{{ getDate() }}，公司共发生台区停电台次,涉及1 千伏线路④条，其中公变台区停电⑤台次、专变台区停电⑥台次，计划停电⑦台次、故障停电⑧台次。
    </h2>
 
 
@@ -36,13 +36,15 @@
 
 <script>
 import echarts from 'echarts'
+import {formatDate} from '../../utils'
 export default {
   data () {
     return {
       chartLine: null,
       chartBar: null,
       chartPie: null,
-      chartScatter: null
+      chartScatter: null,
+      currentDate: ''
     }
   },
   mounted () {
@@ -67,6 +69,9 @@ export default {
     }
   },
   methods: {
+    getDate () {
+      return formatDate(new Date(), 'yyyy-MM-dd')
+    },
     // 折线图
     initChartLine () {
       var option = {

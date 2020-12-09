@@ -2,11 +2,13 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+       查询
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('powercut:district:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button @click="">清空</el-button>
+        <el-button @click="">导入</el-button>
+        <el-button @click="">模板下载</el-button>
         <el-button v-if="isAuth('powercut:district:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -57,12 +59,21 @@
         header-align="center"
         align="center"
         label="台区用户名称">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="showHandle(scope.row.id)">
+            {{scope.row.userName}}
+          </el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="userNatrue"
         header-align="center"
         align="center"
         label="用户性质">
+        <template slot-scope="scope">
+          <span v-if="scope.row.userNatrue">公用</span>
+          <span v-if="!scope.row.userNatrue">专用</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="manager"
@@ -75,18 +86,6 @@
         header-align="center"
         align="center"
         label="用户数量">
-      </el-table-column>
-      <el-table-column
-        prop="gmtCreate"
-        header-align="center"
-        align="center"
-        label="数据创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="gmtModified"
-        header-align="center"
-        align="center"
-        label="数据修改时间">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -111,11 +110,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <show-page v-if="showVisible" ref="showPage" @refreshDataList="getDataList"></show-page>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './district-add-or-update'
+  import ShowPage from './district-show'
   export default {
     data () {
       return {
@@ -128,11 +129,13 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        showVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate, ShowPage
+
     },
     activated () {
       this.getDataList()
@@ -146,8 +149,7 @@
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
-            'limit': this.pageSize,
-            'key': this.dataForm.key
+            'limit': this.pageSize
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
@@ -180,6 +182,13 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 展示详细信息
+      showHandle (id) {
+        this.showVisible = true
+        this.$nextTick(() => {
+          this.$refs.showPage.init(id)
         })
       },
       // 删除

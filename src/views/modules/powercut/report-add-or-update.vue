@@ -22,16 +22,10 @@
     <el-form-item label="备注" prop="remarks">
       <el-input v-model="dataForm.remarks" placeholder="备注"></el-input>
     </el-form-item>
-    <el-form-item label="数据创建时间" prop="gmtCreate">
-      <el-input v-model="dataForm.gmtCreate" placeholder="数据创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="数据修改时间" prop="gmtModified">
-      <el-input v-model="dataForm.gmtModified" placeholder="数据修改时间"></el-input>
-    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">下一步</el-button>
     </span>
   </el-dialog>
 </template>
@@ -70,12 +64,6 @@
           ],
           remarks: [
             { required: true, message: '备注不能为空', trigger: 'blur' }
-          ],
-          gmtCreate: [
-            { required: true, message: '数据创建时间不能为空', trigger: 'blur' }
-          ],
-          gmtModified: [
-            { required: true, message: '数据修改时间不能为空', trigger: 'blur' }
           ]
         }
       }

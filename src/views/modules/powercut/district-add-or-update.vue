@@ -20,19 +20,16 @@
       <el-input v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
     </el-form-item>
     <el-form-item label="用户性质" prop="userNatrue">
-      <el-input v-model="dataForm.userNatrue" placeholder="用户性质"></el-input>
+      <template>
+        <el-radio v-model="dataForm.userNatrue" label="0">公用</el-radio>
+        <el-radio v-model="dataForm.userNatrue" label="1">专用</el-radio>
+      </template>
     </el-form-item>
     <el-form-item label="台区经理" prop="manager">
       <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
     </el-form-item>
     <el-form-item label="用户数量" prop="userCount">
       <el-input v-model="dataForm.userCount" placeholder="用户数量"></el-input>
-    </el-form-item>
-    <el-form-item label="数据创建时间" prop="gmtCreate">
-      <el-input v-model="dataForm.gmtCreate" placeholder="数据创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="数据修改时间" prop="gmtModified">
-      <el-input v-model="dataForm.gmtModified" placeholder="数据修改时间"></el-input>
     </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -84,12 +81,6 @@
           ],
           userCount: [
             { required: true, message: '用户数量不能为空', trigger: 'blur' }
-          ],
-          gmtCreate: [
-            { required: true, message: '数据创建时间不能为空', trigger: 'blur' }
-          ],
-          gmtModified: [
-            { required: true, message: '数据修改时间不能为空', trigger: 'blur' }
           ]
         }
       }

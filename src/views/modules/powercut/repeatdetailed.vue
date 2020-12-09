@@ -2,7 +2,25 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        在（60）天内，停电（3）次以上，记为重复停电
+        <span>在</span>
+        <el-select v-model="dataForm.days" clearable placeholder="请选择">
+          <el-option
+            v-for="item in dataForm.options1"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <span>天内，停电</span>
+        <el-select v-model="dataForm.nexts" clearable placeholder="请选择">
+          <el-option
+            v-for="item in dataForm.options2"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+        <span>次以上，记为重复停电</span>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -148,7 +166,40 @@
     data () {
       return {
         dataForm: {
-          key: ''
+          days: '',
+          nexts: '',
+          options1: [{
+            value: '3',
+            label: '3'
+          }, {
+            value: '10',
+            label: '10'
+          }, {
+            value: '20',
+            label: '20'
+          }, {
+            value: '30',
+            label: '30'
+          }, {
+            value: '60',
+            label: '60'
+          }],
+          options2: [{
+            value: '1',
+            label: '1'
+          }, {
+            value: '3',
+            label: '3'
+          }, {
+            value: '5',
+            label: '5'
+          }, {
+            value: '10',
+            label: '10'
+          }, {
+            value: '30',
+            label: '30'
+          }]
         },
         dataList: [],
         pageIndex: 1,

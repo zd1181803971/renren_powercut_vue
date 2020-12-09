@@ -6,6 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <el-button @click="">预览</el-button>
+        <el-button @click="">下载</el-button>
         <el-button v-if="isAuth('powercut:report:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('powercut:report:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
@@ -53,28 +55,10 @@
         label="报告创建时间">
       </el-table-column>
       <el-table-column
-        prop="reportHref"
-        header-align="center"
-        align="center"
-        label="报告地址">
-      </el-table-column>
-      <el-table-column
         prop="remarks"
         header-align="center"
         align="center"
         label="备注">
-      </el-table-column>
-      <el-table-column
-        prop="gmtCreate"
-        header-align="center"
-        align="center"
-        label="数据创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="gmtModified"
-        header-align="center"
-        align="center"
-        label="数据修改时间">
       </el-table-column>
       <el-table-column
         fixed="right"
