@@ -2,10 +2,34 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input v-model="dataForm.key" placeholder="参数名" clearable></el-input>
+        <span>
+          报告名称：
+        </span>
+        <el-input
+          placeholder="请输入单位名称"
+          v-model="dataForm.reportName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          创建时间:
+      </span>
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.startTime"
+            type="datetimerange"
+            :picker-options="dataForm.pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </div>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
+        <el-button @click="clear()">清空</el-button>
         <el-button @click="">预览</el-button>
         <el-button @click="">下载</el-button>
         <el-button v-if="isAuth('powercut:report:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -92,7 +116,36 @@
     data () {
       return {
         dataForm: {
-          key: ''
+          reportName: '',
+          // pickerOptions日期时间
+          pickerOptions: {
+            shortcuts: [{
+              text: '最近一周',
+              onClick (picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+                picker.$emit('pick', [start, end])
+              }
+            }, {
+              text: '最近一个月',
+              onClick (picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+                picker.$emit('pick', [start, end])
+              }
+            }, {
+              text: '最近三个月',
+              onClick (picker) {
+                const end = new Date()
+                const start = new Date()
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+                picker.$emit('pick', [start, end])
+              }
+            }]
+          },
+          startTime: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -110,6 +163,10 @@
       this.getDataList()
     },
     methods: {
+      clear () {
+        this.dataForm.reportName = null
+        this.dataForm.startTime = null
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true

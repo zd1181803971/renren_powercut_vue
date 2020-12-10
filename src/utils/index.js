@@ -81,3 +81,23 @@ export function formatDate (date, fmt) {
 function padLeftZero (str) {
   return ('00' + str).substr(str.length)
 }
+
+// 验证是否整数,非必填
+export function isIntegerNotMust (rule, value, callback) {
+  if (!value) {
+    callback()
+  }
+  setTimeout(() => {
+    if (!Number(value)) {
+      callback(new Error('请输入正整数'))
+    } else {
+      const re = /^[0-9]*[1-9][0-9]*$/
+      const rsCheck = re.test(value)
+      if (!rsCheck) {
+        callback(new Error('请输入正整数'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}

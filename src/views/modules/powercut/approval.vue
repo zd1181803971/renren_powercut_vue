@@ -1,13 +1,47 @@
 <template>
   <div class="mod-config">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" :rules="dataRule" ref="dataForm" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        查询条件
-        <br>
+        <span>
+          单位名称：
+        </span>
+        <el-input
+          placeholder="请输入单位名称"
+          v-model="dataForm.station"
+          clearable>
+        </el-input>
       </el-form-item>
       <el-form-item>
+        <span>
+          计划停电时间:
+      </span>
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.startTime"
+            type="datetimerange"
+            :picker-options="dataForm.pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </div>
+      </el-form-item>
+
+      <el-form-item prop="count">
+        <span>
+          近两月停电次数：
+        </span>
+        <el-input
+          placeholder="请输入停电次数"
+          v-model="dataForm.count"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <br>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="">清空</el-button>
+        <el-button @click="clear()">清空</el-button>
         <el-button @click="">导出</el-button>
       </el-form-item>
     </el-form>
@@ -75,19 +109,6 @@
         align="center"
         label="工作内容">
       </el-table-column>
-      <el-table-column
-        prop="planState"
-        header-align="center"
-        align="center"
-        label="状态">
-        <template slot-scope="scope">
-          <span v-if="scope.row.planState == 0">已保存</span>
-          <span v-if="scope.row.planState == 1">部门审批中</span>
-          <span v-if="scope.row.planState == 2">部门审批通过待分管领导审批</span>
-          <span v-if="scope.row.planState == 3">部门驳回</span>
-          <span v-if="scope.row.planState == 4">分管领导驳回</span>
-        </template>
-      </el-table-column>
 
     </el-table>
     <el-pagination
@@ -106,10 +127,47 @@
 
 <script>
 import AddOrUpdate from './approval-add-or-update'
+import {isIntegerNotMust} from '../../../utils'
 export default {
   data () {
     return {
       dataForm: {
+        station: '',
+        count: '',
+        // pickerOptions日期时间
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        },
+        startTime: ''
+      },
+      dataRule: {
+        count: [
+          { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
+        ]
       },
       dataList: [],
       pageIndex: 1,
@@ -127,6 +185,11 @@ export default {
     this.getDataList()
   },
   methods: {
+    clear () {
+      this.dataForm.station = null
+      this.dataForm.startTime = null
+      this.dataForm.count = null
+    },
     // 获取数据列表
     getDataList () {
       this.dataListLoading = true

@@ -2,11 +2,69 @@
   <div class="mod-config">
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-       查询
+        <span>
+          单位名称：
+        </span>
+        <el-input
+          placeholder="请输入单位名称"
+          v-model="dataForm.station"
+          clearable>
+        </el-input>
       </el-form-item>
       <el-form-item>
+        <span>
+          变电站名称：
+        </span>
+        <el-input
+          placeholder="请输入变电站名称"
+          v-model="dataForm.stationName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          线路名称：
+        </span>
+        <el-input
+          placeholder="请输入线路名称"
+          v-model="dataForm.lineRoadName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          线段名称：
+        </span>
+        <el-input
+          placeholder="请输入线段名称"
+          v-model="dataForm.lineSegmentName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          台区用户名称：
+        </span>
+        <el-input
+          placeholder="请输入台区用户名称"
+          v-model="dataForm.userName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          台区经理：
+        </span>
+        <el-input
+          placeholder="请输入台区经理"
+          v-model="dataForm.manager "
+          clearable>
+        </el-input>
+      </el-form-item>
+      <br>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="">清空</el-button>
+        <el-button @click="clear()">清空</el-button>
         <el-button @click="">导入</el-button>
         <el-button @click="">模板下载</el-button>
         <el-button v-if="isAuth('powercut:district:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
@@ -52,7 +110,7 @@
         prop="lineSegmentName"
         header-align="center"
         align="center"
-        label="线路名称">
+        label="线段名称">
       </el-table-column>
       <el-table-column
         prop="userName"
@@ -121,7 +179,12 @@
     data () {
       return {
         dataForm: {
-          key: ''
+          station: '',
+          stationName: '',
+          lineRoadName: '',
+          lineSegmentName: '',
+          userName: '',
+          manager: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -141,6 +204,14 @@
       this.getDataList()
     },
     methods: {
+      clear () {
+        this.dataForm.station = null
+        this.dataForm.stationName = null
+        this.dataForm.lineRoadName = null
+        this.dataForm.lineSegmentName = null
+        this.dataForm.userName = null
+        this.dataForm.manager = null
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
