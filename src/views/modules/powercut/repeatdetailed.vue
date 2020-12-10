@@ -154,8 +154,6 @@
         align="center"
         label="是否匹配">
       </el-table-column>
-
-
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
