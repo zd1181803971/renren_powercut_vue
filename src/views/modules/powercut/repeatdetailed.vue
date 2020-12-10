@@ -115,6 +115,10 @@
         header-align="center"
         align="center"
         label="是否整改完成">
+        <template slot-scope="scope">
+          <span v-if="!scope.row.isCorrectiveAction">否</span>
+          <span v-if="scope.row.isCorrectiveAction">是</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="communicate"
@@ -139,6 +143,10 @@
         header-align="center"
         align="center"
         label="是否上报">
+        <template slot-scope="scope">
+          <span v-if="!scope.row.isReporting">否</span>
+          <span v-if="scope.row.isReporting">是</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="isMatching"

@@ -4,30 +4,30 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm"  ref="dataForm"  label-width="120px">
-      <el-form-item label="单位名称" prop="company">
-        <el-input v-model="dataForm.company" placeholder="单位名称"></el-input>
+      <el-form-item label="单位名称:">
+        {{dataForm.company}}
       </el-form-item>
-      <el-form-item label="变电站名称" prop="stationName">
-        <el-input v-model="dataForm.stationName" placeholder="变电站名称"></el-input>
+      <el-form-item label="变电站名称:">
+        {{dataForm.stationName}}
       </el-form-item>
-      <el-form-item label="线路名称" prop="lineRoadName">
-        <el-input v-model="dataForm.lineRoadName" placeholder="线路名称"></el-input>
+      <el-form-item label="线路名称:">
+        {{dataForm.lineRoadName}}
       </el-form-item>
-      <el-form-item label="线路名称" prop="lineSegmentName">
-        <el-input v-model="dataForm.lineSegmentName" placeholder="线路名称"></el-input>
+      <el-form-item label="线段名称:">
+        {{dataForm.lineSegmentName}}
       </el-form-item>
-      <el-form-item label="台区用户名称" prop="userName">
-        <el-input v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
+      <el-form-item label="台区用户名称:">
+        {{dataForm.userName}}
       </el-form-item>
-      <el-form-item label="用户性质" prop="userNatrue">
+      <el-form-item label="用户性质:">
           <span v-if="dataForm.userNatrue">公用</span>
           <span v-if="!dataForm.userNatrue">专用</span>
       </el-form-item>
-      <el-form-item label="台区经理" prop="manager">
-        <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
+      <el-form-item label="台区经理:">
+        {{dataForm.manager}}
       </el-form-item>
-      <el-form-item label="用户数量" prop="userCount">
-        <el-input v-model="dataForm.userCount" placeholder="用户数量"></el-input>
+      <el-form-item label="用户数量:">
+        {{dataForm.userCount}}
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">

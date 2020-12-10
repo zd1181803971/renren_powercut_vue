@@ -3,32 +3,32 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="单位名称" prop="company">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="130px">
+    <el-form-item label="单位名称:" prop="company">
       <el-input v-model="dataForm.company" placeholder="单位名称"></el-input>
     </el-form-item>
-    <el-form-item label="变电站名称" prop="stationName">
+    <el-form-item label="变电站名称:" prop="stationName">
       <el-input v-model="dataForm.stationName" placeholder="变电站名称"></el-input>
     </el-form-item>
-    <el-form-item label="线路名称" prop="lineRoadName">
+    <el-form-item label="线路名称:" prop="lineRoadName">
       <el-input v-model="dataForm.lineRoadName" placeholder="线路名称"></el-input>
     </el-form-item>
-    <el-form-item label="线路名称" prop="lineSegmentName">
+    <el-form-item label="线路名称:" prop="lineSegmentName">
       <el-input v-model="dataForm.lineSegmentName" placeholder="线路名称"></el-input>
     </el-form-item>
-    <el-form-item label="台区用户名称" prop="userName">
+    <el-form-item label="台区用户名称:" prop="userName">
       <el-input v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
     </el-form-item>
-    <el-form-item label="用户性质" prop="userNatrue">
+    <el-form-item label="用户性质:" prop="userNatrue">
       <template>
         <el-radio v-model="dataForm.userNatrue" label="0">公用</el-radio>
         <el-radio v-model="dataForm.userNatrue" label="1">专用</el-radio>
       </template>
     </el-form-item>
-    <el-form-item label="台区经理" prop="manager">
+    <el-form-item label="台区经理:" prop="manager">
       <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
     </el-form-item>
-    <el-form-item label="用户数量" prop="userCount">
+    <el-form-item label="用户数量:" prop="userCount">
       <el-input v-model="dataForm.userCount" placeholder="用户数量"></el-input>
     </el-form-item>
     </el-form>

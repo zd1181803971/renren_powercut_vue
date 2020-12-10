@@ -16,12 +16,6 @@
     <el-form-item label="状态" prop="state">
       <el-input v-model="dataForm.state" placeholder="状态"></el-input>
     </el-form-item>
-    <el-form-item label="数据创建时间" prop="gmtCreate">
-      <el-input v-model="dataForm.gmtCreate" placeholder="数据创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="数据修改时间" prop="gmtModified">
-      <el-input v-model="dataForm.gmtModified" placeholder="数据修改时间"></el-input>
-    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>

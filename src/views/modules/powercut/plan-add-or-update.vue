@@ -4,29 +4,29 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" ref="dataForm" label-width="80px">
-    <el-form-item label="单位名称" prop="company">
-      <el-input v-model="dataForm.company" placeholder="单位名称"></el-input>
+    <el-form-item label="单位名称:" prop="company">
+      {{dataForm.company}}
     </el-form-item>
-    <el-form-item label="计划停电时间" prop="blackoutTime">
-      <el-input v-model="dataForm.blackoutTime" placeholder="计划停电时间"></el-input>
+    <el-form-item label="计划停电时间:">
+      {{dataForm.blackoutTime}}
     </el-form-item>
-    <el-form-item label="计划恢复时间" prop="recoveryTime">
-      <el-input v-model="dataForm.recoveryTime" placeholder="计划恢复时间"></el-input>
+    <el-form-item label="计划恢复时间:">
+      {{dataForm.recoveryTime}}
     </el-form-item>
-    <el-form-item label="影响台区数量" prop="districtCount">
-      <el-input v-model="dataForm.districtCount" placeholder="影响台区数量"></el-input>
+    <el-form-item label="影响台区数量:">
+      {{dataForm.districtCount}}
     </el-form-item>
-    <el-form-item label="影响用户数" prop="userCount">
-      <el-input v-model="dataForm.userCount" placeholder="影响用户数"></el-input>
+    <el-form-item label="影响用户数:">
+      {{dataForm.userCount}}
     </el-form-item>
-    <el-form-item label="停电原因" prop="reason">
-      <el-input v-model="dataForm.reason" placeholder="停电原因"></el-input>
+    <el-form-item label="停电原因:">
+      {{dataForm.reason}}
     </el-form-item>
-    <el-form-item label="近两个月停电次数" prop="blackoutCount">
-      <el-input v-model="dataForm.blackoutCount" placeholder="近两个月停电次数"></el-input>
+    <el-form-item label="近两个月停电次数:">
+      {{dataForm.blackoutCount}}
     </el-form-item>
-    <el-form-item label="工作内容" prop="jobContent">
-      <el-input v-model="dataForm.jobContent" placeholder="工作内容"></el-input>
+    <el-form-item label="工作内容:">
+      {{dataForm.jobContent}}
     </el-form-item>
       <h4>计划停电台区信息</h4>
       <el-table

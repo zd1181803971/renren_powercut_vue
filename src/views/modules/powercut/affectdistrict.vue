@@ -47,18 +47,6 @@
         label="停电台账Id">
       </el-table-column>
       <el-table-column
-        prop="gmtCreate"
-        header-align="center"
-        align="center"
-        label="数据创建时间">
-      </el-table-column>
-      <el-table-column
-        prop="gmtModified"
-        header-align="center"
-        align="center"
-        label="数据修改时间">
-      </el-table-column>
-      <el-table-column
         fixed="right"
         header-align="center"
         align="center"

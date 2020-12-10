@@ -13,12 +13,6 @@
     <el-form-item label="停电台账Id" prop="standingbookId">
       <el-input v-model="dataForm.standingbookId" placeholder="停电台账Id"></el-input>
     </el-form-item>
-    <el-form-item label="数据创建时间" prop="gmtCreate">
-      <el-input v-model="dataForm.gmtCreate" placeholder="数据创建时间"></el-input>
-    </el-form-item>
-    <el-form-item label="数据修改时间" prop="gmtModified">
-      <el-input v-model="dataForm.gmtModified" placeholder="数据修改时间"></el-input>
-    </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>

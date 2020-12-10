@@ -4,22 +4,22 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
-    <el-form-item label="报告名称" prop="reportName">
+    <el-form-item label="报告名称:" prop="reportName">
       <el-input v-model="dataForm.reportName" placeholder="报告名称"></el-input>
     </el-form-item>
-    <el-form-item label="统计开始时间" prop="startTime">
+    <el-form-item label="统计开始时间:" prop="startTime">
       <el-input v-model="dataForm.startTime" placeholder="统计开始时间"></el-input>
     </el-form-item>
-    <el-form-item label="统计结束时间" prop="stopTime">
+    <el-form-item label="统计结束时间:" prop="stopTime">
       <el-input v-model="dataForm.stopTime" placeholder="统计结束时间"></el-input>
     </el-form-item>
-    <el-form-item label="报告创建时间" prop="createTime">
+    <el-form-item label="报告创建时间:" prop="createTime">
       <el-input v-model="dataForm.createTime" placeholder="报告创建时间"></el-input>
     </el-form-item>
-    <el-form-item label="报告地址" prop="reportHref">
+    <el-form-item label="报告地址:" prop="reportHref">
       <el-input v-model="dataForm.reportHref" placeholder="报告地址"></el-input>
     </el-form-item>
-    <el-form-item label="备注" prop="remarks">
+    <el-form-item label="备注:" prop="remarks">
       <el-input v-model="dataForm.remarks" placeholder="备注"></el-input>
     </el-form-item>
     </el-form>
