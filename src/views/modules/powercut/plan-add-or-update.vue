@@ -3,7 +3,7 @@
     :title="'详细页面'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="80px">
+    <el-form :model="dataForm" ref="dataForm" label-width="130px">
     <el-form-item label="单位名称:" prop="company">
       {{dataForm.company}}
     </el-form-item>

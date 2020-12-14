@@ -58,7 +58,6 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">确定</el-button>
-
     </span>
   </el-dialog>
 </template>

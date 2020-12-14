@@ -12,10 +12,24 @@
         <el-input v-model="dataForm.remarks" placeholder="备注"></el-input>
       </el-form-item>
       <el-form-item label="统计开始时间:" prop="startTime">
-        <el-input v-model="dataForm.startTime" placeholder="统计开始时间"></el-input>
+<!--        <el-input v-model="dataForm.startTime" placeholder="统计开始时间"></el-input>-->
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.startTime"
+            type="datetime"
+            placeholder="统计开始时间">
+          </el-date-picker>
+        </div>
       </el-form-item>
       <el-form-item label="统计结束时间:" prop="stopTime">
-        <el-input v-model="dataForm.stopTime" placeholder="统计结束时间"></el-input>
+<!--        <el-input v-model="dataForm.stopTime" placeholder="统计结束时间"></el-input>-->
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.stopTime"
+            type="datetime"
+            placeholder="统计结束时间">
+          </el-date-picker>
+        </div>
       </el-form-item>
       <el-form-item label="单位名称:" prop="station">
         <el-input v-model="dataForm.station" placeholder="单位名称"></el-input>
