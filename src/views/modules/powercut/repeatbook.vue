@@ -27,7 +27,7 @@
       </span>
         <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -188,7 +188,7 @@ export default {
       dataForm: {
         station: '',
         lineName: '',
-        startTime: '',
+        timeList: '',
         // pickerOptions日期时间
         pickerOptions: {
           shortcuts: [{
@@ -259,7 +259,14 @@ export default {
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'station': this.dataForm.station,
+          'lineName': this.dataForm.lineName,
+          'startTime': this.dataForm.timeList[0],
+          'endTime': this.dataForm.timeList[1],
+          'manger': this.dataForm.manger,
+          'report': this.dataForm.report,
+          'count': this.dataForm.count
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

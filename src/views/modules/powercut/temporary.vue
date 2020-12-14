@@ -199,9 +199,10 @@ export default {
   },
   methods: {
     clear () {
-      this.dataForm.station = null
-      this.dataForm.startTime = null
-      this.dataForm.count = null
+      this.dataForm.station = ''
+      this.dataForm.startTime = ''
+      this.dataForm.count = ''
+      this.getDataList()
     },
     // 获取数据列表
     getDataList () {

@@ -26,7 +26,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导入</el-button>
+        <el-button @click="importData()">导入</el-button>
         <el-button @click="">导出</el-button>
         <el-button v-if="isAuth('powercut:repeatdetailed:delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
@@ -227,6 +227,26 @@ export default {
     this.getDataList()
   },
   methods: {
+    importData () {
+      this.dataListLoading = true
+      this.$http({
+        url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
+        method: 'get',
+        params: this.$http.adornParams({
+          'page': this.pageIndex,
+          'limit': this.pageSize
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.dataList = data.page.list
+          this.totalPage = data.page.totalCount
+        } else {
+          this.dataList = []
+          this.totalPage = 0
+        }
+        this.dataListLoading = false
+      })
+    },
     clear () {
       this.dataForm.days = null
       this.dataForm.nexts = null
@@ -240,7 +260,8 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'key': this.dataForm.key
+          'days': this.dataForm.days,
+          'nexts': this.dataForm.nexts
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

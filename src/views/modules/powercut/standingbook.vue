@@ -18,7 +18,7 @@
       </span>
      <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -51,7 +51,6 @@
         </span>
         <el-input v-model="dataForm.manager" placeholder="请输入台区经理"></el-input>
       </el-form-item>
-
     </el-form>
 
     <el-form>
@@ -196,22 +195,22 @@
               }
             }]
           },
-          startTime: '',
+          timeList: '',
           // 停电原因
           options: [{
-            value: '选项1',
+            value: '天灾',
             label: '天灾'
           }, {
-            value: '选项2',
+            value: '人祸',
             label: '人祸'
           }, {
-            value: '选项3',
+            value: '飞机失事',
             label: '飞机失事'
           }, {
-            value: '选项4',
+            value: '日本地震',
             label: '日本地震'
           }, {
-            value: '选项5',
+            value: '韩国欧巴',
             label: '韩国欧巴'
           }],
           reason: ''
@@ -234,10 +233,11 @@
     },
     methods: {
       clear () {
-        this.dataForm.station = null
-        this.dataForm.startTime = null
-        this.dataForm.reason = null
-        this.dataForm.manager = null
+        this.dataForm.station = ''
+        this.dataForm.startTime = ''
+        this.dataForm.reason = ''
+        this.dataForm.manager = ''
+        this.getDataList()
       },
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
@@ -253,7 +253,12 @@
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
-            'limit': this.pageSize
+            'limit': this.pageSize,
+            'company': this.dataForm.station || null,
+            'startTime': this.dataForm.timeList[0] || null,
+            'stopTime': this.dataForm.timeList[1] || null,
+            'reason': this.dataForm.reason || null,
+            'manager': null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
