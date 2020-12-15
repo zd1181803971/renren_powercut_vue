@@ -233,6 +233,8 @@ export default {
     clear () {
       this.dataForm.days = null
       this.dataForm.nexts = null
+      this.dataForm.startTime = null
+      this.dataForm.endTime = null
       this.getDataList()
     },
     // 获取数据列表

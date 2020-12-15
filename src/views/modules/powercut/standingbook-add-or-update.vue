@@ -38,20 +38,20 @@
       <h4>台区信息</h4>
     <br>
       <el-table
-        :data="tableData"
+        :data="districtDtoList"
         style="width: 100%">
         <el-table-column
-          prop="date"
+          prop="id"
           label="序号"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="name"
+          prop="districtName"
           label="台区名称"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="userCount"
           label="台区用户数量"
           width="180">
         </el-table-column>
@@ -84,22 +84,7 @@
           reason: '',
           blackoutCount: ''
         },
-        tableData: [{
-          date: '1',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          manager: 'yuxiang'
-        }, {
-          date: '2',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-          manager: 'yuxiang'
-        }, {
-          date: '3',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-          manager: 'yuxiang'
-        }]
+        districtDtoList: []
       }
     },
     methods: {
@@ -114,6 +99,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
+                console.log(data)
                 this.dataForm.company = data.standingbookDto.company
                 this.dataForm.blackoutTime = data.standingbookDto.blackoutTime
                 this.dataForm.blackoutDuration = data.standingbookDto.blackoutDuration
@@ -122,8 +108,7 @@
                 this.dataForm.isPlan = data.standingbookDto.isPlan
                 this.dataForm.reason = data.standingbookDto.reason
                 this.dataForm.blackoutCount = data.standingbookDto.blackoutCount
-                this.dataForm.gmtCreate = data.standingbookDto.gmtCreate
-                this.dataForm.gmtModified = data.standingbookDto.gmtModified
+                this.districtDtoList = data.standingbookDto.districtDtoList
               }
             })
           }
