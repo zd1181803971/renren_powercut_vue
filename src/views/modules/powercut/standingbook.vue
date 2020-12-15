@@ -11,7 +11,6 @@
           clearable>
         </el-input>
       </el-form-item>
-
       <el-form-item>
         <span>
         停电时间:
@@ -57,7 +56,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导出</el-button>
+        <el-button @click="exprtStandingBook()">导出</el-button>
         <el-button v-if="isAuth('powercut:standingbook:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -232,9 +231,23 @@
       this.getDataList()
     },
     methods: {
+      // tobecontinue
+      // exprtStandingBook () {
+      //   this.dataListLoading = true
+      //   this.$http({
+      //     url: this.$http.adornUrl('/powercut/standingbook/exprtStandingBook'),
+      //     method: 'get',
+      //     params: this.$http.adornParams({
+      //     })
+      //   }).then(({data}) => {
+      //     if (data && data.code === 0) {
+      //     } else {
+      //     }
+      //   })
+      // },
       clear () {
         this.dataForm.station = ''
-        this.dataForm.startTime = ''
+        this.dataForm.timeList = ''
         this.dataForm.reason = ''
         this.dataForm.manager = ''
         this.getDataList()
@@ -258,7 +271,7 @@
             'startTime': this.dataForm.timeList[0] || null,
             'stopTime': this.dataForm.timeList[1] || null,
             'reason': this.dataForm.reason || null,
-            'manager': null
+            'manager': this.dataForm.manager || null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

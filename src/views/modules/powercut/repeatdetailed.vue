@@ -3,24 +3,22 @@
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <span>在</span>
-        <el-select v-model="dataForm.days" clearable placeholder="请选择">
-          <el-option
-            v-for="item in dataForm.options1"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.days" placeholder="请输入天数"></el-input>
+      </el-form-item>
+      <el-form-item>
         <span>天内，停电</span>
-        <el-select v-model="dataForm.nexts" clearable placeholder="请选择">
-          <el-option
-            v-for="item in dataForm.options2"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="dataForm.nexts" placeholder="请输入次数"></el-input>
+      </el-form-item>
+      <el-form-item>
         <span>次以上，记为重复停电</span>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getDataListByDay()">保存</el-button>
+        <el-button @click="clear()">取消</el-button>
       </el-form-item>
       <br>
       <el-form-item>
@@ -176,40 +174,10 @@ export default {
   data () {
     return {
       dataForm: {
-        days: '',
-        nexts: '',
-        options1: [{
-          value: '3',
-          label: '3'
-        }, {
-          value: '10',
-          label: '10'
-        }, {
-          value: '20',
-          label: '20'
-        }, {
-          value: '30',
-          label: '30'
-        }, {
-          value: '60',
-          label: '60'
-        }],
-        options2: [{
-          value: '1',
-          label: '1'
-        }, {
-          value: '3',
-          label: '3'
-        }, {
-          value: '5',
-          label: '5'
-        }, {
-          value: '10',
-          label: '10'
-        }, {
-          value: '30',
-          label: '30'
-        }]
+        days: 60,
+        nexts: 3,
+        startTime: '',
+        endTime: new Date()
       },
       dataList: [],
       pageIndex: 1,
@@ -227,6 +195,18 @@ export default {
     this.getDataList()
   },
   methods: {
+    getDataListByDay () {
+      var date1 = new Date()
+      // 今天时间
+      var time1 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
+      console.log(time1)
+      var date2 = new Date(date1)
+      date2.setDate(date1.getDate() - this.dataForm.days)
+      // num是正数表示之后的时间，num负数表示之前的时间，0表示今天
+      var time2 = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate()
+      this.dataForm.startTime = time2
+    },
+    // 导入全部数据
     importData () {
       this.dataListLoading = true
       this.$http({
@@ -234,7 +214,10 @@ export default {
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'startTime': this.dataForm.startTime || null,
+          'endTime': this.dataForm.endTime || null,
+          'repeatCount': this.dataForm.nexts || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
@@ -250,6 +233,7 @@ export default {
     clear () {
       this.dataForm.days = null
       this.dataForm.nexts = null
+      this.getDataList()
     },
     // 获取数据列表
     getDataList () {
@@ -260,8 +244,9 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'days': this.dataForm.days,
-          'nexts': this.dataForm.nexts
+          'startTime': this.dataForm.startTime || null,
+          'stopTime': this.dataForm.endTime || null,
+          'repeatCount': this.dataForm.nexts || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

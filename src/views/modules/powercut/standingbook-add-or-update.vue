@@ -20,8 +20,14 @@
       {{dataForm.userCount}}
     </el-form-item>
     <el-form-item label="是否计划内：">
-      <span v-if="!dataForm.isPlan">否</span>
-      <span v-if="dataForm.isPlan">是</span>
+      <div v-if="dataForm.isPlan === null">
+      </div>
+      <div v-else-if="dataForm.isPlan === 0">
+        否
+      </div>
+      <div v-else-if="dataForm.isPlan === 1">
+        是
+      </div>
     </el-form-item>
     <el-form-item label="停电原因：">
       {{dataForm.reason}}

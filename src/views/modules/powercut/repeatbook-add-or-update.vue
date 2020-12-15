@@ -43,8 +43,14 @@
         {{dataForm.correctiveAction}}
       </el-form-item>
       <el-form-item label="是否整改完成:">
-        <span v-if="dataForm.isCorrectiveAction">是</span>
-        <span v-if="!dataForm.isCorrectiveAction">否</span>
+        <div v-if="dataForm.isCorrectiveAction === null">
+        </div>
+        <div v-else-if="dataForm.isCorrectiveAction === 0">
+          否
+        </div>
+        <div v-else-if="dataForm.isCorrectiveAction === 1">
+          是
+        </div>
       </el-form-item>
       <el-form-item label="沟通回访情况:">
         {{dataForm.communicate}}

@@ -204,6 +204,7 @@ export default {
       this.dataForm.startTime = null
       this.dataForm.count = null
       this.dataForm.count = null
+      this.getDataList()
     },
     // 获取数据列表
     getDataList () {
@@ -213,10 +214,15 @@ export default {
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'company': this.dataForm.station || null,
+          'startBlackoutTime': this.dataForm.startTime || null,
+          'stopBlackoutTime': this.dataForm.stopTime || null,
+          'blackoutCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
+          console.log(data)
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
         } else {

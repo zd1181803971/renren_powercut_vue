@@ -250,6 +250,7 @@ export default {
       this.dataForm.manger = null
       this.dataForm.report = null
       this.dataForm.count = null
+      this.getDataList()
     },
     // 获取数据列表
     getDataList () {
@@ -260,13 +261,13 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'station': this.dataForm.station,
-          'lineName': this.dataForm.lineName,
-          'startTime': this.dataForm.timeList[0],
-          'endTime': this.dataForm.timeList[1],
-          'manger': this.dataForm.manger,
-          'report': this.dataForm.report,
-          'count': this.dataForm.count
+          'company': this.dataForm.station || null,
+          'lineRoadName': this.dataForm.lineName || null,
+          'startTime': this.dataForm.timeList[0] || null,
+          'stopTime': this.dataForm.timeList[1] || null,
+          'manager': this.dataForm.manger || null,
+          'isReporting': this.dataForm.report || null,
+          'repeatCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
