@@ -69,6 +69,7 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 export default {
   data () {
     return {
@@ -113,6 +114,53 @@ export default {
           })
         }
       })
+=======
+  export default {
+    data () {
+      return {
+        visible: false,
+        dataForm: {
+          id: 0,
+          company: '',
+          blackoutTime: '',
+          blackoutDuration: '',
+          districtCount: '',
+          userCount: '',
+          isPlan: '',
+          reason: '',
+          blackoutCount: ''
+        },
+        districtDtoList: []
+      }
+    },
+    methods: {
+      init (id) {
+        this.dataForm.id = id || 0
+        this.visible = true
+        this.$nextTick(() => {
+          if (this.dataForm.id) {
+            this.$http({
+              url: this.$http.adornUrl(`/powercut/standingbook/info/${this.dataForm.id}`),
+              method: 'get',
+              params: this.$http.adornParams()
+            }).then(({data}) => {
+              if (data && data.code === 0) {
+                console.log(data)
+                this.dataForm.company = data.standingbookDto.company
+                this.dataForm.blackoutTime = data.standingbookDto.blackoutTime
+                this.dataForm.blackoutDuration = data.standingbookDto.blackoutDuration
+                this.dataForm.districtCount = data.standingbookDto.districtCount
+                this.dataForm.userCount = data.standingbookDto.userCount
+                this.dataForm.isPlan = data.standingbookDto.isPlan
+                this.dataForm.reason = data.standingbookDto.reason
+                this.dataForm.blackoutCount = data.standingbookDto.blackoutCount
+                this.districtDtoList = data.standingbookDto.districtDtoList
+              }
+            })
+          }
+        })
+      }
+>>>>>>> d45fc95e1776f4bf53925323c7f4b52c33ca37c9
     }
   }
 }

@@ -235,8 +235,15 @@ export default {
       })
     },
     clear () {
+<<<<<<< HEAD
       this.dataForm.days = ''
       this.dataForm.nexts = ''
+=======
+      this.dataForm.days = null
+      this.dataForm.nexts = null
+      this.dataForm.startTime = null
+      this.dataForm.endTime = null
+>>>>>>> d45fc95e1776f4bf53925323c7f4b52c33ca37c9
       this.getDataList()
     },
     // 获取数据列表
