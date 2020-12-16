@@ -65,7 +65,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导入</el-button>
+        <el-button @click="importDistrict()">导入</el-button>
         <el-button @click="">模板下载</el-button>
         <el-button v-if="isAuth('powercut:district:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
@@ -204,13 +204,32 @@
       this.getDataList()
     },
     methods: {
+      // // 模板导入
+      // importDistrict(){
+      //   this.dataListLoading = true
+      //   this.$http({
+      //     url: this.$http.adornUrl('/powercut/district/importDistrict'),
+      //     method: 'post',
+      //     params: this.$http.adornParams({
+      //
+      //     })
+      //   }).then(({data}) => {
+      //     if (data && data.code === 0) {
+      //
+      //     } else {
+      //
+      //     }
+      //     this.dataListLoading = false
+      //   })
+      // },
       clear () {
-        this.dataForm.station = null
-        this.dataForm.stationName = null
-        this.dataForm.lineRoadName = null
-        this.dataForm.lineSegmentName = null
-        this.dataForm.userName = null
-        this.dataForm.manager = null
+        this.dataForm.station = ''
+        this.dataForm.stationName = ''
+        this.dataForm.lineRoadName = ''
+        this.dataForm.lineSegmentName = ''
+        this.dataForm.userName = ''
+        this.dataForm.manager = ''
+        this.getDataList()
       },
       // 获取数据列表
       getDataList () {
@@ -220,7 +239,13 @@
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
-            'limit': this.pageSize
+            'limit': this.pageSize,
+            'company': this.dataForm.station || null,
+            'station_name': this.dataForm.stationName || null,
+            'line_road_name': this.dataForm.lineRoadName || null,
+            'line_segment_name': this.dataForm.lineSegmentName || null,
+            'user_name': this.dataForm.userName || null,
+            'manager': this.dataForm.manager || null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

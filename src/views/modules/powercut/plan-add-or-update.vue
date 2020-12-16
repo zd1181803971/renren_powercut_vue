@@ -41,7 +41,7 @@
           label="id">
         </el-table-column>
         <el-table-column
-          prop="company"
+          prop="districtName"
           header-align="center"
           align="center"
           label="台区名称">
@@ -71,12 +71,7 @@
     data () {
       return {
         visible: false,
-        dataList: [{
-          id: '1',
-          company: '测试',
-          manager: 'zzzzd',
-          userCount: 123
-        }],
+        dataList: [],
         dataListLoading: false,
         dataForm: {
           id: 0,
@@ -112,6 +107,8 @@
                 this.dataForm.reason = data.plan.reason
                 this.dataForm.blackoutCount = data.plan.blackoutCount
                 this.dataForm.jobContent = data.plan.jobContent
+                this.dataList = data.plan.districtDtoList
+                console.log(data)
               }
             })
           }

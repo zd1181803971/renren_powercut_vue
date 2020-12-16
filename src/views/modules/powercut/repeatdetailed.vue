@@ -151,6 +151,10 @@
         header-align="center"
         align="center"
         label="是否匹配">
+        <template slot-scope="scope">
+          <span v-if="scope.row.isMatching === 0">否</span>
+          <span v-if="scope.row.isMatching === 1">是</span>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -231,8 +235,8 @@ export default {
       })
     },
     clear () {
-      this.dataForm.days = null
-      this.dataForm.nexts = null
+      this.dataForm.days = ''
+      this.dataForm.nexts = ''
       this.getDataList()
     },
     // 获取数据列表

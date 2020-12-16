@@ -17,7 +17,7 @@
       </span>
         <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -176,7 +176,7 @@ export default {
             }
           }]
         },
-        startTime: ''
+        timeList: ''
       },
       dataRule: {
         count: [
@@ -201,8 +201,7 @@ export default {
   methods: {
     clear () {
       this.dataForm.station = null
-      this.dataForm.startTime = null
-      this.dataForm.count = null
+      this.dataForm.timeList = null
       this.dataForm.count = null
       this.getDataList()
     },
@@ -216,13 +215,12 @@ export default {
           'page': this.pageIndex,
           'limit': this.pageSize,
           'company': this.dataForm.station || null,
-          'startBlackoutTime': this.dataForm.startTime || null,
-          'stopBlackoutTime': this.dataForm.stopTime || null,
+          'startBlackoutTime': this.dataForm.timeList[0] || null,
+          'stopBlackoutTime': this.dataForm.timeList[1] || null,
           'blackoutCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
-          console.log(data)
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
         } else {

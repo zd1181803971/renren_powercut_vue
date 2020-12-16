@@ -17,7 +17,7 @@
       </span>
         <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -146,7 +146,7 @@
               }
             }]
           },
-          startTime: ''
+          timeList: ''
         },
         dataList: [],
         pageIndex: 1,
@@ -165,8 +165,9 @@
     },
     methods: {
       clear () {
-        this.dataForm.reportName = null
-        this.dataForm.startTime = null
+        this.dataForm.reportName = ''
+        this.dataForm.timeList = ''
+        this.getDataList()
       },
       // 获取数据列表
       getDataList () {
@@ -177,7 +178,9 @@
           params: this.$http.adornParams({
             'page': this.pageIndex,
             'limit': this.pageSize,
-            'key': this.dataForm.key
+            'reportName': this.dataForm.reportName || null,
+            'startTime': this.dataForm.timeList[0] || null,
+            'stopTime': this.dataForm.timeList[1] || null
           })
         }).then(({data}) => {
           if (data && data.code === 0) {

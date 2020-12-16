@@ -4,6 +4,10 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" ref="dataForm" label-width="140px">
+      <el-form-item label="分类：">
+          <span v-if="dataForm.category ===0">计划停电</span>
+          <span v-if="dataForm.category ===1">临时停电</span>
+      </el-form-item>
       <el-form-item label="单位名称：">
         {{dataForm.company}}
       </el-form-item>
@@ -41,7 +45,7 @@
           label="id">
         </el-table-column>
         <el-table-column
-          prop="company"
+          prop="districtName"
           header-align="center"
           align="center"
           label="台区名称">
@@ -75,15 +79,11 @@ export default {
   data () {
     return {
       visible: false,
-      dataList: [{
-        id: '1',
-        company: '测试',
-        manager: 'zzzzd',
-        userCount: 123
-      }],
+      dataList: [],
       dataListLoading: false,
       dataForm: {
         id: 0,
+        category: '',
         company: '',
         blackoutTime: '',
         recoveryTime: '',
@@ -94,6 +94,11 @@ export default {
         jobContent: '',
         departmentOpinion: ''
       }
+    }
+  },
+  computed: {
+    userName: {
+      get () { return this.$store.state }
     }
   },
   methods: {
@@ -110,6 +115,7 @@ export default {
           }).then(({data}) => {
             if (data && data.code === 0) {
               this.dataForm.company = data.plan.company
+              this.dataForm.category = data.plan.category
               this.dataForm.blackoutTime = data.plan.blackoutTime
               this.dataForm.recoveryTime = data.plan.recoveryTime
               this.dataForm.districtCount = data.plan.districtCount
@@ -117,7 +123,8 @@ export default {
               this.dataForm.reason = data.plan.reason
               this.dataForm.blackoutCount = data.plan.blackoutCount
               this.dataForm.jobContent = data.plan.jobContent
-              this.dataForm.departmentOpinion = data.plan.departmentOpinion
+              this.dataForm.departmentOpinion = data.plan.opinion
+              this.dataList = data.plan.districtDtoList
             }
           })
         }
@@ -125,13 +132,19 @@ export default {
     },
 // 表单提交
     dataFormSubmit () {
+      console.log(this.userName)
+      // eslint-disable-next-line no-unused-vars
+      var dawf
+      if (this.userName === 'admin') {
+        dawf = 2
+      }
       this.$http({
         url: this.$http.adornUrl(`/powercut/plan/update`),
         method: 'post',
         data: this.$http.adornData({
           'id': this.dataForm.id,
-          'departmentOpinion': this.dataForm.departmentOpinion,
-          'planState': 2
+          'opinion': this.dataForm.departmentOpinion,
+          'planState': dawf
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

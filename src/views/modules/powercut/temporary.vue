@@ -17,7 +17,7 @@
       </span>
         <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -115,11 +115,11 @@
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.planState == 0">已保存</span>
-          <span v-if="scope.row.planState == 1">部门审批中</span>
-          <span v-if="scope.row.planState == 2">部门审批通过待分管领导审批</span>
-          <span v-if="scope.row.planState == 3">部门驳回</span>
-          <span v-if="scope.row.planState == 4">分管领导驳回</span>
+          <span v-if="scope.row.planState === 0">已保存</span>
+          <span v-if="scope.row.planState === 1">部门审批中</span>
+          <span v-if="scope.row.planState === 2">部门审批通过待分管领导审批</span>
+          <span v-if="scope.row.planState === 3">部门驳回</span>
+          <span v-if="scope.row.planState === 4">分管领导驳回</span>
         </template>
       </el-table-column>
 
@@ -175,7 +175,7 @@ export default {
             }
           }]
         },
-        startTime: ''
+        timeList: ''
       },
       dataList: [],
       pageIndex: 1,
@@ -208,14 +208,19 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/powercut/plan/list'),
+        url: this.$http.adornUrl('/powercut/plan/temporaryList'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'company': this.dataForm.station || null,
+          'startBlackoutTime': this.dataForm.timeList[1] || null,
+          'stopBlackoutTime': this.dataForm.timeList[0] || null,
+          'blackoutCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
+          console.log(data)
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
         } else {

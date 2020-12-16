@@ -82,7 +82,7 @@ export default {
         communicate: '',
         reason: '',
         category: '',
-        manager: '赵董。'
+        manager: ''
       }
     }
   },
@@ -112,6 +112,7 @@ export default {
               this.dataForm.communicate = data.repeatDetailed.communicate
               this.dataForm.reason = data.repeatDetailed.reason
               this.dataForm.category = data.repeatDetailed.category
+              this.dataForm.manager = data.repeatDetailed.manager
             }
           })
         }

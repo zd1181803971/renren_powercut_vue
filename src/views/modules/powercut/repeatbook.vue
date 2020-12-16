@@ -244,12 +244,12 @@ export default {
   },
   methods: {
     clear () {
-      this.dataForm.station = null
-      this.dataForm.lineName = null
-      this.dataForm.startTime = null
-      this.dataForm.manger = null
-      this.dataForm.report = null
-      this.dataForm.count = null
+      this.dataForm.station = ''
+      this.dataForm.lineName = ''
+      this.dataForm.startTime = ''
+      this.dataForm.manger = ''
+      this.dataForm.report = ''
+      this.dataForm.count = ''
       this.getDataList()
     },
     // 获取数据列表

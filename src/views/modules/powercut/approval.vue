@@ -17,7 +17,7 @@
       </span>
         <div class="block">
           <el-date-picker
-            v-model="dataForm.startTime"
+            v-model="dataForm.timeList"
             type="datetimerange"
             :picker-options="dataForm.pickerOptions"
             range-separator="至"
@@ -42,7 +42,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导出</el-button>
+        <el-button @click="">批量审批</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -55,6 +55,16 @@
         header-align="center"
         align="center"
         label="id">
+      </el-table-column>
+      <el-table-column
+        prop="category"
+        header-align="center"
+        align="center"
+        label="分类">
+        <template slot-scope="scope">
+          <span v-if="scope.row.category ===0">计划停电</span>
+          <span v-if="scope.row.category ===1">临时停电</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="company"
@@ -162,7 +172,7 @@ export default {
             }
           }]
         },
-        startTime: ''
+        timeList: ''
       },
       dataRule: {
         count: [
@@ -186,19 +196,24 @@ export default {
   },
   methods: {
     clear () {
-      this.dataForm.station = null
-      this.dataForm.startTime = null
-      this.dataForm.count = null
+      this.dataForm.station = ''
+      this.dataForm.timeList = ''
+      this.dataForm.count = ''
+      this.getDataList()
     },
     // 获取数据列表
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/powercut/plan/list'),
+        url: this.$http.adornUrl('/powercut/plan/approvalList'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'company': this.dataForm.station || null,
+          'startBlackoutTime': this.dataForm.timeList[0] || null,
+          'stopBlackoutTime': this.dataForm.timeList[1] || null,
+          'blackoutCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

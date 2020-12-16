@@ -35,10 +35,10 @@
         <div>
           <el-select v-model="dataForm.reason" placeholder="请选择">
             <el-option
-              v-for="item in dataForm.options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              v-for="item in dataList"
+              :key="item.reason"
+              :label="item.reason"
+              :value="item.reason">
             </el-option>
           </el-select>
         </div>
@@ -195,23 +195,6 @@
             }]
           },
           timeList: '',
-          // 停电原因
-          options: [{
-            value: '天灾',
-            label: '天灾'
-          }, {
-            value: '人祸',
-            label: '人祸'
-          }, {
-            value: '飞机失事',
-            label: '飞机失事'
-          }, {
-            value: '日本地震',
-            label: '日本地震'
-          }, {
-            value: '韩国欧巴',
-            label: '韩国欧巴'
-          }],
           reason: ''
         },
         ids: 1,
@@ -221,7 +204,8 @@
         pageSize: 10,
         totalPage: 0,
         dataListLoading: false,
-        dataListSelections: []
+        dataListSelections: [],
+        test: []
       }
     },
     components: {
@@ -276,7 +260,6 @@
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
-            console.log(this.dataList)
             this.totalPage = data.page.totalCount
           } else {
             this.dataList = []
