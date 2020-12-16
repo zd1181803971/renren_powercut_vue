@@ -96,11 +96,6 @@ export default {
       }
     }
   },
-  computed: {
-    userName: {
-      get () { return this.$store.state }
-    }
-  },
   methods: {
     init (id) {
       this.dataForm.id = id || 0
@@ -132,19 +127,12 @@ export default {
     },
 // 表单提交
     dataFormSubmit () {
-      console.log(this.userName)
-      // eslint-disable-next-line no-unused-vars
-      var dawf
-      if (this.userName === 'admin') {
-        dawf = 2
-      }
       this.$http({
         url: this.$http.adornUrl(`/powercut/plan/update`),
         method: 'post',
         data: this.$http.adornData({
           'id': this.dataForm.id,
-          'opinion': this.dataForm.departmentOpinion,
-          'planState': dawf
+          'opinion': this.dataForm.departmentOpinion
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
