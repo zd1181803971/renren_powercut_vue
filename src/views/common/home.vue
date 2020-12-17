@@ -3,26 +3,29 @@
 
       <el-tag size="big">总体情况</el-tag>
    <h2>
-     {{ getDate() }}至{{ getDate() }}，公司共发生台区停电台次,涉及1 千伏线路④条，其中公变台区停电⑤台次、专变台区停电⑥台次，计划停电⑦台次、故障停电⑧台次。
+     {{ dataForm.startTime }}至{{ dataForm.stopTime }}，
+     公司共发生台区停电{{ dataForm.districtCount }}台次,涉及10千伏线路{{ dataForm.lineRoadCount }}条，其中公变台区停电{{ dataForm.commonTransformers }}台次、专变台区停电{{ dataForm.specialUse }}台次，
+     计划停电{{ dataForm.planCount }}台次、故障停电{{ dataForm.faultCount }}台次。
    </h2>
-
-
-
-
     <el-row :gutter="20">
-      <el-col :span="24">
-        <el-card>
-          <div id="J_chartLineBox" class="chart-box"></div>
-        </el-card>
-      </el-col>
       <el-col :span="24">
         <el-card>
           <div id="J_chartBarBox" class="chart-box"></div>
         </el-card>
       </el-col>
+      <el-col :span="24">
+        <el-card>
+          <div id="J_chartLineBox" class="chart-box"></div>
+        </el-card>
+      </el-col>
       <el-col :span="12">
         <el-card>
           <div id="J_chartPieBox" class="chart-box"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card>
+          <div id="test" class="chart-box"></div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -36,22 +39,34 @@
 
 <script>
 import echarts from 'echarts'
-import {formatDate} from '../../utils'
+
 export default {
   data () {
     return {
       chartLine: null,
       chartBar: null,
+      chartBar2: null,
       chartPie: null,
       chartScatter: null,
-      currentDate: ''
+      dataForm: {
+        startTime: '',
+        stopTime: '',
+        districtCount: '',
+        lineRoadCount: '',
+        commonTransformers: '',
+        specialUse: '',
+        planCount: '',
+        faultCount: ''
+      }
     }
   },
   mounted () {
-    this.initChartLine()
     this.initChartBar()
     this.initChartPie()
+    this.initChartBar2()
+    this.initChartLine()
     this.initChartScatter()
+    this.getDataList()
   },
   activated () {
     // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
@@ -61,6 +76,9 @@ export default {
     if (this.chartBar) {
       this.chartBar.resize()
     }
+    if (this.chartBar2) {
+      this.chartBar2.resize()
+    }
     if (this.chartPie) {
       this.chartPie.resize()
     }
@@ -69,8 +87,25 @@ export default {
     }
   },
   methods: {
-    getDate () {
-      return formatDate(new Date(), 'yyyy-MM-dd')
+    // 获取数据列表
+    getDataList () {
+      this.$http({
+        url: this.$http.adornUrl('/powercut/standingbook/generalSituation'),
+        method: 'get',
+        params: this.$http.adornParams({
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.dataForm.startTime = data.generalSituationDto.startTime
+          this.dataForm.stopTime = data.generalSituationDto.stopTime
+          this.dataForm.districtCount = data.generalSituationDto.districtCount
+          this.dataForm.lineRoadCount = data.generalSituationDto.lineRoadCount
+          this.dataForm.commonTransformers = data.generalSituationDto.commonTransformers
+          this.dataForm.specialUse = data.generalSituationDto.specialUse
+          this.dataForm.planCount = data.generalSituationDto.planCount
+          this.dataForm.faultCount = data.generalSituationDto.faultCount
+        }
+      })
     },
     // 折线图
     initChartLine () {
@@ -142,9 +177,12 @@ export default {
         this.chartLine.resize()
       })
     },
-    // 柱状图
+    // 供电所停电情况统计
     initChartBar () {
       var option = {
+        title: {
+          text: '供电所停电情况统计'
+        },
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -152,7 +190,7 @@ export default {
           }
         },
         legend: {
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
+          data: ['专变', '公变']
         },
         grid: {
           left: '3%',
@@ -163,77 +201,25 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            data: ['一台次', '二台次', '三台次', '四台次', '无台次', '六台次', '七台次']
           }
         ],
         yAxis: [
           {
-            type: 'value'
+            type: 'category',
+            data: ['1号供电所', '2号供电所', '3号供电所', '4号供电所', '5号供电所', '6号供电所', '7号供电所']
           }
         ],
         series: [
           {
-            name: '直接访问',
+            name: '专变',
             type: 'bar',
-            data: [320, 332, 301, 334, 390, 330, 320]
+            data: [1, 2, 3, 4, 5, 6, 7]
           },
           {
-            name: '邮件营销',
+            name: '公变',
             type: 'bar',
-            stack: '广告',
-            data: [120, 132, 101, 134, 90, 230, 210]
-          },
-          {
-            name: '联盟广告',
-            type: 'bar',
-            stack: '广告',
-            data: [220, 182, 191, 234, 290, 330, 310]
-          },
-          {
-            name: '视频广告',
-            type: 'bar',
-            stack: '广告',
-            data: [150, 232, 201, 154, 190, 330, 410]
-          },
-          {
-            name: '搜索引擎',
-            type: 'bar',
-            data: [862, 1018, 964, 1026, 1679, 1600, 1570],
-            markLine: {
-              lineStyle: {
-                normal: {
-                  type: 'dashed'
-                }
-              },
-              data: [
-                [{ type: 'min' }, { type: 'max' }]
-              ]
-            }
-          },
-          {
-            name: '百度',
-            type: 'bar',
-            barWidth: 5,
-            stack: '搜索引擎',
-            data: [620, 732, 701, 734, 1090, 1130, 1120]
-          },
-          {
-            name: '谷歌',
-            type: 'bar',
-            stack: '搜索引擎',
-            data: [120, 132, 101, 134, 290, 230, 220]
-          },
-          {
-            name: '必应',
-            type: 'bar',
-            stack: '搜索引擎',
-            data: [60, 72, 71, 74, 190, 130, 110]
-          },
-          {
-            name: '其他',
-            type: 'bar',
-            stack: '搜索引擎',
-            data: [62, 82, 91, 84, 109, 110, 120]
+            data: [2, 5, 6, 4, 5, 6, 7]
           }
         ]
       }
@@ -243,12 +229,64 @@ export default {
         this.chartBar.resize()
       })
     },
-    // 饼状图
+    // 停电报送核查统计
+    initChartBar2 () {
+      var option = {
+        title: {
+          text: '停电报送核查统计'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          data: ['专变', '公变']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            data: ['一台次', '二台次', '三台次', '四台次', '无台次', '六台次', '七台次']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'category',
+            data: ['1号供电所', '2号供电所', '3号供电所', '4号供电所', '5号供电所', '6号供电所', '7号供电所']
+          }
+        ],
+        series: [
+          {
+            name: '专变',
+            type: 'bar',
+            data: [1, 2, 3, 4, 5, 6, 7]
+          },
+          {
+            name: '公变',
+            type: 'bar',
+            data: [2, 5, 6, 4, 5, 6, 7]
+          }
+        ]
+      }
+      this.chartBar2 = echarts.init(document.getElementById('test'))
+      this.chartBar2.setOption(option)
+      window.addEventListener('resize', () => {
+        this.chartBar2.resize()
+      })
+    },
+    // 停电原因统计
     initChartPie () {
       var option = {
         backgroundColor: '#2c343c',
         title: {
-          text: 'Customized Pie',
+          text: '停电原因统计',
           left: 'center',
           top: 20,
           textStyle: {
