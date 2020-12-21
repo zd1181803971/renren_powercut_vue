@@ -65,9 +65,25 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="importDistrict()">导入</el-button>
-        <el-button @click="">模板下载</el-button>
         <el-button v-if="isAuth('powercut:district:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button @click="exportDistrict()">模板下载</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-upload
+          style="display:inline-block"
+          :limit="1"
+          class="upload-demo"
+          ref="upload"
+          accept=".csv"
+          :action="uploadUrl"
+          :file-list="fileList"
+          :auto-upload="false"
+          :on-success="onSuccess"
+          :on-error="onError"
+          :show-file-list="true">
+          <el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+          <el-button type="primary" @click="handleSubmit()">导入</el-button>
+        </el-upload>
       </el-form-item>
     </el-form>
     <el-table
@@ -128,10 +144,6 @@
         header-align="center"
         align="center"
         label="用户性质">
-        <template slot-scope="scope">
-          <span v-if="scope.row.userNatrue">公用</span>
-          <span v-if="!scope.row.userNatrue">专用</span>
-        </template>
       </el-table-column>
       <el-table-column
         prop="manager"
@@ -175,9 +187,12 @@
 <script>
   import AddOrUpdate from './district-add-or-update'
   import ShowPage from './district-show'
+
   export default {
     data () {
       return {
+        fileList: [],
+        uploadUrl: '',
         dataForm: {
           station: '',
           stationName: '',
@@ -193,7 +208,8 @@
         dataListLoading: false,
         dataListSelections: [],
         addOrUpdateVisible: false,
-        showVisible: false
+        showVisible: false,
+        dataArray: ''
       }
     },
     components: {
@@ -204,24 +220,52 @@
       this.getDataList()
     },
     methods: {
-      // // 模板导入
-      // importDistrict(){
-      //   this.dataListLoading = true
-      //   this.$http({
-      //     url: this.$http.adornUrl('/powercut/district/importDistrict'),
-      //     method: 'post',
-      //     params: this.$http.adornParams({
-      //
-      //     })
-      //   }).then(({data}) => {
-      //     if (data && data.code === 0) {
-      //
-      //     } else {
-      //
-      //     }
-      //     this.dataListLoading = false
-      //   })
-      // },
+      onSuccess (res) {
+        this.$alert('上传成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            console.log('上传成功')
+          }
+        })
+      },
+      onError (res) {
+        this.$alert('创建失败', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            console.log('上传失败')
+          }
+        })
+      },
+      handleSubmit () {
+        this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/district/importDistrict'  // 这里，读者换成实际项目中的上传接口
+        this.$nextTick(() => {
+          this.$refs.upload.submit()
+        })
+      },
+      // 模板下载
+      exportDistrict () {
+        this.dataArray = ''
+        if (this.dataForm.station !== '' && this.dataForm.station !== null) {
+          this.dataArray += 'company=' + this.dataForm.station + '&'
+        }
+        if (this.dataForm.stationName !== '' && this.dataForm.stationName !== null) {
+          this.dataArray += 'station_name=' + this.dataForm.stationName + '&'
+        }
+        if (this.dataForm.lineRoadName !== '' && this.dataForm.lineRoadName !== null) {
+          this.dataArray += 'line_road_name=' + this.dataForm.lineRoadName + '&'
+        }
+        if (this.dataForm.lineSegmentName !== '' && this.dataForm.lineSegmentName !== null) {
+          this.dataArray += 'line_segment_name=' + this.dataForm.lineSegmentName + '&'
+        }
+        if (this.dataForm.userName !== '' && this.dataForm.userName !== null) {
+          this.dataArray += 'user_name=' + this.dataForm.userName + '&'
+        }
+        if (this.dataForm.manager !== '' && this.dataForm.manager !== null) {
+          this.dataArray += 'manager=' + this.dataForm.manager + '&'
+        }
+        this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
+        window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/district/exportDistrict?' + this.dataArray
+      },
       clear () {
         this.dataForm.station = ''
         this.dataForm.stationName = ''

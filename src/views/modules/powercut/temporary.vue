@@ -42,7 +42,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导出</el-button>
+        <el-button @click="exportData()">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -188,7 +188,8 @@ export default {
         count: [
           { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
         ]
-      }
+      },
+      dataArray: ''
     }
   },
   components: {
@@ -198,6 +199,27 @@ export default {
     this.getDataList()
   },
   methods: {
+    // 计划停电导出数据
+    exportData () {
+      this.dataArray = ''
+      if (this.dataForm.station !== '' && this.dataForm.station !== null) {
+        this.dataArray += 'company=' + this.dataForm.station + '&'
+      }
+      if (this.dataForm.timeList !== '' && this.dataForm.timeList !== null) {
+        if (this.dataForm.timeList[0] !== '' && this.dataForm.timeList[0] !== null) {
+          this.dataArray += 'startBlackoutTime=' + this.dataForm.timeList[0] + '&'
+        }
+        if (this.dataForm.timeList[1] !== '' && this.dataForm.timeList[1] !== null) {
+          this.dataArray += 'stopBlackoutTime=' + this.dataForm.timeList[1] + '&'
+        }
+      }
+      if (this.dataForm.count !== '' && this.dataForm.count !== null) {
+        this.dataArray += 'blackoutCount=' + this.dataForm.count + '&'
+      }
+      this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
+      console.log(this.dataArray)
+      window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/plan/exportTemporary?' + this.dataArray
+    },
     clear () {
       this.dataForm.station = ''
       this.dataForm.startTime = ''

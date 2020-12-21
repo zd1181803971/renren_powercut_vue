@@ -20,8 +20,7 @@
         {{dataForm.userName}}
       </el-form-item>
       <el-form-item label="用户性质:">
-          <span v-if="dataForm.userNatrue">公用</span>
-          <span v-if="!dataForm.userNatrue">专用</span>
+       {{ dataForm.userNatrue }}
       </el-form-item>
       <el-form-item label="台区经理:">
         {{dataForm.manager}}
@@ -50,14 +49,20 @@ export default {
         userName: '',
         userNatrue: '',
         manager: '',
-        userCount: '',
-        gmtCreate: '',
-        gmtModified: ''
+        userCount: ''
       }
     }
   },
   methods: {
     init (id) {
+      this.dataForm.company = ''
+      this.dataForm.stationName = ''
+      this.dataForm.lineRoadName = ''
+      this.dataForm.lineSegmentName = ''
+      this.dataForm.userName = ''
+      this.dataForm.userNatrue = ''
+      this.dataForm.manager = ''
+      this.dataForm.userCount = ''
       this.dataForm.id = id || 0
       this.visible = true
       this.$nextTick(() => {
@@ -77,8 +82,6 @@ export default {
               this.dataForm.userNatrue = data.district.userNatrue
               this.dataForm.manager = data.district.manager
               this.dataForm.userCount = data.district.userCount
-              this.dataForm.gmtCreate = data.district.gmtCreate
-              this.dataForm.gmtModified = data.district.gmtModified
             }
           })
         }

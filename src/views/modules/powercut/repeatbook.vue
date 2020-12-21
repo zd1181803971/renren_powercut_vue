@@ -76,7 +76,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">导出</el-button>
+        <el-button @click="exportData()">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -186,6 +186,7 @@ export default {
   data () {
     return {
       dataForm: {
+        dataArray: '',
         station: '',
         lineName: '',
         timeList: '',
@@ -243,6 +244,36 @@ export default {
     this.getDataList()
   },
   methods: {
+    // 导出重复停电台账
+    exportData () {
+      this.dataArray = ''
+      if (this.dataForm.station !== '' && this.dataForm.station !== null) {
+        this.dataArray += 'company=' + this.dataForm.station + '&'
+      }
+      if (this.dataForm.lineName !== '' && this.dataForm.lineName !== null) {
+        this.dataArray += 'lineRoadName=' + this.dataForm.lineName + '&'
+      }
+      if (this.dataForm.timeList !== '' && this.dataForm.timeList !== null) {
+        if (this.dataForm.timeList[0] !== '' && this.dataForm.timeList[0] !== null) {
+          this.dataArray += 'startTime=' + this.dataForm.timeList[0] + '&'
+        }
+        if (this.dataForm.timeList[1] !== '' && this.dataForm.timeList[1] !== null) {
+          this.dataArray += 'stopTime=' + this.dataForm.timeList[1] + '&'
+        }
+      }
+      if (this.dataForm.manger !== '' && this.dataForm.manger !== null) {
+        this.dataArray += 'manager=' + this.dataForm.manger + '&'
+      }
+      if (this.dataForm.report !== '' && this.dataForm.report !== null) {
+        this.dataArray += 'isReporting=' + this.dataForm.report + '&'
+      }
+      if (this.dataForm.count !== '' && this.dataForm.count !== null) {
+        this.dataArray += 'repeatCount=' + this.dataForm.count + '&'
+      }
+      this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
+      console.log(this.dataArray)
+      window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/exportRepeat?' + this.dataArray
+    },
     clear () {
       this.dataForm.station = ''
       this.dataForm.lineName = ''

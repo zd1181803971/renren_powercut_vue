@@ -128,7 +128,7 @@ export default {
 // 表单提交
     dataFormSubmit () {
       this.$http({
-        url: this.$http.adornUrl(`/powercut/plan/update`),
+        url: this.$http.adornUrl(`/powercut/plan/passApproval`),
         method: 'post',
         data: this.$http.adornData({
           'id': this.dataForm.id,

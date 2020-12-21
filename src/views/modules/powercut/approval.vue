@@ -42,14 +42,21 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="">批量审批</el-button>
+        <el-button @click="approvalBatch()">批量审批</el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
       border
       v-loading="dataListLoading"
+      @selection-change="selectionChangeHandle"
       style="width: 100%;">
+      <el-table-column
+        type="selection"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
       <el-table-column
         prop="id"
         header-align="center"
@@ -195,6 +202,35 @@ export default {
     this.getDataList()
   },
   methods: {
+    // 多选
+    selectionChangeHandle (val) {
+      this.dataListSelections = val
+    },
+    // 批量审批
+    approvalBatch () {
+      this.$http({
+        url: this.$http.adornUrl(`/powercut/plan/approvalBatch`),
+        method: 'post',
+        data: this.$http.adornData({
+          'id': this.dataListSelections,
+          'opinion': this.dataForm.departmentOpinion
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
+            }
+          })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
+    },
     clear () {
       this.dataForm.station = ''
       this.dataForm.timeList = ''

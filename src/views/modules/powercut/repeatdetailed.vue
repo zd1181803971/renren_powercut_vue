@@ -24,11 +24,27 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="importData()">导入</el-button>
-        <el-button @click="">导出</el-button>
         <el-button v-if="isAuth('powercut:repeatdetailed:delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
+        <el-button @click="exportData()">导出</el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-upload
+          style="display:inline-block"
+          :limit="1"
+          class="upload-demo"
+          ref="upload"
+          accept=".csv"
+          :action="uploadUrl"
+          :file-list="fileList"
+          :auto-upload="false"
+          :on-success="onSuccess"
+          :on-error="onError"
+          :show-file-list="true">
+          <el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+          <el-button type="primary" @click="handleSubmit()">导入</el-button>
+        </el-upload>
       </el-form-item>
     </el-form>
     <el-table
@@ -166,8 +182,9 @@
       :total="totalPage"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!-- 弹窗, 新增 / 修改 -->
+    <!-- 弹窗, 详细信息 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+
   </div>
 </template>
 
@@ -177,7 +194,10 @@ import AddOrUpdate from './repeatdetailed-add-or-update'
 export default {
   data () {
     return {
+      fileList: [],
+      uploadUrl: '',
       dataForm: {
+        file: '',
         days: 60,
         nexts: 3,
         startTime: '',
@@ -189,7 +209,8 @@ export default {
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      dataArray: ''
     }
   },
   components: {
@@ -199,44 +220,60 @@ export default {
     this.getDataList()
   },
   methods: {
+    onSuccess (res) {
+      this.$alert('上传成功', '提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          console.log('上传成功')
+        }
+      })
+    },
+    onError (res) {
+      this.$alert('创建失败', '提示', {
+        confirmButtonText: '确定',
+        callback: action => {
+          console.log('上传失败')
+        }
+      })
+    },
+    handleSubmit () {
+      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed'  // 这里，读者换成实际项目中的上传接口
+      this.$nextTick(() => {
+        this.$refs.upload.submit()
+      })
+    },
+    // 获取多少天之前的日期
     getDataListByDay () {
       var date1 = new Date()
-      // 今天时间
-      var time1 = date1.getFullYear() + '-' + (date1.getMonth() + 1) + '-' + date1.getDate()
-      console.log(time1)
+      console.log(date1)
       var date2 = new Date(date1)
       date2.setDate(date1.getDate() - this.dataForm.days)
       // num是正数表示之后的时间，num负数表示之前的时间，0表示今天
       var time2 = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate()
+      console.log(time2)
+
       this.dataForm.startTime = time2
     },
     // 导入全部数据
     importData () {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'startTime': this.dataForm.startTime || null,
-          'endTime': this.dataForm.endTime || null,
-          'repeatCount': this.dataForm.nexts || null
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
-        }
-        this.dataListLoading = false
-      })
+    },
+    // 停电明细导出出出全部数据
+    exportData () {
+      this.dataArray = ''
+      if (this.dataForm.startTime !== '' && this.dataForm.startTime !== null) {
+        this.dataArray += 'startTime=' + this.dataForm.startTime + '&'
+      }
+      if (this.dataForm.endTime !== '' && this.dataForm.endTime !== null) {
+        this.dataArray += 'stopTime=' + this.dataForm.endTime + '&'
+      }
+      if (this.dataForm.nexts !== '' && this.dataForm.nexts !== null) {
+        this.dataArray += 'repeatCount=' + this.dataForm.nexts + '&'
+      }
+      this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
+      console.log(this.dataArray)
+      window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/exportRepeatDetailed?' + this.dataArray
     },
     clear () {
-      this.dataForm.days = ''
-      this.dataForm.nexts = ''
       this.dataForm.days = null
       this.dataForm.nexts = null
       this.dataForm.startTime = null
@@ -282,7 +319,7 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-    // 新增 / 修改
+    // 详细信息
     addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {

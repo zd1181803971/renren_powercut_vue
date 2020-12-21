@@ -56,7 +56,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="clear()">清空</el-button>
-        <el-button @click="exprtStandingBook()">导出</el-button>
+        <el-button @click="exportData()">导出</el-button>
         <el-button v-if="isAuth('powercut:standingbook:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -205,7 +205,8 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        test: []
+        test: [],
+        dataArray: ''
       }
     },
     components: {
@@ -215,20 +216,30 @@
       this.getDataList()
     },
     methods: {
-      // tobecontinue
-      // exprtStandingBook () {
-      //   this.dataListLoading = true
-      //   this.$http({
-      //     url: this.$http.adornUrl('/powercut/standingbook/exprtStandingBook'),
-      //     method: 'get',
-      //     params: this.$http.adornParams({
-      //     })
-      //   }).then(({data}) => {
-      //     if (data && data.code === 0) {
-      //     } else {
-      //     }
-      //   })
-      // },
+      // 停电记录导出数据
+      exportData () {
+        this.dataArray = ''
+        if (this.dataForm.station !== '' && this.dataForm.station !== null) {
+          this.dataArray += 'company=' + this.dataForm.station + '&'
+        }
+        if (this.dataForm.timeList !== '' && this.dataForm.timeList !== null) {
+          if (this.dataForm.timeList[0] !== '' && this.dataForm.timeList[0] !== null) {
+            this.dataArray += 'startTime=' + this.dataForm.timeList[0] + '&'
+          }
+          if (this.dataForm.timeList[1] !== '' && this.dataForm.timeList[1] !== null) {
+            this.dataArray += 'stopTime=' + this.dataForm.timeList[1] + '&'
+          }
+        }
+        if (this.dataForm.reason !== '' && this.dataForm.reason !== null) {
+          this.dataArray += 'reason=' + this.dataForm.reason + '&'
+        }
+        if (this.dataForm.manager !== '' && this.dataForm.manager !== null) {
+          this.dataArray += 'manager=' + this.dataForm.manager + '&'
+        }
+        this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
+        console.log(this.dataArray)
+        window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/standingbook/exprtStandingBook?' + this.dataArray
+      },
       clear () {
         this.dataForm.station = ''
         this.dataForm.timeList = ''

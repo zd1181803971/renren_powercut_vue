@@ -17,9 +17,17 @@
       <el-menu
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
-        <el-menu-item index="1" @click="$router.push({ name: 'theme' })">
+
+        <el-menu-item index="1" @click="$router.push('/powercut-approval')">
           <template slot="title">
-            <el-badge value="new">
+            <el-badge :value="dataCount" class="item">
+              <icon-svg name="tixing" class="el-icon-setting"></icon-svg>
+            </el-badge>
+          </template>
+        </el-menu-item>
+        <el-menu-item index="2" @click="$router.push({ name: 'theme' })">
+          <template slot="title">
+            <el-badge>
               <icon-svg name="shezhi" class="el-icon-setting"></icon-svg>
             </el-badge>
           </template>
@@ -49,7 +57,8 @@
   export default {
     data () {
       return {
-        updatePassowrdVisible: false
+        updatePassowrdVisible: false,
+        dataCount: ''
       }
     },
     components: {
@@ -71,7 +80,18 @@
         get () { return this.$store.state.user.name }
       }
     },
+    created () {
+      this.getDataCount()
+    },
     methods: {
+      getDataCount () {
+        this.$http({
+          url: this.$http.adornUrl('/powercut/plan/getAgencyCount'),
+          method: 'get'
+        }).then(({data}) => {
+          this.dataCount = data.count
+        })
+      },
       // 修改密码
       updatePasswordHandle () {
         this.updatePassowrdVisible = true
