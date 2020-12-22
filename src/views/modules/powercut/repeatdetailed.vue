@@ -17,9 +17,82 @@
         <span>次以上，记为重复停电</span>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getDataListByDay()">保存</el-button>
+        <el-button @click="getRepeatruleUpdate()">保存</el-button>
         <el-button @click="clear()">取消</el-button>
       </el-form-item>
+      <br>
+      <el-form-item>
+        <span>
+          单位名称：
+        </span>
+        <el-input
+          placeholder="请输入单位名称"
+          v-model="dataForm.station"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          线路名称：
+        </span>
+        <el-input
+          placeholder="请输入线路名称"
+          v-model="dataForm.lineName"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          选择停电时间:
+      </span>
+        <div class="block">
+          <el-date-picker
+            v-model="dataForm.timeList"
+            type="datetimerange"
+            :picker-options="dataForm.pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </div>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          台区经理：
+        </span>
+        <el-input
+          placeholder="请输入台区经理"
+          v-model="dataForm.manger"
+          clearable>
+        </el-input>
+      </el-form-item>
+      <el-form-item>
+        <span>
+          是否上报：
+        </span>
+        <br>
+        <el-select v-model="dataForm.report" placeholder="请选择">
+          <el-option
+            v-for="item in dataForm.options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+
+      </el-form-item>
+      <el-form-item>
+        <span>
+          重复停电次数：
+        </span>
+        <el-input
+          placeholder="请输入重复停电次数"
+          v-model="dataForm.count"
+          clearable>
+        </el-input>
+      </el-form-item>
+
       <br>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
@@ -201,7 +274,48 @@ export default {
         days: 60,
         nexts: 3,
         startTime: '',
-        endTime: new Date()
+        endTime: new Date(),
+        station: '',
+        lineName: '',
+        timeList: '',
+        // pickerOptions日期时间
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近三个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        },
+        manger: '',
+        report: '',
+        count: '',
+        options: [{
+          value: '1',
+          label: '是'
+        }, {
+          value: '0',
+          label: '否'
+        }]
       },
       dataList: [],
       pageIndex: 1,
@@ -218,6 +332,7 @@ export default {
   },
   activated () {
     this.getDataList()
+    this.getRepeatruleInfo()
   },
   methods: {
     onSuccess (res) {
@@ -242,20 +357,32 @@ export default {
         this.$refs.upload.submit()
       })
     },
-    // 获取多少天之前的日期
-    getDataListByDay () {
-      var date1 = new Date()
-      console.log(date1)
-      var date2 = new Date(date1)
-      date2.setDate(date1.getDate() - this.dataForm.days)
-      // num是正数表示之后的时间，num负数表示之前的时间，0表示今天
-      var time2 = date2.getFullYear() + '-' + (date2.getMonth() + 1) + '-' + date2.getDate()
-      console.log(time2)
-
-      this.dataForm.startTime = time2
+    getRepeatruleInfo () {
+      this.$http({
+        url: this.$http.adornUrl('/powercut/repeatrule/info'),
+        method: 'get',
+        params: this.$http.adornParams()
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.dataForm.days = data.repeatrule.days
+          this.dataForm.nexts = data.repeatrule.number
+        }
+      })
     },
-    // 导入全部数据
-    importData () {
+    getRepeatruleUpdate () {
+      console.log('tete')
+      console.log(this.dataForm.days)
+      console.log(this.dataForm.nexts)
+      this.$http({
+        url: this.$http.adornUrl('/powercut/repeatrule/update'),
+        method: 'post',
+        params: this.$http.adornParams({
+          'days': this.dataForm.days,
+          'number': this.dataForm.nexts
+        })
+      }).then(({data}) => {
+        console.log(data)
+      })
     },
     // 停电明细导出出出全部数据
     exportData () {
@@ -289,9 +416,13 @@ export default {
         params: this.$http.adornParams({
           'page': this.pageIndex,
           'limit': this.pageSize,
-          'startTime': this.dataForm.startTime || null,
-          'stopTime': this.dataForm.endTime || null,
-          'repeatCount': this.dataForm.nexts || null
+          'company': this.dataForm.station || null,
+          'lineRoadName': this.dataForm.lineName || null,
+          'startTime': this.dataForm.timeList[0] || null,
+          'stopTime': this.dataForm.timeList[1] || null,
+          'manager': this.dataForm.manger || null,
+          'isReporting': this.dataForm.report || null,
+          'repeatCount': this.dataForm.count || null
         })
       }).then(({data}) => {
         if (data && data.code === 0) {

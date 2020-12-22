@@ -8,14 +8,15 @@
      计划停电{{ dataForm.planCount }}台次、故障停电{{ dataForm.faultCount }}台次。
    </h2>
     <el-row :gutter="20">
+
       <el-col :span="24">
         <el-card>
-          <div id="J_chartBarBox" class="chart-box"></div>
+          <div id="J_firstBox" class="first-box"></div>
         </el-card>
       </el-col>
       <el-col :span="24">
         <el-card>
-          <div id="J_chartLineBox" class="chart-box"></div>
+          <div id="J_chartBarBox" class="chart-box"></div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -107,77 +108,56 @@ export default {
         }
       })
     },
-    // 折线图
+    // 供电所停电情况统计
     initChartLine () {
       var option = {
-        'title': {
-          'text': '折线图堆叠'
+        title: {
+          text: '供电所停电情况统计',
+          subtext: '统计“停电明细导入分析”菜单中60天内各供电所停电数量'
         },
-        'tooltip': {
-          'trigger': 'axis'
-        },
-        'legend': {
-          'data': [ '邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎' ]
-        },
-        'grid': {
-          'left': '3%',
-          'right': '4%',
-          'bottom': '3%',
-          'containLabel': true
-        },
-        'toolbox': {
-          'feature': {
-            'saveAsImage': { }
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
           }
         },
-        'xAxis': {
-          'type': 'category',
-          'boundaryGap': false,
-          'data': [ '周一', '周二', '周三', '周四', '周五', '周六', '周日' ]
+        legend: {
+          data: ['专变', '公变']
         },
-        'yAxis': {
-          'type': 'value'
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
-        'series': [
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: 'category',
+          data: ['供电所1', '供电所2', '供电所3', '供电所4', '供电所5', '供电所6', '供电所7', '供电所8', '供电所9', '供电所10', '供电所11', '供电所12', '供电所13', '供电所14']
+        },
+        series: [
           {
-            'name': '邮件营销',
-            'type': 'line',
-            'stack': '总量',
-            'data': [ 120, 132, 101, 134, 90, 230, 210 ]
+            name: '专变',
+            type: 'bar',
+            data: [2, 5, 7, 6, 2, 8, 7, 8, 6, 3, 5, 4, 5, 6]
           },
           {
-            'name': '联盟广告',
-            'type': 'line',
-            'stack': '总量',
-            'data': [ 220, 182, 191, 234, 290, 330, 310 ]
-          },
-          {
-            'name': '视频广告',
-            'type': 'line',
-            'stack': '总量',
-            'data': [ 150, 232, 201, 154, 190, 330, 410 ]
-          },
-          {
-            'name': '直接访问',
-            'type': 'line',
-            'stack': '总量',
-            'data': [ 320, 332, 301, 334, 390, 330, 320 ]
-          },
-          {
-            'name': '搜索引擎',
-            'type': 'line',
-            'stack': '总量',
-            'data': [ 820, 932, 901, 934, 1290, 1330, 1320 ]
+            name: '公变',
+            type: 'bar',
+            data: [1, 3, 5, 2, 8, 10, 2, 6, 9, 4, 2, 3, 6, 9]
           }
         ]
       }
-      this.chartLine = echarts.init(document.getElementById('J_chartLineBox'))
+      this.chartLine = echarts.init(document.getElementById('J_firstBox'))
       this.chartLine.setOption(option)
       window.addEventListener('resize', () => {
         this.chartLine.resize()
       })
     },
-    // 供电所停电情况统计
+    // null
     initChartBar () {
       var option = {
         title: {
@@ -312,11 +292,11 @@ export default {
             radius: '55%',
             center: ['50%', '50%'],
             data: [
-              { value: 335, name: '直接访问' },
-              { value: 310, name: '邮件营销' },
-              { value: 274, name: '联盟广告' },
-              { value: 235, name: '视频广告' },
-              { value: 400, name: '搜索引擎' }
+              { value: 335, name: '天灾来临' },
+              { value: 310, name: '人祸降下' },
+              { value: 274, name: '东跑西凑' },
+              { value: 235, name: '上天入地' },
+              { value: 400, name: '测试一下' }
             ].sort(function (a, b) { return a.value - b.value }),
             roseType: 'radius',
             label: {
@@ -510,6 +490,9 @@ export default {
   }
   .chart-box {
     min-height: 400px;
+  }
+  .first-box {
+    min-height: 700px;
   }
 }
 </style>

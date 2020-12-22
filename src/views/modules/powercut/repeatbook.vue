@@ -186,7 +186,6 @@ export default {
   data () {
     return {
       dataForm: {
-        dataArray: '',
         station: '',
         lineName: '',
         timeList: '',
@@ -234,7 +233,8 @@ export default {
       pageSize: 10,
       totalPage: 0,
       dataListLoading: false,
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      dataArray: ''
     }
   },
   components: {
