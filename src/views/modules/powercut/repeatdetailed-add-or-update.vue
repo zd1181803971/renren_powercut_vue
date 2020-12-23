@@ -1,55 +1,109 @@
 <template>
   <el-dialog
     :title="'详细页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm"  ref="dataForm"  label-width="120px">
-    <el-form-item label="单位名称:">
-      {{dataForm.company}}
-    </el-form-item>
-    <el-form-item label="线路名称:">
-      {{dataForm.lineRoadName}}
-    </el-form-item>
-    <el-form-item label="用户名称:">
-      {{dataForm.userName}}
-    </el-form-item>
-    <el-form-item label="用户性质:">
-      {{dataForm.userNatrue}}
-    </el-form-item>
-    <el-form-item label="起始时间:">
-      {{dataForm.startTime}}
-    </el-form-item>
-    <el-form-item label="终止时间:">
-      {{dataForm.stopTime}}
-    </el-form-item>
-    <el-form-item label="停电时户数:">
-      {{dataForm.hourCount}}
-    </el-form-item>
-    <el-form-item label="重复停电次数：">
-      {{dataForm.repeatCount}}
-    </el-form-item>
-    <el-form-item label="是否整改完成：">
-      <div v-if="dataForm.isCorrectiveAction === null">
-      </div>
-      <div v-else-if="dataForm.isCorrectiveAction === 0">
-        否
-      </div>
-      <div v-else-if="dataForm.isCorrectiveAction === 1">
-        是
-      </div>
-    </el-form-item>
-    <el-form-item label="沟通回访：">
-      {{dataForm.communicate}}
-    </el-form-item>
-    <el-form-item label="停电原因：">
-      {{dataForm.reason}}
-    </el-form-item>
-    <el-form-item label="停电分类：">
-      {{dataForm.category}}
-    </el-form-item>
+    <el-form :model="dataForm"  ref="dataForm"  label-width="150px">
+      <el-form-item  label="单位名称：">
+        <el-input
+          readonly
+          v-model="dataForm.company">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="线路名称：">
+        <el-input
+          readonly
+          v-model="dataForm.lineRoadName">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="用户名称：">
+        <el-input
+          readonly
+          v-model="dataForm.userName">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="用户性质：">
+        <el-input
+          readonly
+          v-model="dataForm.userNatrue">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="起始时间：">
+        <el-input
+          readonly
+          v-model="dataForm.startTime">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="终止时间：">
+        <el-input
+          readonly
+          v-model="dataForm.stopTime">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="停电用户数：">
+        <el-input
+          readonly
+          v-model="dataForm.userCount">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="停电时户数：">
+        <el-input
+          readonly
+          v-model="dataForm.hourCount">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="重复停电次数：">
+        <el-input
+          readonly
+          v-model="dataForm.repeatCount">
+        </el-input>
+      </el-form-item>
+
+
+      <el-form-item label="停电原因：">
+        <el-input
+          readonly
+          v-model="dataForm.reason">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="停电分类：">
+        <el-input
+          readonly
+          v-model="dataForm.category">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="整改措施：">
+        <el-input
+          readonly
+          v-model="dataForm.correctivection">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="是否整改完成：">
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == null">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 0"
+          value="否">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 1"
+          value="是">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="沟通回访情况：">
+        <el-input
+          readonly
+          v-model="dataForm.communicate">
+        </el-input>
+      </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">确定</el-button>
+      <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -72,7 +126,8 @@
           isCorrectiveAction: '',
           communicate: '',
           reason: '',
-          category: ''
+          category: '',
+          userCount: ''
         }
       }
     },
@@ -89,6 +144,7 @@
               params: this.$http.adornParams()
             }).then(({data}) => {
               if (data && data.code === 0) {
+                console.log(data)
                 this.dataForm.company = data.repeatDetailed.company
                 this.dataForm.lineRoadName = data.repeatDetailed.lineRoadName
                 this.dataForm.userName = data.repeatDetailed.userName

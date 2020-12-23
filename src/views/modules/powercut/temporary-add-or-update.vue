@@ -1,67 +1,90 @@
 <template>
   <el-dialog
     :title="'详细页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="130px">
-      <el-form-item label="单位名称：">
-        {{dataForm.company}}
+    <el-form :model="dataForm"  ref="dataForm"  label-width="150px">
+      <el-form-item  label="单位名称：">
+        <el-input
+          readonly
+          v-model="dataForm.company">
+        </el-input>
       </el-form-item>
       <el-form-item label="计划停电时间：">
-        {{dataForm.blackoutTime}}
+        <el-input
+          readonly
+          v-model="dataForm.blackoutTime">
+        </el-input>
       </el-form-item>
       <el-form-item label="计划恢复时间：">
-        {{dataForm.recoveryTime}}
+        <el-input
+          readonly
+          v-model="dataForm.recoveryTime">
+        </el-input>
       </el-form-item>
-      <el-form-item label="影响台区数量；">
-        {{dataForm.districtCount}}
+      <el-form-item label="影响台区数量：">
+        <el-input
+          readonly
+          v-model="dataForm.districtCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="影响用户数:">
-        {{dataForm.userCount}}
+      <el-form-item label="影响用户数：">
+        <el-input
+          readonly
+          v-model="dataForm.userCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="停电原因:">
-        {{dataForm.reason}}
+      <el-form-item label="停电原因：">
+        <el-input
+          readonly
+          v-model="dataForm.reason"></el-input>
       </el-form-item>
-      <el-form-item label="近两个月停电次数:">
-        {{dataForm.blackoutCount}}
+      <el-form-item label="近两个月停电次数：">
+        <el-input
+          readonly
+          v-model="dataForm.blackoutCount"></el-input>
       </el-form-item>
-      <el-form-item label="工作内容:">
-        {{dataForm.jobContent}}
+      <el-form-item label="工作内容：">
+        <el-input
+          readonly
+          v-model="dataForm.jobContent"></el-input>
       </el-form-item>
-      <h4>计划停电台区信息</h4>
-      <el-table
-        :data="dataList"
-        border
-        v-loading="dataListLoading"
-        style="width: 100%;">
-        <el-table-column
-          prop="id"
-          header-align="center"
-          align="center"
-          label="id">
-        </el-table-column>
-        <el-table-column
-          prop="districtName"
-          header-align="center"
-          align="center"
-          label="台区名称">
-        </el-table-column>
-        <el-table-column
-          prop="manager"
-          header-align="center"
-          align="center"
-          label="台区经理">
-        </el-table-column>
-        <el-table-column
-          prop="userCount"
-          header-align="center"
-          align="center"
-          label="用户数量">
-        </el-table-column>
-      </el-table>
     </el-form>
+    <h3 style="text-align: center">计划停电台区信息</h3>
+    <el-table
+      :data="dataList"
+      border
+      fit
+      style="width: 100%;">
+      <el-table-column
+        label="序号"
+        type="index"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="districtName"
+        header-align="center"
+        align="center"
+        label="台区名称">
+      </el-table-column>
+      <el-table-column
+        prop="manager"
+        header-align="center"
+        align="center"
+        label="台区经理">
+      </el-table-column>
+      <el-table-column
+        prop="userCount"
+        header-align="center"
+        align="center"
+        label="用户数量">
+      </el-table-column>
+    </el-table>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">确定</el-button>
+      <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
   </el-dialog>
 </template>

@@ -1,63 +1,107 @@
 <template>
   <el-dialog
-    :title="'详细信息'"
+    :title="'详细页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="120px">
-      <el-form-item label="单位名称：">
-        {{dataForm.company}}
+    <el-form :model="dataForm"  ref="dataForm"  label-width="150px">
+      <el-form-item  label="单位名称：">
+        <el-input
+          readonly
+          v-model="dataForm.company">
+        </el-input>
       </el-form-item>
       <el-form-item label="线路名称：">
-        {{dataForm.lineRoadName}}
+        <el-input
+          readonly
+          v-model="dataForm.lineRoadName">
+        </el-input>
       </el-form-item>
       <el-form-item label="用户名称：">
-        {{dataForm.userName}}
+        <el-input
+          readonly
+          v-model="dataForm.userName">
+        </el-input>
       </el-form-item>
       <el-form-item label="用户性质：">
-        {{dataForm.userNatrue}}
+        <el-input
+          readonly
+          v-model="dataForm.userNatrue">
+        </el-input>
       </el-form-item>
-      <el-form-item label="起始时间；">
-        {{dataForm.startTime}}
+      <el-form-item label="起始时间：">
+        <el-input
+          readonly
+          v-model="dataForm.startTime">
+        </el-input>
       </el-form-item>
-      <el-form-item label="终止时间;">
-        {{dataForm.stopTime}}
+      <el-form-item label="终止时间：">
+        <el-input
+          readonly
+          v-model="dataForm.stopTime">
+        </el-input>
       </el-form-item>
-      <el-form-item label="停电时户数:">
-        {{dataForm.hourCount}}
+      <el-form-item label="停电时户数：">
+        <el-input
+          readonly
+          v-model="dataForm.hourCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="重复停电次数:">
-        {{dataForm.repeatCount}} 次
+      <el-form-item label="重复停电次数：">
+        <el-input
+          readonly
+          v-model="dataForm.repeatCount">
+        </el-input>
       </el-form-item>
-
-      <el-form-item label="台区经理:">
-        {{dataForm.manager}}
+      <el-form-item label="台区经理：">
+        <el-input
+          readonly
+          v-model="dataForm.manager">
+        </el-input>
       </el-form-item>
-
-      <el-form-item label="停电原因:">
-        {{dataForm.reason}}
+      <el-form-item label="停电原因：">
+        <el-input
+          readonly
+          v-model="dataForm.reason">
+        </el-input>
       </el-form-item>
-      <el-form-item label="停电分类:">
-        {{dataForm.category}}
+      <el-form-item label="停电分类：">
+        <el-input
+          readonly
+          v-model="dataForm.category">
+        </el-input>
       </el-form-item>
-      <el-form-item label="整改措施:">
-        {{dataForm.correctiveAction}}
+      <el-form-item label="整改措施：">
+        <el-input
+          readonly
+          v-model="dataForm.correctiveAction">
+        </el-input>
       </el-form-item>
-      <el-form-item label="是否整改完成:">
-        <div v-if="dataForm.isCorrectiveAction === null">
-        </div>
-        <div v-else-if="dataForm.isCorrectiveAction === 0">
-          否
-        </div>
-        <div v-else-if="dataForm.isCorrectiveAction === 1">
-          是
-        </div>
+      <el-form-item label="是否整改完成：">
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == null">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 0"
+          value="否">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 1"
+          value="是">
+        </el-input>
       </el-form-item>
-      <el-form-item label="沟通回访情况:">
-        {{dataForm.communicate}}
+      <el-form-item label="沟通回访情况：">
+        <el-input
+          readonly
+          v-model="dataForm.communicate">
+        </el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">确定</el-button>
+      <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
   </el-dialog>
 </template>

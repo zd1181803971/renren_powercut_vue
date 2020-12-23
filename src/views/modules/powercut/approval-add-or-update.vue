@@ -1,74 +1,118 @@
 <template>
   <el-dialog
     :title="'详细页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="140px">
-      <el-form-item label="分类：">
-          <span v-if="dataForm.category ===0">计划停电</span>
-          <span v-if="dataForm.category ===1">临时停电</span>
+    <el-form :model="dataForm" ref="dataForm" label-width="150px">
+      <el-form-item  label="分类：">
+        <el-input
+          readonly
+          v-if="dataForm.category == null">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.category == 0"
+          value="计划停电">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.category == 1"
+          value="临时停电">
+        </el-input>
       </el-form-item>
-      <el-form-item label="单位名称：">
-        {{dataForm.company}}
+      <el-form-item  label="单位名称：">
+        <el-input
+          readonly
+          v-model="dataForm.company">
+        </el-input>
       </el-form-item>
-      <el-form-item label="计划停电时间：">
-        {{dataForm.blackoutTime}}
+      <el-form-item  label="计划停电时间：">
+        <el-input
+          readonly
+          v-model="dataForm.blackoutTime">
+        </el-input>
       </el-form-item>
-      <el-form-item label="计划恢复时间：">
-        {{dataForm.recoveryTime}}
+      <el-form-item  label="计划恢复时间：">
+        <el-input
+          readonly
+          v-model="dataForm.recoveryTime">
+        </el-input>
       </el-form-item>
-      <el-form-item label="影响台区数量：">
-        {{dataForm.districtCount}}
+      <el-form-item  label="影响台区数量：">
+        <el-input
+          readonly
+          v-model="dataForm.districtCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="影响用户数：">
-        {{dataForm.userCount}}
+      <el-form-item  label="影响用户数：">
+        <el-input
+          readonly
+          v-model="dataForm.userCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="停电原因：">
-        {{dataForm.reason}}
+      <el-form-item  label="停电原因：">
+        <el-input
+          readonly
+          v-model="dataForm.reason">
+        </el-input>
       </el-form-item>
-      <el-form-item label="近两个月停电次数：">
-        {{dataForm.blackoutCount}}
+      <el-form-item  label="近两个月停电次数：">
+        <el-input
+          readonly
+          v-model="dataForm.blackoutCount">
+        </el-input>
       </el-form-item>
-      <el-form-item label="工作内容：">
-        {{dataForm.jobContent}}
+      <el-form-item  label="工作内容：">
+        <el-input
+          readonly
+          v-model="dataForm.jobContent">
+        </el-input>
       </el-form-item>
-      <h4>计划停电台区信息：</h4>
-      <el-table
-        :data="dataList"
-        border
-        v-loading="dataListLoading"
-        style="width: 100%;">
-        <el-table-column
-          prop="id"
-          header-align="center"
-          align="center"
-          label="id">
-        </el-table-column>
-        <el-table-column
-          prop="districtName"
-          header-align="center"
-          align="center"
-          label="台区名称">
-        </el-table-column>
-        <el-table-column
-          prop="manager"
-          header-align="center"
-          align="center"
-          label="台区经理">
-        </el-table-column>
-        <el-table-column
-          prop="userCount"
-          header-align="center"
-          align="center"
-          label="用户数量">
-        </el-table-column>
-      </el-table>
-      <el-form-item label="审批意见：" prop="部门审批意见">
-        <el-input type="textarea"   :rows="2" v-model="dataForm.departmentOpinion" placeholder="手输，多行文本，200字以内。"></el-input>
-      </el-form-item>
+
+        <h3 style="text-align: center">计划停电台区信息</h3>
+        <el-table
+          :data="dataList"
+          border
+          v-loading="dataListLoading"
+          style="width: 100%;">
+          <el-table-column
+            header-align="center"
+            align="center"
+            label="序号"
+            type="index"
+          width="50">
+          </el-table-column>
+          <el-table-column
+            prop="districtName"
+            header-align="center"
+            align="center"
+            label="台区名称">
+          </el-table-column>
+          <el-table-column
+            prop="manager"
+            header-align="center"
+            align="center"
+            label="台区经理">
+          </el-table-column>
+          <el-table-column
+            prop="userCount"
+            header-align="center"
+            align="center"
+            label="用户数量">
+          </el-table-column>
+        </el-table>
+      <br>
+      <h3 style="text-align: center">审批意见</h3>
+      <el-input
+        type="textarea"
+        :rows="4"
+        v-model="dataForm.departmentOpinion"
+        placeholder="手输，多行文本，200字以内。">
+      </el-input>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">返回</el-button>
+      <el-button @click="visible = false" type="warning">返回</el-button>
       <el-button type="primary" @click="dataFormSubmit()">审批</el-button>
     </span>
   </el-dialog>

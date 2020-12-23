@@ -87,9 +87,7 @@
                 'id': this.dataForm.id || undefined,
                 'districtId': this.dataForm.districtId,
                 'districtName': this.dataForm.districtName,
-                'standingbookId': this.dataForm.standingbookId,
-                'gmtCreate': this.dataForm.gmtCreate,
-                'gmtModified': this.dataForm.gmtModified
+                'standingbookId': this.dataForm.standingbookId
               })
             }).then(({data}) => {
               if (data && data.code === 0) {

@@ -1,26 +1,34 @@
 <template>
   <div class="mod-config">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" :rules="dataRule" ref="dataForm" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <span>在</span>
       </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.days" placeholder="请输入天数"></el-input>
+      <el-form-item prop="days">
+        <el-input
+          v-model="dataForm.days"
+          placeholder="请输入天数"
+          style="width: 110px">
+        </el-input>
       </el-form-item>
       <el-form-item>
         <span>天内，停电</span>
       </el-form-item>
-      <el-form-item>
-        <el-input v-model="dataForm.nexts" placeholder="请输入次数"></el-input>
+      <el-form-item prop="nexts">
+        <el-input
+           v-model="dataForm.nexts"
+           placeholder="请输入次数"
+           style="width: 110px">
+        </el-input>
       </el-form-item>
       <el-form-item>
         <span>次以上，记为重复停电</span>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getRepeatruleUpdate()">保存</el-button>
-        <el-button @click="clear()">取消</el-button>
+        <el-button @click="getRepeatruleUpdate()" type="info">保存</el-button>
+        <el-button @click="getRepeatruleInfo()" type="warning">取消</el-button>
       </el-form-item>
-      <br>
+      <hr>
       <el-form-item>
         <span>
           单位名称：
@@ -80,11 +88,10 @@
             :value="item.value">
           </el-option>
         </el-select>
-
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="count">
         <span>
-          重复停电次数：
+           重复停电次数：
         </span>
         <el-input
           placeholder="请输入重复停电次数"
@@ -92,15 +99,14 @@
           clearable>
         </el-input>
       </el-form-item>
-
       <br>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
+        <el-button @click="getDataList()" type="success">查询</el-button>
+        <el-button @click="clear()" type="warning">清空</el-button>
+        <el-button @click="exportData()" type="primary">导出</el-button>
         <el-button v-if="isAuth('powercut:repeatdetailed:delete')" type="danger" @click="deleteHandle()"
                    :disabled="dataListSelections.length <= 0">批量删除
         </el-button>
-        <el-button @click="exportData()">导出</el-button>
       </el-form-item>
       <el-form-item>
         <el-upload
@@ -108,8 +114,8 @@
           :limit="1"
           class="upload-demo"
           ref="upload"
-          accept=".csv"
-          :action="uploadUrl"
+          accept="application/vnd.ms-excel"
+          :action="'http://powercut.free.idcfengye.com/renren-fast/powercut/repeatdetailed/importRepeatDetailed'"
           :file-list="fileList"
           :auto-upload="false"
           :on-success="onSuccess"
@@ -123,20 +129,21 @@
     <el-table
       :data="dataList"
       border
+      fit
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
         type="selection"
         header-align="center"
-        align="center"
-        width="50">
+        align="center">
       </el-table-column>
       <el-table-column
-        prop="id"
         header-align="center"
         align="center"
-        label="id">
+        label="序号"
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="company"
@@ -154,7 +161,8 @@
         prop="userName"
         header-align="center"
         align="center"
-        label="用户名称">
+        label="用户名称"
+        width="180">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">
             {{ scope.row.userName }}
@@ -171,13 +179,15 @@
         prop="startTime"
         header-align="center"
         align="center"
-        label="起始时间">
+        label="起始时间"
+        width="170">
       </el-table-column>
       <el-table-column
         prop="stopTime"
         header-align="center"
         align="center"
-        label="终止时间">
+        label="终止时间"
+        width="170">
       </el-table-column>
       <el-table-column
         prop="hourCount"
@@ -189,41 +199,8 @@
         prop="repeatCount"
         header-align="center"
         align="center"
-        label="重复停电次数">
-      </el-table-column>
-      <el-table-column
-        prop="correctiveAction"
-        header-align="center"
-        align="center"
-        label="整改措施">
-      </el-table-column>
-      <el-table-column
-        prop="isCorrectiveAction"
-        header-align="center"
-        align="center"
-        label="是否整改完成">
-        <template slot-scope="scope">
-          <span v-if="!scope.row.isCorrectiveAction">否</span>
-          <span v-if="scope.row.isCorrectiveAction">是</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="communicate"
-        header-align="center"
-        align="center"
-        label="沟通回访">
-      </el-table-column>
-      <el-table-column
-        prop="reason"
-        header-align="center"
-        align="center"
-        label="停电原因">
-      </el-table-column>
-      <el-table-column
-        prop="category"
-        header-align="center"
-        align="center"
-        label="停电分类">
+        label="重复停电次数"
+        width="120">
       </el-table-column>
       <el-table-column
         prop="isReporting"
@@ -263,7 +240,7 @@
 
 <script>
 import AddOrUpdate from './repeatdetailed-add-or-update'
-
+import {isIntegerNotMust} from '../../../utils'
 export default {
   data () {
     return {
@@ -271,8 +248,8 @@ export default {
       uploadUrl: '',
       dataForm: {
         file: '',
-        days: 60,
-        nexts: 3,
+        days: '',
+        nexts: '',
         startTime: '',
         endTime: new Date(),
         station: '',
@@ -317,6 +294,17 @@ export default {
           label: '否'
         }]
       },
+      dataRule: {
+        count: [
+          { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
+        ],
+        days: [
+          { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
+        ],
+        nexts: [
+          { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
+        ]
+      },
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -336,9 +324,10 @@ export default {
   },
   methods: {
     onSuccess (res) {
-      this.$alert('上传成功', '提示', {
+      this.$alert(res, '提示', {
         confirmButtonText: '确定',
         callback: action => {
+          console.log(res)
           console.log('上传成功')
         }
       })
@@ -347,16 +336,19 @@ export default {
       this.$alert('创建失败', '提示', {
         confirmButtonText: '确定',
         callback: action => {
+          console.log(res)
           console.log('上传失败')
         }
       })
     },
+    // 文件上传 未完成
     handleSubmit () {
       this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed'  // 这里，读者换成实际项目中的上传接口
       this.$nextTick(() => {
         this.$refs.upload.submit()
       })
     },
+    // 获取停电规则信息
     getRepeatruleInfo () {
       this.$http({
         url: this.$http.adornUrl('/powercut/repeatrule/info'),
@@ -369,14 +361,12 @@ export default {
         }
       })
     },
+    // 更新停电规则
     getRepeatruleUpdate () {
-      console.log('tete')
-      console.log(this.dataForm.days)
-      console.log(this.dataForm.nexts)
       this.$http({
         url: this.$http.adornUrl('/powercut/repeatrule/update'),
         method: 'post',
-        params: this.$http.adornParams({
+        data: this.$http.adornData({
           'days': this.dataForm.days,
           'number': this.dataForm.nexts
         })
@@ -387,17 +377,31 @@ export default {
     // 停电明细导出出出全部数据
     exportData () {
       this.dataArray = ''
-      if (this.dataForm.startTime !== '' && this.dataForm.startTime !== null) {
-        this.dataArray += 'startTime=' + this.dataForm.startTime + '&'
+      if (this.dataForm.station !== '' && this.dataForm.station !== null) {
+        this.dataArray += 'company=' + this.dataForm.station + '&'
       }
-      if (this.dataForm.endTime !== '' && this.dataForm.endTime !== null) {
-        this.dataArray += 'stopTime=' + this.dataForm.endTime + '&'
+      if (this.dataForm.lineName !== '' && this.dataForm.lineName !== null) {
+        this.dataArray += 'lineRoadName=' + this.dataForm.lineName + '&'
       }
-      if (this.dataForm.nexts !== '' && this.dataForm.nexts !== null) {
-        this.dataArray += 'repeatCount=' + this.dataForm.nexts + '&'
+      if (this.dataForm.timeList !== '' && this.dataForm.timeList !== null) {
+        if (this.dataForm.timeList[0] !== '' && this.dataForm.timeList[0] !== null) {
+          this.dataArray += 'startTime=' + this.dataForm.timeList[0] + '&'
+        }
+        if (this.dataForm.timeList[1] !== '' && this.dataForm.timeList[1] !== null) {
+          this.dataArray += 'stopTime=' + this.dataForm.timeList[1] + '&'
+        }
+      }
+      if (this.dataForm.manger !== '' && this.dataForm.manger !== null) {
+        this.dataArray += 'manager=' + this.dataForm.manger + '&'
+      }
+      if (this.dataForm.report !== '' && this.dataForm.report !== null) {
+        this.dataArray += 'isReporting=' + this.dataForm.report + '&'
+      }
+      if (this.dataForm.count !== '' && this.dataForm.count !== null) {
+        this.dataArray += 'repeatCount=' + this.dataForm.count + '&'
       }
       this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
-      console.log(this.dataArray)
+
       window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/exportRepeatDetailed?' + this.dataArray
     },
     clear () {

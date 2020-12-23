@@ -1,6 +1,6 @@
 <template>
   <div class="mod-config">
-    <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
+    <el-form :inline="true" :rules="dataRule" ref="dataForm" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
         <span>
           单位名称：
@@ -62,7 +62,7 @@
         </el-select>
 
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="count">
         <span>
           重复停电次数：
         </span>
@@ -74,21 +74,23 @@
       </el-form-item>
       <br>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
-        <el-button @click="exportData()">导出</el-button>
+        <el-button @click="getDataList()" type="success">查询</el-button>
+        <el-button @click="clear()" type="warning">清空</el-button>
+        <el-button @click="exportData()" type="primary">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
       border
+      fit
       v-loading="dataListLoading"
       style="width: 100%;">
       <el-table-column
-        prop="id"
         header-align="center"
         align="center"
-        label="id">
+        label="序号"
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="company"
@@ -106,7 +108,8 @@
         prop="userName"
         header-align="center"
         align="center"
-        label="用户名称">
+        label="用户名称"
+        width="180">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">
             {{scope.row.userName}}
@@ -123,13 +126,15 @@
         prop="startTime"
         header-align="center"
         align="center"
-        label="起始时间">
+        label="起始时间"
+        width="170">
       </el-table-column>
       <el-table-column
         prop="stopTime"
         header-align="center"
         align="center"
-        label="终止时间">
+        label="终止时间"
+        width="170">
       </el-table-column>
       <el-table-column
         prop="hourCount"
@@ -182,6 +187,8 @@
 
 <script>
 import AddOrUpdate from './repeatbook-add-or-update'
+import {isIntegerNotMust} from '../../../utils'
+
 export default {
   data () {
     return {
@@ -227,6 +234,11 @@ export default {
           value: '0',
           label: '否'
         }]
+      },
+      dataRule: {
+        count: [
+          { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
+        ]
       },
       dataList: [],
       pageIndex: 1,

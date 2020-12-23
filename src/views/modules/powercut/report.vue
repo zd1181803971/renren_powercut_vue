@@ -29,8 +29,8 @@
       </el-form-item>
       <br>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
+        <el-button @click="getDataList()" type="success">查询</el-button>
+        <el-button @click="clear()" type="warning">清空</el-button>
         <el-button @click="">预览</el-button>
         <el-button @click="">下载</el-button>
         <el-button v-if="isAuth('powercut:report:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
@@ -50,10 +50,11 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="id"
+        label="序号"
+        type="index"
         header-align="center"
         align="center"
-        label="id">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="reportName"
@@ -92,8 +93,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="danger" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

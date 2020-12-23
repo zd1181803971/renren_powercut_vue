@@ -35,10 +35,10 @@
         <div>
           <el-select v-model="dataForm.reason" placeholder="请选择">
             <el-option
-              v-for="item in dataList"
-              :key="item.reason"
-              :label="item.reason"
-              :value="item.reason">
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
             </el-option>
           </el-select>
         </div>
@@ -54,9 +54,9 @@
 
     <el-form>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
-        <el-button @click="exportData()">导出</el-button>
+        <el-button @click="getDataList()"  type="success">查询</el-button>
+        <el-button @click="clear()" type="warning">清空</el-button>
+        <el-button @click="exportData()" type="primary">导出</el-button>
         <el-button v-if="isAuth('powercut:standingbook:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
@@ -64,44 +64,44 @@
     <el-table
       :data="dataList"
       border
+      fit
       v-loading="dataListLoading"
       @selection-change="selectionChangeHandle"
       style="width: 100%;">
       <el-table-column
         type="selection"
         header-align="center"
-        align="center"
-        width="50">
+        align="center">
       </el-table-column>
       <el-table-column
-        prop="id"
         header-align="center"
         align="center"
-        label="id">
+        label="序号"
+        width="50">
+        <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column
+        prop="company"
         header-align="center"
         align="center"
         label="单位名称">
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">
-           {{scope.row.company}}
-          </el-button>
-        </template>
       </el-table-column>
       <el-table-column
-        prop="blackoutTime"
         header-align="center"
         align="center"
         label="停电时间">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">
+            {{scope.row.blackoutTime}}
+          </el-button>
+        </template>
       </el-table-column>
       <el-table-column
         header-align="center"
         align="center"
         label="停电时长">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.blackoutDuration }}小时</span>
+          <span>{{ scope.row.blackoutDuration }}小时</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -158,6 +158,7 @@
 
 <script>
   import AddOrUpdate from './standingbook-add-or-update'
+
   export default {
     data () {
       return {
@@ -197,7 +198,6 @@
           timeList: '',
           reason: ''
         },
-        ids: 1,
         addOrUpdateVisible: false,
         dataList: [],
         pageIndex: 1,
@@ -206,7 +206,35 @@
         dataListLoading: false,
         dataListSelections: [],
         test: [],
-        dataArray: ''
+        dataArray: '',
+        options: [{
+          value: '计划停电',
+          label: '计划停电'
+        }, {
+          value: '用户原因',
+          label: '用户原因'
+        }, {
+          value: '自然因素',
+          label: '自然因素'
+        }, {
+          value: '外力因素',
+          label: '外力因素'
+        }, {
+          value: '运行维护',
+          label: '运行维护'
+        }, {
+          value: '设备原因',
+          label: '设备原因'
+        }, {
+          value: '设计施工',
+          label: '设计施工'
+        }, {
+          value: '低压表前',
+          label: '低压表前'
+        }, {
+          value: '低压表后',
+          label: '低压表后'
+        }]
       }
     },
     components: {
@@ -237,7 +265,6 @@
           this.dataArray += 'manager=' + this.dataForm.manager + '&'
         }
         this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
-        console.log(this.dataArray)
         window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/standingbook/exprtStandingBook?' + this.dataArray
       },
       clear () {

@@ -1,69 +1,99 @@
 <template>
   <el-dialog
-    :title="'详细信息'"
+    :title="'详细页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" ref="dataForm" label-width="140px">
-      <el-form-item label="单位名称：">
-        {{dataForm.company}}
+    <el-form :model="dataForm"  ref="dataForm"  label-width="150px">
+      <el-form-item  label="单位名称：">
+        <el-input
+          readonly
+          v-model="dataForm.company">
+        </el-input>
       </el-form-item>
       <el-form-item label="停电时间：">
-        {{dataForm.blackoutTime}}
+        <el-input
+          readonly
+          v-model="dataForm.blackoutTime">
+        </el-input>
       </el-form-item>
       <el-form-item label="停电时长：">
-        {{dataForm.blackoutDuration}}小时
+        <el-input
+          readonly
+          v-model="dataForm.blackoutDuration+'小时'">
+        </el-input>
       </el-form-item>
       <el-form-item label="影响台区数量：">
-        {{dataForm.districtCount}}
+        <el-input
+          readonly
+          v-model="dataForm.districtCount">
+        </el-input>
       </el-form-item>
       <el-form-item label="影响用户数：">
-        {{dataForm.userCount}}
+        <el-input
+          readonly
+          v-model="dataForm.userCount">
+        </el-input>
       </el-form-item>
       <el-form-item label="是否计划内：">
-        <div v-if="dataForm.isPlan === null">
-        </div>
-        <div v-else-if="dataForm.isPlan === 0">
-          否
-        </div>
-        <div v-else-if="dataForm.isPlan === 1">
-          是
-        </div>
+        <el-input
+          readonly
+          v-if="dataForm.isPlan == 1" value="是">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isPlan == 0" value="否">
+        </el-input>
       </el-form-item>
       <el-form-item label="停电原因：">
-        {{dataForm.reason}}
+        <el-input
+          readonly
+          v-model="dataForm.reason"></el-input>
       </el-form-item>
       <el-form-item label="近两个月停电次数：">
-        {{dataForm.blackoutCount}}
+        <el-input
+          readonly
+          v-model="dataForm.blackoutCount"></el-input>
       </el-form-item>
-      <h4>台区信息</h4>
-      <br>
+    </el-form>
+    <div>
+      <h3 style="text-align: center">台区信息</h3>
+    </div>
+    <div>
       <el-table
+        fit
+        border
         :data="districtDtoList"
         style="width: 100%">
         <el-table-column
-          prop="id"
           label="序号"
-          width="180">
+          type="index"
+          header-align="center"
+          align="center"
+          width="50">
         </el-table-column>
         <el-table-column
           prop="districtName"
           label="台区名称"
-          width="180">
+          header-align="center"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="userCount"
           label="台区用户数量"
-          width="180">
+          header-align="center"
+          align="center">
         </el-table-column>
         <el-table-column
           prop="manager"
-          label="台区经理"
-          width="180">
+          header-align="center"
+          align="center"
+          label="台区经理">
         </el-table-column>
       </el-table>
-    </el-form>
+    </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">确定</el-button>
+      <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -89,6 +119,16 @@ export default {
   },
   methods: {
     init (id) {
+      this.dataForm.company = ''
+      this.dataForm.blackoutTime = ''
+      this.dataForm.blackoutDuration = ''
+      this.dataForm.districtCount = ''
+      this.dataForm.company = ''
+      this.dataForm.userCount = ''
+      this.dataForm.isPlan = ''
+      this.dataForm.reason = ''
+      this.dataForm.blackoutCount = ''
+      this.dataForm.districtDtoList = ''
       this.dataForm.id = id || 0
       this.visible = true
       this.$nextTick(() => {
@@ -99,7 +139,6 @@ export default {
             params: this.$http.adornParams()
           }).then(({data}) => {
             if (data && data.code === 0) {
-              console.log(data)
               this.dataForm.company = data.standingbookDto.company
               this.dataForm.blackoutTime = data.standingbookDto.blackoutTime
               this.dataForm.blackoutDuration = data.standingbookDto.blackoutDuration

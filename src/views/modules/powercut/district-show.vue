@@ -1,36 +1,37 @@
 <template>
   <el-dialog
     :title="'详情页面'"
+    center
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm"  ref="dataForm"  label-width="120px">
-      <el-form-item label="单位名称:">
-        {{dataForm.company}}
+      <el-form-item label="单位名称:" prop="company">
+        <el-input  readonly v-model="dataForm.company" placeholder="单位名称"></el-input>
       </el-form-item>
-      <el-form-item label="变电站名称:">
-        {{dataForm.stationName}}
+      <el-form-item label="变电站名称:" prop="stationName">
+        <el-input readonly v-model="dataForm.stationName" placeholder="变电站名称"></el-input>
       </el-form-item>
-      <el-form-item label="线路名称:">
-        {{dataForm.lineRoadName}}
+      <el-form-item label="线路名称:" prop="lineRoadName">
+        <el-input  readonly v-model="dataForm.lineRoadName" placeholder="线路名称"></el-input>
       </el-form-item>
-      <el-form-item label="线段名称:">
-        {{dataForm.lineSegmentName}}
+      <el-form-item label="线路名称:" prop="lineSegmentName">
+        <el-input readonly v-model="dataForm.lineSegmentName" placeholder="线路名称"></el-input>
       </el-form-item>
-      <el-form-item label="台区用户名称:">
-        {{dataForm.userName}}
+      <el-form-item label="台区用户名称:" prop="userName">
+        <el-input readonly v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
       </el-form-item>
-      <el-form-item label="用户性质:">
-       {{ dataForm.userNatrue }}
+      <el-form-item label="用户性质:" prop="userNatrue">
+        <el-input readonly  v-model="dataForm.userNatrue" placeholder="台区用户名称"></el-input>
       </el-form-item>
-      <el-form-item label="台区经理:">
-        {{dataForm.manager}}
+      <el-form-item label="台区经理:" prop="manager">
+        <el-input readonly v-model="dataForm.manager" placeholder="台区经理"></el-input>
       </el-form-item>
-      <el-form-item label="用户数量:">
-        {{dataForm.userCount}}
+      <el-form-item label="用户数量:" prop="userCount">
+        <el-input readonly v-model="dataForm.userCount" placeholder="用户数量"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">确定</el-button>
+      <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -47,7 +48,7 @@ export default {
         lineRoadName: '',
         lineSegmentName: '',
         userName: '',
-        userNatrue: '',
+        userNatrue: 1,
         manager: '',
         userCount: ''
       }

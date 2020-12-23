@@ -40,21 +40,23 @@
       </el-form-item>
       <br>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
-        <el-button @click="exportData()">导出</el-button>
+        <el-button @click="getDataList()" type="success">查询</el-button>
+        <el-button @click="clear()" type="warning">清空</el-button>
+        <el-button @click="exportData()" type="primary">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
       border
+      fit
       v-loading="dataListLoading"
       style="width: 100%;">
       <el-table-column
-        prop="id"
+        label="序号"
+        type="index"
         header-align="center"
         align="center"
-        label="id">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="company"

@@ -40,21 +40,23 @@
       </el-form-item>
       <br>
       <el-form-item>
-        <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="clear()">清空</el-button>
-        <el-button @click="exportData()">导出</el-button>
+        <el-button @click="getDataList()" type="success">查询</el-button>
+        <el-button @click="clear()"  type="warning">清空</el-button>
+        <el-button @click="exportData()" type="primary">导出</el-button>
       </el-form-item>
     </el-form>
     <el-table
       :data="dataList"
       border
+      fit
       v-loading="dataListLoading"
       style="width: 100%;">
       <el-table-column
-        prop="id"
         header-align="center"
         align="center"
-        label="id">
+        label="序号"
+        type="index"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="company"
@@ -101,7 +103,7 @@
         prop="blackoutCount"
         header-align="center"
         align="center"
-        label="近两个月停电次数">
+        label="近两月停电次数">
       </el-table-column>
       <el-table-column
         prop="jobContent"
@@ -242,6 +244,7 @@ export default {
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
+          console.log(data)
           this.dataList = data.page.list
           this.totalPage = data.page.totalCount
         } else {

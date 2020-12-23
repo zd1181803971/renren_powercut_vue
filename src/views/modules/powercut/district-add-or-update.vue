@@ -3,7 +3,7 @@
     :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible">
-    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="130px">
+    <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="150px">
     <el-form-item label="单位名称:" prop="company">
       <el-input v-model="dataForm.company" placeholder="单位名称"></el-input>
     </el-form-item>
@@ -20,10 +20,7 @@
       <el-input v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
     </el-form-item>
     <el-form-item label="用户性质:" prop="userNatrue">
-      <template>
-        <el-radio v-model="dataForm.userNatrue" label="0">公用</el-radio>
-        <el-radio v-model="dataForm.userNatrue" label="1">专用</el-radio>
-      </template>
+      <el-input v-model="dataForm.userNatrue" placeholder="台区用户名称"></el-input>
     </el-form-item>
     <el-form-item label="台区经理:" prop="manager">
       <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
