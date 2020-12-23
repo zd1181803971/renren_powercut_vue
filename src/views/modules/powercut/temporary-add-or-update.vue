@@ -29,7 +29,7 @@
           v-model="dataForm.districtCount">
         </el-input>
       </el-form-item>
-      <el-form-item label="影响用户数：">
+      <el-form-item label="影响用户数量：">
         <el-input
           readonly
           v-model="dataForm.userCount">
@@ -71,16 +71,16 @@
         label="台区名称">
       </el-table-column>
       <el-table-column
+        prop="userCount"
+        header-align="center"
+        align="center"
+        label="台区用户数量">
+      </el-table-column>
+      <el-table-column
         prop="manager"
         header-align="center"
         align="center"
         label="台区经理">
-      </el-table-column>
-      <el-table-column
-        prop="userCount"
-        header-align="center"
-        align="center"
-        label="用户数量">
       </el-table-column>
     </el-table>
     <span slot="footer" class="dialog-footer">
@@ -113,29 +113,26 @@ export default {
     init (id) {
       this.dataForm.id = id || 0
       this.visible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.id) {
-          this.$http({
-            url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.dataForm.company = data.plan.company
-              this.dataForm.blackoutTime = data.plan.blackoutTime
-              this.dataForm.recoveryTime = data.plan.recoveryTime
-              this.dataForm.districtCount = data.plan.districtCount
-              this.dataForm.userCount = data.plan.userCount
-              this.dataForm.reason = data.plan.reason
-              this.dataForm.blackoutCount = data.plan.blackoutCount
-              this.dataForm.jobContent = data.plan.jobContent
-              this.dataList = data.plan.districtDtoList
-              console.log(data)
-            }
-          })
-        }
-      })
+      if (this.dataForm.id) {
+        this.$http({
+          url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataForm.company = data.plan.company
+            this.dataForm.blackoutTime = data.plan.blackoutTime
+            this.dataForm.recoveryTime = data.plan.recoveryTime
+            this.dataForm.districtCount = data.plan.districtCount
+            this.dataForm.userCount = data.plan.userCount
+            this.dataForm.reason = data.plan.reason
+            this.dataForm.blackoutCount = data.plan.blackoutCount
+            this.dataForm.jobContent = data.plan.jobContent
+            this.dataList = data.plan.districtDtoList
+            console.log(data)
+          }
+        })
+      }
     }
   }
 }

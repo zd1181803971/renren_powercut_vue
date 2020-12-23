@@ -74,9 +74,9 @@
           :limit="1"
           class="upload-demo"
           ref="upload"
-          accept=".csv"
-          :action="uploadUrl"
-          :file-list="fileList"
+          accept=".xls, .xlsx, .csv"
+          :action=uploadUrl
+          :file-list=fileList
           :auto-upload="false"
           :on-success="onSuccess"
           :on-error="onError"
@@ -222,12 +222,23 @@
     },
     methods: {
       onSuccess (res) {
-        this.$alert('上传成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            console.log('上传成功')
-          }
-        })
+        if (res.code === 500) {
+          this.$alert(res.msg, '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              console.log(res)
+              console.log('上传失败')
+            }
+          })
+        } if (res.code === 0) {
+          this.$alert('上传成功', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+              console.log(res)
+              console.log('上传成功')
+            }
+          })
+        }
       },
       onError (res) {
         this.$alert('创建失败', '提示', {
@@ -238,7 +249,8 @@
         })
       },
       handleSubmit () {
-        this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/district/importDistrict'  // 这里，读者换成实际项目中的上传接口
+        console.log('12345566')
+        this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/district/importDistrict'
         this.$nextTick(() => {
           this.$refs.upload.submit()
         })

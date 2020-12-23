@@ -108,7 +108,7 @@
         prop="userCount"
         header-align="center"
         align="center"
-        label="影响用户数">
+        label="影响用户数量">
       </el-table-column>
       <el-table-column
         prop="reason"
@@ -208,7 +208,7 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-    // 批量审批
+    // 批量审批？？？？？？？？？？？？？？？？？
     approvalBatch () {
       this.$http({
         url: this.$http.adornUrl(`/powercut/plan/approvalBatch`),
@@ -241,27 +241,31 @@ export default {
     },
     // 获取数据列表
     getDataList () {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/powercut/plan/approvalList'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'company': this.dataForm.station || null,
-          'startBlackoutTime': this.dataForm.timeList[0] || null,
-          'stopBlackoutTime': this.dataForm.timeList[1] || null,
-          'blackoutCount': this.dataForm.count || null
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl('/powercut/plan/approvalList'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'page': this.pageIndex,
+              'limit': this.pageSize,
+              'company': this.dataForm.station || null,
+              'startBlackoutTime': this.dataForm.timeList[0] || null,
+              'stopBlackoutTime': this.dataForm.timeList[1] || null,
+              'blackoutCount': this.dataForm.count || null
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.dataList = data.page.list
+              this.totalPage = data.page.totalCount
+            } else {
+              this.dataList = []
+              this.totalPage = 0
+            }
+            this.dataListLoading = false
+          })
         }
-        this.dataListLoading = false
       })
     },
     // 每页数

@@ -297,30 +297,35 @@ export default {
     },
     // 获取数据列表
     getDataList () {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'company': this.dataForm.station || null,
-          'lineRoadName': this.dataForm.lineName || null,
-          'startTime': this.dataForm.timeList[0] || null,
-          'stopTime': this.dataForm.timeList[1] || null,
-          'manager': this.dataForm.manger || null,
-          'isReporting': this.dataForm.report || null,
-          'repeatCount': this.dataForm.count || null
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl('/powercut/repeatdetailed/repeatList'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'page': this.pageIndex,
+              'limit': this.pageSize,
+              'company': this.dataForm.station || null,
+              'lineRoadName': this.dataForm.lineName || null,
+              'startTime': this.dataForm.timeList[0] || null,
+              'stopTime': this.dataForm.timeList[1] || null,
+              'manager': this.dataForm.manger || null,
+              'isReporting': this.dataForm.report || null,
+              'repeatCount': this.dataForm.count || null
+            })
+          }).then(({data}) => {
+            console.log(data)
+            if (data && data.code === 0) {
+              this.dataList = data.page.list
+              this.totalPage = data.page.totalCount
+            } else {
+              this.dataList = []
+              this.totalPage = 0
+            }
+            this.dataListLoading = false
+          })
         }
-        this.dataListLoading = false
       })
     },
     // 每页数

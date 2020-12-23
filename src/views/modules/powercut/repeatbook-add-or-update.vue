@@ -80,17 +80,7 @@
       <el-form-item label="是否整改完成：">
         <el-input
           readonly
-          v-if="dataForm.isCorrectiveAction == null">
-        </el-input>
-        <el-input
-          readonly
-          v-if="dataForm.isCorrectiveAction == 0"
-          value="否">
-        </el-input>
-        <el-input
-          readonly
-          v-if="dataForm.isCorrectiveAction == 1"
-          value="是">
+          v-model="dataForm.isCorrectiveAction">
         </el-input>
       </el-form-item>
       <el-form-item label="沟通回访情况：">
@@ -134,33 +124,31 @@ export default {
     init (id) {
       this.dataForm.id = id || 0
       this.visible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.id) {
-          this.$http({
-            url: this.$http.adornUrl(`/powercut/repeatdetailed/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.dataForm.company = data.repeatDetailed.company
-              this.dataForm.lineRoadName = data.repeatDetailed.lineRoadName
-              this.dataForm.userName = data.repeatDetailed.userName
-              this.dataForm.userNatrue = data.repeatDetailed.userNatrue
-              this.dataForm.startTime = data.repeatDetailed.startTime
-              this.dataForm.stopTime = data.repeatDetailed.stopTime
-              this.dataForm.hourCount = data.repeatDetailed.hourCount
-              this.dataForm.repeatCount = data.repeatDetailed.repeatCount
-              this.dataForm.correctiveAction = data.repeatDetailed.correctiveAction
-              this.dataForm.isCorrectiveAction = data.repeatDetailed.isCorrectiveAction
-              this.dataForm.communicate = data.repeatDetailed.communicate
-              this.dataForm.reason = data.repeatDetailed.reason
-              this.dataForm.category = data.repeatDetailed.category
-              this.dataForm.manager = data.repeatDetailed.manager
-            }
-          })
-        }
-      })
+      if (this.dataForm.id) {
+        this.$http({
+          url: this.$http.adornUrl(`/powercut/repeatdetailed/info/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            console.log(data)
+            this.dataForm.company = data.repeatDetailed.company
+            this.dataForm.lineRoadName = data.repeatDetailed.lineRoadName
+            this.dataForm.userName = data.repeatDetailed.userName
+            this.dataForm.userNatrue = data.repeatDetailed.userNatrue
+            this.dataForm.startTime = data.repeatDetailed.startTime
+            this.dataForm.stopTime = data.repeatDetailed.stopTime
+            this.dataForm.hourCount = data.repeatDetailed.hourCount
+            this.dataForm.repeatCount = data.repeatDetailed.repeatCount
+            this.dataForm.correctiveAction = data.repeatDetailed.correctiveAction
+            this.dataForm.isCorrectiveAction = data.repeatDetailed.isCorrectiveAction
+            this.dataForm.communicate = data.repeatDetailed.communicate
+            this.dataForm.reason = data.repeatDetailed.reason
+            this.dataForm.category = data.repeatDetailed.category
+            this.dataForm.manager = data.repeatDetailed.manager
+          }
+        })
+      }
     }
   }
 }

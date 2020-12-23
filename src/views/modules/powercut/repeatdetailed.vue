@@ -114,9 +114,9 @@
           :limit="1"
           class="upload-demo"
           ref="upload"
-          accept="application/vnd.ms-excel"
-          :action="'http://powercut.free.idcfengye.com/renren-fast/powercut/repeatdetailed/importRepeatDetailed'"
-          :file-list="fileList"
+          accept=".xls, .xlsx, .csv"
+          :action=uploadUrl
+          :file-list=fileList
           :auto-upload="false"
           :on-success="onSuccess"
           :on-error="onError"
@@ -244,14 +244,9 @@ import {isIntegerNotMust} from '../../../utils'
 export default {
   data () {
     return {
-      fileList: [],
-      uploadUrl: '',
       dataForm: {
-        file: '',
         days: '',
         nexts: '',
-        startTime: '',
-        endTime: new Date(),
         station: '',
         lineName: '',
         timeList: '',
@@ -285,15 +280,17 @@ export default {
         },
         manger: '',
         report: '',
-        count: '',
         options: [{
           value: '1',
           label: '是'
         }, {
           value: '0',
           label: '否'
-        }]
+        }],
+        count: ''
       },
+      fileList: [],
+      uploadUrl: '',
       dataRule: {
         count: [
           { validator: isIntegerNotMust, message: '只能输入正整数', trigger: 'blur' }
@@ -324,16 +321,26 @@ export default {
   },
   methods: {
     onSuccess (res) {
-      this.$alert(res, '提示', {
-        confirmButtonText: '确定',
-        callback: action => {
-          console.log(res)
-          console.log('上传成功')
-        }
-      })
+      if (res.code === 500) {
+        this.$alert(res.msg, '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            console.log(res.msg)
+            console.log('上传失败')
+          }
+        })
+      } if (res.code === 0) {
+        this.$alert('上传成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            console.log(res)
+            console.log('上传成功')
+          }
+        })
+      }
     },
     onError (res) {
-      this.$alert('创建失败', '提示', {
+      this.$alert('上传失败', '提示', {
         confirmButtonText: '确定',
         callback: action => {
           console.log(res)
@@ -341,9 +348,9 @@ export default {
         }
       })
     },
-    // 文件上传 未完成
+    // 文件上传
     handleSubmit () {
-      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed'  // 这里，读者换成实际项目中的上传接口
+      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed'
       this.$nextTick(() => {
         this.$refs.upload.submit()
       })
@@ -363,15 +370,29 @@ export default {
     },
     // 更新停电规则
     getRepeatruleUpdate () {
-      this.$http({
-        url: this.$http.adornUrl('/powercut/repeatrule/update'),
-        method: 'post',
-        data: this.$http.adornData({
-          'days': this.dataForm.days,
-          'number': this.dataForm.nexts
-        })
-      }).then(({data}) => {
-        console.log(data)
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.$http({
+            url: this.$http.adornUrl('/powercut/repeatrule/update'),
+            method: 'post',
+            data: this.$http.adornData({
+              'days': this.dataForm.days,
+              'number': this.dataForm.nexts
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              if (data && data.code === 0) {
+                this.$message({
+                  message: '重复停电规则维护成功',
+                  type: 'success',
+                  duration: 1500
+                })
+              } else {
+                this.$message.error(data.msg)
+              }
+            }
+          })
+        }
       })
     },
     // 停电明细导出出出全部数据
@@ -401,42 +422,47 @@ export default {
         this.dataArray += 'repeatCount=' + this.dataForm.count + '&'
       }
       this.dataArray = this.dataArray.substring(0, this.dataArray.length - 1)
-
       window.location.href = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/exportRepeatDetailed?' + this.dataArray
     },
     clear () {
-      this.dataForm.days = null
-      this.dataForm.nexts = null
-      this.dataForm.startTime = null
-      this.dataForm.endTime = null
+      this.dataForm.station = ''
+      this.dataForm.lineName = ''
+      this.dataForm.timeList = ''
+      this.dataForm.manger = ''
+      this.dataForm.report = ''
+      this.dataForm.count = ''
       this.getDataList()
     },
     // 获取数据列表
     getDataList () {
-      this.dataListLoading = true
-      this.$http({
-        url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
-        method: 'get',
-        params: this.$http.adornParams({
-          'page': this.pageIndex,
-          'limit': this.pageSize,
-          'company': this.dataForm.station || null,
-          'lineRoadName': this.dataForm.lineName || null,
-          'startTime': this.dataForm.timeList[0] || null,
-          'stopTime': this.dataForm.timeList[1] || null,
-          'manager': this.dataForm.manger || null,
-          'isReporting': this.dataForm.report || null,
-          'repeatCount': this.dataForm.count || null
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.dataList = data.page.list
-          this.totalPage = data.page.totalCount
-        } else {
-          this.dataList = []
-          this.totalPage = 0
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.dataListLoading = true
+          this.$http({
+            url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
+            method: 'get',
+            params: this.$http.adornParams({
+              'page': this.pageIndex,
+              'limit': this.pageSize,
+              'company': this.dataForm.station || null,
+              'lineRoadName': this.dataForm.lineName || null,
+              'startTime': this.dataForm.timeList[0] || null,
+              'stopTime': this.dataForm.timeList[1] || null,
+              'manager': this.dataForm.manger || null,
+              'isReporting': this.dataForm.report || null,
+              'repeatCount': this.dataForm.count || null
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.dataList = data.page.list
+              this.totalPage = data.page.totalCount
+            } else {
+              this.dataList = []
+              this.totalPage = 0
+            }
+            this.dataListLoading = false
+          })
         }
-        this.dataListLoading = false
       })
     },
     // 每页数

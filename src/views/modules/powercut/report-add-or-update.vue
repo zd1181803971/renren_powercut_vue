@@ -153,9 +153,6 @@ export default {
         ],
         stopTime: [
           {required: true, message: '统计结束时间不能为空', trigger: 'blur'}
-        ],
-        remarks: [
-          {required: true, message: '备注不能为空', trigger: 'blur'}
         ]
       }
     }

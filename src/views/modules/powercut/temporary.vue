@@ -91,7 +91,7 @@
         prop="userCount"
         header-align="center"
         align="center"
-        label="影响用户数">
+        label="影响用户数量">
       </el-table-column>
       <el-table-column
         prop="reason"
@@ -103,7 +103,7 @@
         prop="blackoutCount"
         header-align="center"
         align="center"
-        label="近两个月停电次数">
+        label="近两月停电次数">
       </el-table-column>
       <el-table-column
         prop="jobContent"
@@ -124,7 +124,6 @@
           <span v-if="scope.row.planState === 4">分管领导驳回</span>
         </template>
       </el-table-column>
-
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"

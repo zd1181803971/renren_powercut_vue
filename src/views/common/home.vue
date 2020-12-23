@@ -17,9 +17,9 @@
           <div id="J_secondBox" class="chart-box"></div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card>
-          <div id="J_chartPieBox" class="chart-box"></div>
+          <div id="J_thirdBox" class="chart-box"></div>
         </el-card>
       </el-col>
       <el-col :span="12">
@@ -42,9 +42,9 @@ import echarts from 'echarts'
 export default {
   data () {
     return {
-      chartLine: null,
-      chartBar: null,
-      chartBar2: null,
+      firstBox: null,
+      secondBox: null,
+      thirdBox: null,
       chartPie: null,
       chartScatter: null,
       dataForm: {
@@ -60,22 +60,22 @@ export default {
     }
   },
   mounted () {
-    this.initChartBar()
-    this.initChartPie()
-    this.initChartBar2()
-    this.initChartLine()
     this.getDataList()
+    this.initFirstBox()
+    this.initSecondBox()
+    this.initThirdBox()
+    this.initChartLine()
   },
   activated () {
     // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
-    if (this.chartLine) {
-      this.chartLine.resize()
+    if (this.firstBox) {
+      this.firstBox.resize()
     }
-    if (this.chartBar) {
-      this.chartBar.resize()
+    if (this.secondBox) {
+      this.secondBox.resize()
     }
-    if (this.chartBar2) {
-      this.chartBar2.resize()
+    if (this.thirdBox) {
+      this.thirdBox.resize()
     }
     if (this.chartPie) {
       this.chartPie.resize()
@@ -106,7 +106,7 @@ export default {
       })
     },
     // 供电所停电情况统计 横向堆叠柱状图统计
-    initChartLine () {
+    initFirstBox () {
       var option = {
         title: {
           text: '供电所停电情况统计',
@@ -148,14 +148,14 @@ export default {
           }
         ]
       }
-      this.chartLine = echarts.init(document.getElementById('J_firstBox'))
-      this.chartLine.setOption(option)
+      this.firstBox = echarts.init(document.getElementById('J_firstBox'))
+      this.firstBox.setOption(option)
       window.addEventListener('resize', () => {
-        this.chartLine.resize()
+        this.firstBox.resize()
       })
     },
     // 停电原因统计 环状图
-    initChartPie () {
+    initSecondBox () {
       var option = {
         backgroundColor: '#2c343c',
         title: {
@@ -228,14 +228,14 @@ export default {
           }
         ]
       }
-      this.chartPie = echarts.init(document.getElementById('J_secondBox'))
-      this.chartPie.setOption(option)
+      this.secondBox = echarts.init(document.getElementById('J_secondBox'))
+      this.secondBox.setOption(option)
       window.addEventListener('resize', () => {
-        this.chartPie.resize()
+        this.secondBox.resize()
       })
     },
-    // null
-    initChartBar () {
+    // 停电报送核查统计 柱状图统计  ing
+    initThirdBox () {
       var option = {
         title: {
           text: '供电所停电情况统计'
@@ -280,10 +280,10 @@ export default {
           }
         ]
       }
-      this.chartBar = echarts.init(document.getElementById('J_chartScatterBox'))
-      this.chartBar.setOption(option)
+      this.thirdBox = echarts.init(document.getElementById('J_thirdBox'))
+      this.thirdBox.setOption(option)
       window.addEventListener('resize', () => {
-        this.chartBar.resize()
+        this.thirdBox.resize()
       })
     },
     // 停电报送核查统计

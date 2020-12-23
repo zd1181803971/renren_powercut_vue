@@ -23,18 +23,6 @@
           v-model="dataForm.blackoutDuration+'小时'">
         </el-input>
       </el-form-item>
-      <el-form-item label="影响台区数量：">
-        <el-input
-          readonly
-          v-model="dataForm.districtCount">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="影响用户数：">
-        <el-input
-          readonly
-          v-model="dataForm.userCount">
-        </el-input>
-      </el-form-item>
       <el-form-item label="是否计划内：">
         <el-input
           readonly
@@ -50,10 +38,22 @@
           readonly
           v-model="dataForm.reason"></el-input>
       </el-form-item>
-      <el-form-item label="近两个月停电次数：">
+      <el-form-item label="近两月停电次数：">
         <el-input
           readonly
           v-model="dataForm.blackoutCount"></el-input>
+      </el-form-item>
+      <el-form-item label="影响台区数量：">
+        <el-input
+          readonly
+          v-model="dataForm.districtCount">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="用户数量：">
+        <el-input
+          readonly
+          v-model="dataForm.userCount">
+        </el-input>
       </el-form-item>
     </el-form>
     <div>

@@ -29,7 +29,7 @@
           v-model="dataForm.districtCount">
         </el-input>
       </el-form-item>
-      <el-form-item label="影响用户数：">
+      <el-form-item label="影响用户数量：">
         <el-input
           readonly
           v-model="dataForm.userCount">
@@ -51,6 +51,38 @@
           v-model="dataForm.jobContent"></el-input>
       </el-form-item>
     </el-form>
+    <h3 style="text-align: center">计划停电台区信息</h3>
+    <el-table
+      :data="dataList"
+      border
+      fit
+      style="width: 100%;">
+      <el-table-column
+        label="序号"
+        type="index"
+        header-align="center"
+        align="center"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="districtName"
+        header-align="center"
+        align="center"
+        label="台区名称">
+      </el-table-column>
+      <el-table-column
+        prop="userCount"
+        header-align="center"
+        align="center"
+        label="台区用户数量">
+      </el-table-column>
+      <el-table-column
+        prop="manager"
+        header-align="center"
+        align="center"
+        label="台区经理">
+      </el-table-column>
+    </el-table>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false" type="primary">确定</el-button>
     </span>
@@ -81,28 +113,25 @@
       init (id) {
         this.dataForm.id = id || 0
         this.visible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].resetFields()
-          if (this.dataForm.id) {
-            this.$http({
-              url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
-              method: 'get',
-              params: this.$http.adornParams()
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.dataForm.company = data.plan.company
-                this.dataForm.blackoutTime = data.plan.blackoutTime
-                this.dataForm.recoveryTime = data.plan.recoveryTime
-                this.dataForm.districtCount = data.plan.districtCount
-                this.dataForm.userCount = data.plan.userCount
-                this.dataForm.reason = data.plan.reason
-                this.dataForm.blackoutCount = data.plan.blackoutCount
-                this.dataForm.jobContent = data.plan.jobContent
-                this.dataList = data.plan.districtDtoList
-              }
-            })
-          }
-        })
+        if (this.dataForm.id) {
+          this.$http({
+            url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
+            method: 'get',
+            params: this.$http.adornParams()
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.dataForm.company = data.plan.company
+              this.dataForm.blackoutTime = data.plan.blackoutTime
+              this.dataForm.recoveryTime = data.plan.recoveryTime
+              this.dataForm.districtCount = data.plan.districtCount
+              this.dataForm.userCount = data.plan.userCount
+              this.dataForm.reason = data.plan.reason
+              this.dataForm.blackoutCount = data.plan.blackoutCount
+              this.dataForm.jobContent = data.plan.jobContent
+              this.dataList = data.plan.districtDtoList
+            }
+          })
+        }
       }
     }
   }

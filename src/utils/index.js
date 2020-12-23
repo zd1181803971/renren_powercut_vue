@@ -63,16 +63,28 @@ export function isIntegerNotMust (rule, value, callback) {
     callback()
   }
   setTimeout(() => {
-    if (!Number(value)) {
+    const re = /^[+]{0,1}(\d+)$/
+    const rsCheck = re.test(value)
+    if (!rsCheck) {
       callback(new Error('请输入正整数'))
     } else {
-      const re = /^[0-9]*[1-9][0-9]*$/
-      const rsCheck = re.test(value)
-      if (!rsCheck) {
-        callback(new Error('请输入正整数'))
-      } else {
-        callback()
-      }
+      callback()
     }
   }, 1000)
+}
+
+// 验证是否1-99之间
+export function isOneToNinetyNine (rule, value, callback) {
+  if (!value) {
+    return callback(new Error('输入不可以为空'))
+  }
+  setTimeout(() => {
+    const re = /^[+]{0,1}(\d+)$/
+    const rsCheck = re.test(value)
+    if (!rsCheck) {
+      callback(new Error('请输入正整数'))
+    } else {
+      callback()
+    }
+  }, 0)
 }

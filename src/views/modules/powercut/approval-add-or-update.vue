@@ -45,7 +45,7 @@
           v-model="dataForm.districtCount">
         </el-input>
       </el-form-item>
-      <el-form-item  label="影响用户数：">
+      <el-form-item  label="影响用户数量：">
         <el-input
           readonly
           v-model="dataForm.userCount">
@@ -57,7 +57,7 @@
           v-model="dataForm.reason">
         </el-input>
       </el-form-item>
-      <el-form-item  label="近两个月停电次数：">
+      <el-form-item  label="近两月停电次数：">
         <el-input
           readonly
           v-model="dataForm.blackoutCount">
@@ -90,26 +90,31 @@
             label="台区名称">
           </el-table-column>
           <el-table-column
+            prop="userCount"
+            header-align="center"
+            align="center"
+            label="台区用户数量">
+          </el-table-column>
+          <el-table-column
             prop="manager"
             header-align="center"
             align="center"
             label="台区经理">
           </el-table-column>
-          <el-table-column
-            prop="userCount"
-            header-align="center"
-            align="center"
-            label="用户数量">
-          </el-table-column>
         </el-table>
       <br>
       <h3 style="text-align: center">审批意见</h3>
-      <el-input
-        type="textarea"
-        :rows="4"
-        v-model="dataForm.departmentOpinion"
-        placeholder="手输，多行文本，200字以内。">
-      </el-input>
+      <el-form :model="dataForm" ref="dataForm" :rules="dataRule">
+        <el-form-item prop="departmentOpinion">
+          <el-input
+            type="textarea"
+            :rows="4"
+            v-model="dataForm.departmentOpinion"
+            placeholder="手输，多行文本，200字以内。">
+          </el-input>
+        </el-form-item>
+      </el-form>
+
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false" type="warning">返回</el-button>
@@ -125,6 +130,11 @@ export default {
       visible: false,
       dataList: [],
       dataListLoading: false,
+      dataRule: {
+        departmentOpinion: [
+          { required: true, message: '审批意见不能为空！', trigger: 'blur' }
+        ]
+      },
       dataForm: {
         id: 0,
         category: '',
@@ -144,53 +154,54 @@ export default {
     init (id) {
       this.dataForm.id = id || 0
       this.visible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].resetFields()
-        if (this.dataForm.id) {
+      if (this.dataForm.id) {
+        this.$http({
+          url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
+          method: 'get',
+          params: this.$http.adornParams()
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataForm.company = data.plan.company
+            this.dataForm.category = data.plan.category
+            this.dataForm.blackoutTime = data.plan.blackoutTime
+            this.dataForm.recoveryTime = data.plan.recoveryTime
+            this.dataForm.districtCount = data.plan.districtCount
+            this.dataForm.userCount = data.plan.userCount
+            this.dataForm.reason = data.plan.reason
+            this.dataForm.blackoutCount = data.plan.blackoutCount
+            this.dataForm.jobContent = data.plan.jobContent
+            this.dataForm.departmentOpinion = data.plan.opinion
+            this.dataList = data.plan.districtDtoList
+          }
+        })
+      }
+    },
+// 审批
+    dataFormSubmit () {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
           this.$http({
-            url: this.$http.adornUrl(`/powercut/plan/info/${this.dataForm.id}`),
-            method: 'get',
-            params: this.$http.adornParams()
+            url: this.$http.adornUrl(`/powercut/plan/passApproval`),
+            method: 'post',
+            data: this.$http.adornData({
+              'id': this.dataForm.id,
+              'opinion': this.dataForm.departmentOpinion
+            })
           }).then(({data}) => {
             if (data && data.code === 0) {
-              this.dataForm.company = data.plan.company
-              this.dataForm.category = data.plan.category
-              this.dataForm.blackoutTime = data.plan.blackoutTime
-              this.dataForm.recoveryTime = data.plan.recoveryTime
-              this.dataForm.districtCount = data.plan.districtCount
-              this.dataForm.userCount = data.plan.userCount
-              this.dataForm.reason = data.plan.reason
-              this.dataForm.blackoutCount = data.plan.blackoutCount
-              this.dataForm.jobContent = data.plan.jobContent
-              this.dataForm.departmentOpinion = data.plan.opinion
-              this.dataList = data.plan.districtDtoList
+              this.$message({
+                message: '审批成功！',
+                type: 'success',
+                duration: 3000,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
             }
           })
-        }
-      })
-    },
-// 表单提交
-    dataFormSubmit () {
-      this.$http({
-        url: this.$http.adornUrl(`/powercut/plan/passApproval`),
-        method: 'post',
-        data: this.$http.adornData({
-          'id': this.dataForm.id,
-          'opinion': this.dataForm.departmentOpinion
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
         }
       })
     }
