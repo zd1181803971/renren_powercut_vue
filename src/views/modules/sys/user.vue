@@ -36,12 +36,6 @@
         label="用户名">
       </el-table-column>
       <el-table-column
-        prop="email"
-        header-align="center"
-        align="center"
-        label="邮箱">
-      </el-table-column>
-      <el-table-column
         prop="mobile"
         header-align="center"
         align="center"
@@ -126,6 +120,7 @@
             'username': this.dataForm.userName
           })
         }).then(({data}) => {
+          console.log(data)
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount

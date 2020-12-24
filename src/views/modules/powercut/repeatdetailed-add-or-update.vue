@@ -139,21 +139,23 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
+              console.log(data)
+
               if (data && data.code === 0) {
-                this.dataForm.company = data.repeatDetailed.company
-                this.dataForm.lineRoadName = data.repeatDetailed.lineRoadName
-                this.dataForm.userName = data.repeatDetailed.userName
-                this.dataForm.userNatrue = data.repeatDetailed.userNatrue
-                this.dataForm.startTime = data.repeatDetailed.startTime
-                this.dataForm.stopTime = data.repeatDetailed.stopTime
-                this.dataForm.hourCount = data.repeatDetailed.hourCount
-                this.dataForm.userCount = data.repeatDetailed.userCount
-                this.dataForm.manager = data.repeatDetailed.manager
-                this.dataForm.repeatCount = data.repeatDetailed.repeatCount
-                this.dataForm.isCorrectiveAction = data.repeatDetailed.isCorrectiveAction
-                this.dataForm.communicate = data.repeatDetailed.communicate
-                this.dataForm.reason = data.repeatDetailed.reason
-                this.dataForm.category = data.repeatDetailed.category
+                this.dataForm.company = data.repeatDetailedDto.company
+                this.dataForm.lineRoadName = data.repeatDetailedDto.lineRoadName
+                this.dataForm.userName = data.repeatDetailedDto.userName
+                this.dataForm.userNatrue = data.repeatDetailedDto.userNatrue
+                this.dataForm.startTime = data.repeatDetailedDto.startTime
+                this.dataForm.stopTime = data.repeatDetailedDto.stopTime
+                this.dataForm.hourCount = data.repeatDetailedDto.hourCount
+                this.dataForm.userCount = data.repeatDetailedDto.userCount
+                this.dataForm.manager = data.repeatDetailedDto.manager
+                this.dataForm.repeatCount = data.repeatDetailedDto.repeatCount
+                this.dataForm.isCorrectiveAction = data.repeatDetailedDto.isCorrectiveAction
+                this.dataForm.communicate = data.repeatDetailedDto.communicate
+                this.dataForm.reason = data.repeatDetailedDto.reason
+                this.dataForm.category = data.repeatDetailedDto.category
               }
             })
           }

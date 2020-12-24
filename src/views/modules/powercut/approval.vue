@@ -42,7 +42,7 @@
       <el-form-item>
         <el-button @click="getDataList()" type="success">查询</el-button>
         <el-button @click="clear()" type="warning">清空</el-button>
-        <el-button @click="approvalBatch()" type="danger">批量审批</el-button>
+        <el-button @click="BatchHandle()" type="danger">批量审批</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -141,11 +141,13 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <batch v-if="BatchVisible" ref="Batch" @refreshDataList="getDataList"></batch>
   </div>
 </template>
 
 <script>
 import AddOrUpdate from './approval-add-or-update'
+import Batch from './approval-batch'
 import {isIntegerNotMust} from '../../../utils'
 export default {
   data () {
@@ -194,11 +196,13 @@ export default {
       totalPage: 0,
       dataListLoading: false,
       dataListSelections: [],
-      addOrUpdateVisible: false
+      addOrUpdateVisible: false,
+      BatchVisible: false
     }
   },
   components: {
-    AddOrUpdate
+    AddOrUpdate,
+    Batch
   },
   activated () {
     this.getDataList()
@@ -208,30 +212,9 @@ export default {
     selectionChangeHandle (val) {
       this.dataListSelections = val
     },
-    // 批量审批？？？？？？？？？？？？？？？？？
+    // 批量审批
     approvalBatch () {
-      this.$http({
-        url: this.$http.adornUrl(`/powercut/plan/approvalBatch`),
-        method: 'post',
-        data: this.$http.adornData({
-          'id': this.dataListSelections,
-          'opinion': this.dataForm.departmentOpinion
-        })
-      }).then(({data}) => {
-        if (data && data.code === 0) {
-          this.$message({
-            message: '操作成功',
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.visible = false
-              this.$emit('refreshDataList')
-            }
-          })
-        } else {
-          this.$message.error(data.msg)
-        }
-      })
+      console.log()
     },
     clear () {
       this.dataForm.station = ''
@@ -279,12 +262,23 @@ export default {
       this.pageIndex = val
       this.getDataList()
     },
-    // 新增 / 修改
     addOrUpdateHandle (id) {
       this.addOrUpdateVisible = true
       this.$nextTick(() => {
         this.$refs.addOrUpdate.init(id)
       })
+    },
+    BatchHandle () {
+      if (this.dataListSelections.length === 0) {
+        this.$alert('请选择要审批的停电计划', '提示', {
+          confirmButtonText: '确定'
+        })
+      } else {
+        this.BatchVisible = true
+        this.$nextTick(() => {
+          this.$refs.Batch.init(this.dataListSelections)
+        })
+      }
     }
   }
 }

@@ -13,9 +13,6 @@
       <el-form-item label="确认密码" prop="comfirmPassword" :class="{ 'is-required': !dataForm.id }">
         <el-input v-model="dataForm.comfirmPassword" type="password" placeholder="确认密码"></el-input>
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="dataForm.email" placeholder="邮箱"></el-input>
-      </el-form-item>
       <el-form-item label="手机号" prop="mobile">
         <el-input v-model="dataForm.mobile" placeholder="手机号"></el-input>
       </el-form-item>
@@ -39,7 +36,7 @@
 </template>
 
 <script>
-  import { isEmail, isMobile } from '@/utils/validate'
+  import { isMobile } from '@/utils/validate'
   export default {
     data () {
       var validatePassword = (rule, value, callback) => {
@@ -54,13 +51,6 @@
           callback(new Error('确认密码不能为空'))
         } else if (this.dataForm.password !== value) {
           callback(new Error('确认密码与密码输入不一致'))
-        } else {
-          callback()
-        }
-      }
-      var validateEmail = (rule, value, callback) => {
-        if (!isEmail(value)) {
-          callback(new Error('邮箱格式错误'))
         } else {
           callback()
         }
@@ -81,7 +71,6 @@
           password: '',
           comfirmPassword: '',
           salt: '',
-          email: '',
           mobile: '',
           roleIdList: [],
           status: 1
@@ -95,10 +84,6 @@
           ],
           comfirmPassword: [
             { validator: validateComfirmPassword, trigger: 'blur' }
-          ],
-          email: [
-            { required: true, message: '邮箱不能为空', trigger: 'blur' },
-            { validator: validateEmail, trigger: 'blur' }
           ],
           mobile: [
             { required: true, message: '手机号不能为空', trigger: 'blur' },
@@ -131,7 +116,6 @@
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
                 this.dataForm.salt = data.user.salt
-                this.dataForm.email = data.user.email
                 this.dataForm.mobile = data.user.mobile
                 this.dataForm.roleIdList = data.user.roleIdList
                 this.dataForm.status = data.user.status
@@ -152,7 +136,6 @@
                 'username': this.dataForm.userName,
                 'password': this.dataForm.password,
                 'salt': this.dataForm.salt,
-                'email': this.dataForm.email,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList

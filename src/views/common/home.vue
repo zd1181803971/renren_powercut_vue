@@ -22,14 +22,14 @@
           <div id="J_thirdBox" class="chart-box"></div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card>
-          <div id="test" class="chart-box"></div>
+          <div id="J_fourthBox" class="chart-box"></div>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="24">
         <el-card>
-          <div id="J_chartScatterBox" class="chart-box"></div>
+          <div id="J_fifthBox" class="chart-box"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -45,8 +45,8 @@ export default {
       firstBox: null,
       secondBox: null,
       thirdBox: null,
-      chartPie: null,
-      chartScatter: null,
+      fourthBox: null,
+      fifthBox: null,
       dataForm: {
         startTime: '',
         stopTime: '',
@@ -64,7 +64,8 @@ export default {
     this.initFirstBox()
     this.initSecondBox()
     this.initThirdBox()
-    this.initChartLine()
+    this.initFourthBox()
+    this.initFifthBox()
   },
   activated () {
     // 由于给echart添加了resize事件, 在组件激活时需要重新resize绘画一次, 否则出现空白bug
@@ -77,11 +78,11 @@ export default {
     if (this.thirdBox) {
       this.thirdBox.resize()
     }
-    if (this.chartPie) {
-      this.chartPie.resize()
+    if (this.fourthBox) {
+      this.fourthBox.resize()
     }
-    if (this.chartScatter) {
-      this.chartScatter.resize()
+    if (this.fifthBox) {
+      this.fifthBox.resize()
     }
   },
   methods: {
@@ -157,33 +158,40 @@ export default {
     // 停电原因统计 环状图
     initSecondBox () {
       var option = {
-        backgroundColor: '#2c343c',
         title: {
           text: '停电原因统计',
-          left: 'center',
-          top: 20,
-          textStyle: {
-            color: '#ccc'
-          }
+          subtext: '环状图统计“停电明细导入分析”菜单中60天内停电记录的“停电分类”占比。'
         },
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-        visualMap: {
-          show: false,
-          min: 80,
-          max: 600,
-          inRange: {
-            colorLightness: [0, 1]
-          }
+        legend: {
+          orient: 'vertical',
+          top: 60,
+          left: 10,
+          data: ['计划停电', '用户原因', '自然因素', '外力因素', '运行维护', '设备原因', '设计施工', '低压表前', '低压表后']
         },
         series: [
           {
             name: '访问来源',
             type: 'pie',
-            radius: '55%',
-            center: ['50%', '50%'],
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '30',
+                fontWeight: 'bold'
+              }
+            },
+            labelLine: {
+              show: false
+            },
             data: [
               { value: 335, name: '计划停电' },
               { value: 310, name: '用户原因' },
@@ -194,37 +202,7 @@ export default {
               { value: 333, name: '设计施工' },
               { value: 444, name: '低压表前' },
               { value: 555, name: '低压表后' }
-            ].sort(function (a, b) { return a.value - b.value }),
-            roseType: 'radius',
-            label: {
-              normal: {
-                textStyle: {
-                  color: 'rgba(255, 255, 255, 0.3)'
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                lineStyle: {
-                  color: 'rgba(255, 255, 255, 0.3)'
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#c23531',
-                shadowBlur: 200,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            },
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function (idx) {
-              return Math.random() * 200
-            }
+            ]
           }
         ]
       }
@@ -234,11 +212,12 @@ export default {
         this.secondBox.resize()
       })
     },
-    // 停电报送核查统计 柱状图统计  ing
+    // 停电报送核查统计 柱状图统计
     initThirdBox () {
       var option = {
         title: {
-          text: '供电所停电情况统计'
+          text: '停电报送核查统计',
+          subtext: '柱状图统计“停电明细导入分析”菜单中60天内各供电所上报停电记录的匹配率。匹配度低的在前。'
         },
         tooltip: {
           trigger: 'axis',
@@ -247,7 +226,7 @@ export default {
           }
         },
         legend: {
-          data: ['专变', '公变']
+          data: ['匹配率']
         },
         grid: {
           left: '3%',
@@ -258,25 +237,19 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['一台次', '二台次', '三台次', '四台次', '无台次', '六台次', '七台次']
+            data: ['供电所1', '供电所2', '供电所3', '供电所4', '供电所5', '供电所6', '供电所7', '供电所8', '供电所9', '供电所10', '供电所11', '供电所12', '供电所13', '供电所14']
           }
         ],
         yAxis: [
           {
-            type: 'category',
-            data: ['1号供电所', '2号供电所', '3号供电所', '4号供电所', '5号供电所', '6号供电所', '7号供电所']
+            type: 'value'
           }
         ],
         series: [
           {
-            name: '专变',
+            name: '匹配率',
             type: 'bar',
-            data: [1, 2, 3, 4, 5, 6, 7]
-          },
-          {
-            name: '公变',
-            type: 'bar',
-            data: [2, 5, 6, 4, 5, 6, 7]
+            data: [0.12, 0.33, 0.12, 0.21, 0.36, 0.45, 0.33, 0.12, 0.11, 0.01, 0.03, 0.01, 0.03, 0.22]
           }
         ]
       }
@@ -286,11 +259,12 @@ export default {
         this.thirdBox.resize()
       })
     },
-    // 停电报送核查统计
-    initChartBar2 () {
+    // 台区经理重复停电统计
+    initFourthBox () {
       var option = {
         title: {
-          text: '停电报送核查统计'
+          text: '台区经理重复停电统计',
+          subtext: '横向柱状图统计“停电明细导入分析”菜单中60天内各台区经理的停电次数，数量多的在上。'
         },
         tooltip: {
           trigger: 'axis',
@@ -299,7 +273,47 @@ export default {
           }
         },
         legend: {
-          data: ['专变', '公变']
+          data: ['停电次数']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: 'category',
+          data: ['经理1', '经理2', '经理3', '经理4', '经理5', '经理6', '经理7', '经理8', '经理9', '经理10']
+        },
+        series: [
+          {
+            name: '停电次数',
+            type: 'bar',
+            data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+          }
+        ]
+      }
+      this.fourthBox = echarts.init(document.getElementById('J_fourthBox'))
+      this.fourthBox.setOption(option)
+      window.addEventListener('resize', () => {
+        this.fourthBox.resize()
+      })
+    },
+
+    initFifthBox () {
+      var option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        legend: {
+          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '百度', '谷歌', '必应', '其他']
         },
         grid: {
           left: '3%',
@@ -310,32 +324,82 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['一台次', '二台次', '三台次', '四台次', '无台次', '六台次', '七台次']
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
           }
         ],
         yAxis: [
           {
-            type: 'category',
-            data: ['1号供电所', '2号供电所', '3号供电所', '4号供电所', '5号供电所 ', '6号供电所', '7号供电所']
+            type: 'value'
           }
         ],
         series: [
           {
-            name: '专变',
+            name: '直接访问',
             type: 'bar',
-            data: [1, 2, 3, 4, 5, 6, 7]
+            data: [320, 332, 301, 334, 390, 330, 320]
           },
           {
-            name: '公变',
+            name: '邮件营销',
             type: 'bar',
-            data: [2, 5, 6, 4, 5, 6, 7]
+            stack: '广告',
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: '联盟广告',
+            type: 'bar',
+            stack: '广告',
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: '视频广告',
+            type: 'bar',
+            stack: '广告',
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: '搜索引擎',
+            type: 'bar',
+            data: [862, 1018, 964, 1026, 1679, 1600, 1570],
+            markLine: {
+              lineStyle: {
+                type: 'dashed'
+              },
+              data: [
+                [{type: 'min'}, {type: 'max'}]
+              ]
+            }
+          },
+          {
+            name: '百度',
+            type: 'bar',
+            barWidth: 5,
+            stack: '搜索引擎',
+            data: [620, 732, 701, 734, 1090, 1130, 1120]
+          },
+          {
+            name: '谷歌',
+            type: 'bar',
+            stack: '搜索引擎',
+            data: [120, 132, 101, 134, 290, 230, 220]
+          },
+          {
+            name: '必应',
+            type: 'bar',
+            stack: '搜索引擎',
+            data: [60, 72, 71, 74, 190, 130, 110]
+          },
+          {
+            name: '其他',
+            type: 'bar',
+            stack: '搜索引擎',
+            data: [62, 82, 91, 84, 109, 110, 120]
           }
         ]
       }
-      this.chartBar2 = echarts.init(document.getElementById('test'))
-      this.chartBar2.setOption(option)
+      this.fifthBox = echarts.init(document.getElementById('J_fifthBox'))
+      this.fifthBox.setOption(option)
       window.addEventListener('resize', () => {
-        this.chartBar2.resize()
+        this.fifthBox.resize()
       })
     }
 
