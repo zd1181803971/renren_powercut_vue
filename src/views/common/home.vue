@@ -56,6 +56,12 @@ export default {
         specialUse: '',
         planCount: '',
         faultCount: ''
+      },
+      firstBoxData: {
+        placeName: [],
+        privateCount: '',
+        publicCount: '',
+        allCount: ''
       }
     }
   },
@@ -108,108 +114,143 @@ export default {
     },
     // 供电所停电情况统计 横向堆叠柱状图统计
     initFirstBox () {
-      var option = {
-        title: {
-          text: '供电所停电情况统计',
-          subtext: '统计“停电明细导入分析”菜单中60天内各供电所停电数量'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
+      this.$http({
+        url: this.$http.adornUrl('/app/repeatDetailed/placeBlackout'),
+        method: 'get'
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          var option = {
+            title: {
+              text: '供电所停电情况统计',
+              subtext: '统计“停电明细导入分析”菜单中60天内各供电所停电数量'
+            },
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            legend: {
+              data: ['公变', '专变']
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'value',
+              axisLabel: {
+                formatter: '{value} 台次'
+              }
+            },
+            yAxis: {
+              type: 'category',
+              // eslint-disable-next-line no-undef
+              data: data.placeBlackoutDtos.map(item => {
+                return item.placeName
+              })
+            },
+            series: [
+              {
+                name: '公变',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                  show: true,
+                  position: 'insideRight'
+                },
+                data: data.placeBlackoutDtos.map(item => {
+                  return item.publicCount
+                })
+              },
+              {
+                name: '专变',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                  show: true,
+                  position: 'insideRight'
+                },
+                data: data.placeBlackoutDtos.map(item => {
+                  return item.privateCount
+                })
+              }
+            ]
           }
-        },
-        legend: {
-          data: ['专变', '公变']
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'value',
-          boundaryGap: [0, 0.01]
-        },
-        yAxis: {
-          type: 'category',
-          data: ['供电所1', '供电所2', '供电所3', '供电所4', '供电所5', '供电所6', '供电所7', '供电所8', '供电所9', '供电所10', '供电所11', '供电所12', '供电所13', '供电所14']
-        },
-        series: [
-          {
-            name: '专变',
-            type: 'bar',
-            data: [2, 5, 7, 6, 2, 8, 7, 8, 6, 3, 5, 4, 5, 6]
-          },
-          {
-            name: '公变',
-            type: 'bar',
-            data: [1, 3, 5, 2, 8, 10, 2, 6, 9, 4, 2, 3, 6, 9]
-          }
-        ]
-      }
-      this.firstBox = echarts.init(document.getElementById('J_firstBox'))
-      this.firstBox.setOption(option)
-      window.addEventListener('resize', () => {
-        this.firstBox.resize()
+          this.firstBox = echarts.init(document.getElementById('J_firstBox'))
+          this.firstBox.setOption(option)
+          window.addEventListener('resize', () => {
+            this.firstBox.resize()
+          })
+        }
       })
     },
     // 停电原因统计 环状图
     initSecondBox () {
-      var option = {
-        title: {
-          text: '停电原因统计',
-          subtext: '环状图统计“停电明细导入分析”菜单中60天内停电记录的“停电分类”占比。'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          top: 60,
-          left: 10,
-          data: ['计划停电', '用户原因', '自然因素', '外力因素', '运行维护', '设备原因', '设计施工', '低压表前', '低压表后']
-        },
-        series: [
-          {
-            name: '访问来源',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
+      this.$http({
+        url: this.$http.adornUrl('/app/repeatDetailed/reasonCensus'),
+        method: 'get'
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          console.log(data)
+
+          var option = {
+            title: {
+              text: '停电原因统计',
+              subtext: '环状图统计“停电明细导入分析”菜单中60天内停电记录的“停电分类”占比。'
             },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '30',
-                fontWeight: 'bold'
+            tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+              orient: 'vertical',
+              top: 60,
+              left: 10,
+              data: data.reasonCensusDtos.map((item) => {
+                return item.category
+              })
+            },
+            series: [
+              {
+                name: '访问来源',
+                type: 'pie',
+                radius: ['50%', '70%'],
+                avoidLabelOverlap: false,
+                label: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  label: {
+                    show: true,
+                    fontSize: '30',
+                    fontWeight: 'bold'
+                  }
+                },
+                labelLine: {
+                  show: false
+                },
+                data: data.reasonCensusDtos.forEach((item, index, array) => {
+                  delete data.reasonCensusDtos['percentage']
+                  var arry = []
+                  var obj = {}
+                  obj['name'] = item.category
+                  obj['value'] = item.cateCount
+                  arry.push(obj)
+                  return array
+                })
               }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              { value: 335, name: '计划停电' },
-              { value: 310, name: '用户原因' },
-              { value: 274, name: '自然因素' },
-              { value: 235, name: '外力因素' },
-              { value: 111, name: '运行维护' },
-              { value: 222, name: '设备原因' },
-              { value: 333, name: '设计施工' },
-              { value: 444, name: '低压表前' },
-              { value: 555, name: '低压表后' }
             ]
           }
-        ]
-      }
-      this.secondBox = echarts.init(document.getElementById('J_secondBox'))
-      this.secondBox.setOption(option)
-      window.addEventListener('resize', () => {
-        this.secondBox.resize()
+          this.secondBox = echarts.init(document.getElementById('J_secondBox'))
+          this.secondBox.setOption(option)
+          window.addEventListener('resize', () => {
+            this.secondBox.resize()
+          })
+        }
       })
     },
     // 停电报送核查统计 柱状图统计

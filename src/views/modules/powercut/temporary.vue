@@ -117,11 +117,10 @@
         align="center"
         label="状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.planState === 0">已保存</span>
-          <span v-if="scope.row.planState === 1">部门审批中</span>
-          <span v-if="scope.row.planState === 2">部门审批通过待分管领导审批</span>
-          <span v-if="scope.row.planState === 3">部门驳回</span>
-          <span v-if="scope.row.planState === 4">分管领导驳回</span>
+          <span v-if="scope.row.planState == 0">已保存</span>
+          <span v-if="scope.row.planState == 1">审批中</span>
+          <span v-if="scope.row.planState == 2">审批中</span>
+          <span v-if="scope.row.planState == 3">已通过</span>
         </template>
       </el-table-column>
     </el-table>

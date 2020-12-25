@@ -39,7 +39,9 @@ export default {
       },
       dataForm: {
         departmentOpinion: '',
-        company: []
+        company: [],
+        ids: [],
+        flags: 0
       }
     }
   },
@@ -51,10 +53,15 @@ export default {
       dataListSelections.forEach((item, index, array) => {
         this.dataForm.company[index] = item.company
       })
-      console.log(this.dataForm.company)
+      this.dataForm.ids = dataListSelections.map(item => {
+        return item.id
+      })
     },
 // 审批
     dataFormSubmit () {
+      console.log(this.dataForm.ids)
+      console.log(this.dataForm.flags)
+      console.log(this.dataForm.departmentOpinion)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.$confirm('确认审批吗', '提示', {
@@ -63,10 +70,11 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$http({
-              url: this.$http.adornUrl(`/powercut/plan/passApproval`),
+              url: this.$http.adornUrl(`/powercut/plan/approvalBatch`),
               method: 'post',
               data: this.$http.adornData({
-                'id': this.dataForm.id,
+                'ids': this.dataForm.ids,
+                'flag': this.dataForm.flags,
                 'opinion': this.dataForm.departmentOpinion
               })
             }).then(({data}) => {
@@ -96,43 +104,8 @@ export default {
 
     // 驳回
     dataFormSubmit2 () {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.$confirm('确认驳回吗', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消驳回',
-            type: 'warning'
-          }).then(() => {
-            this.$http({
-              url: this.$http.adornUrl(`/powercut/plan/rejectApproval`),
-              method: 'post',
-              data: this.$http.adornData({
-                'id': this.dataForm.id,
-                'opinion': this.dataForm.departmentOpinion
-              })
-            }).then(({data}) => {
-              if (data && data.code === 0) {
-                this.$message({
-                  message: '驳回成功！',
-                  type: 'success',
-                  duration: 3000,
-                  onClose: () => {
-                    this.visible = false
-                    this.$emit('refreshDataList')
-                  }
-                })
-              } else {
-                this.$message.error(data.msg)
-              }
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消驳回'
-            })
-          })
-        }
-      })
+      this.dataForm.flags = 1
+      this.dataFormSubmit()
     }
   }
 }

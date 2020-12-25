@@ -18,7 +18,7 @@
         class="site-navbar__menu site-navbar__menu--right"
         mode="horizontal">
 
-        <el-menu-item index="1" @click="$router.push('/powercut-approval')">
+        <el-menu-item index="1" @click="gotoApproval()">
           <template slot="title">
             <el-badge :value="dataCount" class="item">
               <icon-svg name="tixing" class="el-icon-setting"></icon-svg>
@@ -80,10 +80,14 @@
         get () { return this.$store.state.user.name }
       }
     },
-    created () {
+    mounted () {
       this.getDataCount()
     },
     methods: {
+      gotoApproval () {
+        this.getDataCount()
+        this.$router.push('/powercut-approval')
+      },
       getDataCount () {
         this.$http({
           url: this.$http.adornUrl('/powercut/plan/getAgencyCount'),
