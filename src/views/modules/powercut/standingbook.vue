@@ -137,7 +137,6 @@
         align="center"
         label="近两个月停电次数">
       </el-table-column>
-
     </el-table>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>

@@ -424,6 +424,7 @@ export default {
               {
                 name: '未整改',
                 type: 'bar',
+                stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.noCorrectiveCount
                 })
@@ -431,6 +432,7 @@ export default {
               {
                 name: '进行中',
                 type: 'bar',
+                stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.carryOnCount
                 })
@@ -438,12 +440,14 @@ export default {
               {
                 name: '已整改',
                 type: 'bar',
+                stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.correctiveCount
                 })
               }
             ]
           }
+
           this.fifthBox = echarts.init(document.getElementById('J_fifthBox'))
           this.fifthBox.setOption(option)
           window.addEventListener('resize', () => {
