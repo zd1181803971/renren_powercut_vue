@@ -58,12 +58,6 @@ export default {
         specialUse: '',
         planCount: '',
         faultCount: ''
-      },
-      firstBoxData: {
-        placeName: [],
-        privateCount: '',
-        publicCount: '',
-        allCount: ''
       }
     }
   },
@@ -196,16 +190,16 @@ export default {
         url: this.$http.adornUrl('/app/repeatDetailed/reasonCensus'),
         method: 'get'
       }).then(({data}) => {
-        this.obj = {}
-        this.arry = []
-        data.reasonCensusDtos.map(item => {
-          delete data.reasonCensusDtos['percentage']
-          this.arry.push({
-            value: item.cateCount,
-            name: item.category
-          })
-        })
         if (data && data.code === 0) {
+          this.obj = {}
+          this.arry = []
+          data.reasonCensusDtos.map(item => {
+            delete data.reasonCensusDtos['percentage']
+            this.arry.push({
+              value: item.cateCount,
+              name: item.category
+            })
+          })
           var option = {
             title: {
               text: '停电原因统计',
@@ -376,15 +370,6 @@ export default {
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {
-          for (let i = 0; i < data.correctiveActionDtos.length; i++) {
-            for (let j = 1; j < data.correctiveActionDtos.length; j++) {
-              if (data.correctiveActionDtos[i].correctiveRate > data.correctiveActionDtos[j].correctiveRate) {
-                const arrs = data.correctiveActionDtos[i]
-                data.correctiveActionDtos[i] = data.correctiveActionDtos[j]
-                data.correctiveActionDtos[j] = arrs
-              }
-            }
-          }
           var option = {
             title: {
               text: '重复停电整改统计',

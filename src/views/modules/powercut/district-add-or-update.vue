@@ -20,7 +20,16 @@
       <el-input v-model="dataForm.userName" placeholder="台区用户名称"></el-input>
     </el-form-item>
     <el-form-item label="用户性质:" prop="userNatrue">
-      <el-input v-model="dataForm.userNatrue" placeholder="台区用户名称"></el-input>
+      <template>
+        <el-select v-model="dataForm.userNatrue" placeholder="请选择用户性质">
+          <el-option
+            v-for="item in dataForm.options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
     </el-form-item>
     <el-form-item label="台区经理:" prop="manager">
       <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
@@ -53,8 +62,14 @@ export default {
         userNatrue: '',
         manager: '',
         userCount: '',
-        gmtCreate: '',
-        gmtModified: ''
+        options: [{
+          value: '公变',
+          label: '公变'
+        }, {
+          value: '专用',
+          label: '专用'
+        }],
+        value: ''
       },
       dataRule: {
         company: [
