@@ -23,11 +23,12 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="roleId"
         header-align="center"
         align="center"
         width="80"
-        label="ID">
+        label="序号"
+        type="index">
+        <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column
         prop="roleName"

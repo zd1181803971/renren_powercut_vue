@@ -123,7 +123,8 @@
           isCorrectiveAction: '',
           communicate: '',
           reason: '',
-          category: ''
+          category: '',
+          correctiveAction: ''
         }
       }
     },
@@ -152,6 +153,7 @@
                 this.dataForm.userCount = data.repeatDetailedDto.userCount
                 this.dataForm.manager = data.repeatDetailedDto.manager
                 this.dataForm.repeatCount = data.repeatDetailedDto.repeatCount
+                this.dataForm.correctiveAction = data.repeatDetailedDto.correctiveAction
                 this.dataForm.isCorrectiveAction = data.repeatDetailedDto.isCorrectiveAction
                 this.dataForm.communicate = data.repeatDetailedDto.communicate
                 this.dataForm.reason = data.repeatDetailedDto.reason

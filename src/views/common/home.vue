@@ -42,6 +42,8 @@ import echarts from 'echarts'
 export default {
   data () {
     return {
+      firstArry: [],
+      thirdArry: [],
       arry: [],
       obj: {},
       firstBox: null,
@@ -111,10 +113,18 @@ export default {
     // 供电所停电情况统计 横向堆叠柱状图统计
     initFirstBox () {
       this.$http({
-        url: this.$http.adornUrl('/app/repeatDetailed/placeBlackout'),
+        url: this.$http.adornUrl('/powercut/repeatdetailed/placeBlackout'),
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {
+          this.firstArry = []
+          for (let i = data.placeBlackoutDtos.length - 1; i > 0; i--) {
+            this.firstArry.push({
+              placeName: data.placeBlackoutDtos[i].placeName,
+              publicCount: data.placeBlackoutDtos[i].publicCount,
+              privateCount: data.placeBlackoutDtos[i].privateCount
+            })
+          }
           var option = {
             title: {
               text: '供电所停电情况统计',
@@ -145,7 +155,7 @@ export default {
             },
             yAxis: {
               type: 'category',
-              data: data.placeBlackoutDtos.map(item => {
+              data: this.firstArry.map(item => {
                 return item.placeName
               })
             },
@@ -158,7 +168,7 @@ export default {
                   show: true,
                   position: 'insideRight'
                 },
-                data: data.placeBlackoutDtos.map(item => {
+                data: this.firstArry.map(item => {
                   return item.publicCount
                 })
               },
@@ -170,7 +180,7 @@ export default {
                   show: true,
                   position: 'insideRight'
                 },
-                data: data.placeBlackoutDtos.map(item => {
+                data: this.firstArry.map(item => {
                   return item.privateCount
                 })
               }
@@ -187,11 +197,10 @@ export default {
     // 停电原因统计 环状图
     initSecondBox () {
       this.$http({
-        url: this.$http.adornUrl('/app/repeatDetailed/reasonCensus'),
+        url: this.$http.adornUrl('/powercut/repeatdetailed/reasonCensus'),
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {
-          this.obj = {}
           this.arry = []
           data.reasonCensusDtos.map(item => {
             delete data.reasonCensusDtos['percentage']
@@ -252,7 +261,7 @@ export default {
     // 停电报送核查统计 柱状图统计
     initThirdBox () {
       this.$http({
-        url: this.$http.adornUrl('/app/repeatDetailed/placeMatching'),
+        url: this.$http.adornUrl('/powercut/repeatdetailed/placeMatching'),
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {
@@ -311,10 +320,17 @@ export default {
     // 台区经理重复停电统计
     initFourthBox () {
       this.$http({
-        url: this.$http.adornUrl('/app/repeatDetailed/districtManager'),
+        url: this.$http.adornUrl('/powercut/repeatdetailed/districtManager'),
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {
+          this.thirdArry = []
+          for (let i = data.districtManagerDtos.length - 1; i > 0; i--) {
+            this.thirdArry.push({
+              blackoutCount: data.districtManagerDtos[i].blackoutCount,
+              managerName: data.districtManagerDtos[i].managerName
+            })
+          }
           var option = {
             title: {
               text: '台区经理重复停电统计',
@@ -341,7 +357,7 @@ export default {
             },
             yAxis: {
               type: 'category',
-              data: data.districtManagerDtos.map(item => {
+              data: this.thirdArry.map(item => {
                 return item.managerName
               })
             },
@@ -349,7 +365,7 @@ export default {
               {
                 name: '停电次数',
                 type: 'bar',
-                data: data.districtManagerDtos.map(item => {
+                data: this.thirdArry.map(item => {
                   return item.blackoutCount
                 })
               }
@@ -366,7 +382,7 @@ export default {
 
     initFifthBox () {
       this.$http({
-        url: this.$http.adornUrl('/app/repeatDetailed/correctiveList'),
+        url: this.$http.adornUrl('/powercut/repeatdetailed/correctiveList'),
         method: 'get'
       }).then(({data}) => {
         if (data && data.code === 0) {

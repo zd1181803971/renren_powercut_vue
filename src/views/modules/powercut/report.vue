@@ -55,6 +55,7 @@
         header-align="center"
         align="center"
         width="50">
+        <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column
         prop="reportName"

@@ -249,7 +249,6 @@
         })
       },
       handleSubmit () {
-        console.log('12345566')
         this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/district/importDistrict'
         this.$nextTick(() => {
           this.$refs.upload.submit()

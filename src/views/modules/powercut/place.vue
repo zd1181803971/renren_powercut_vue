@@ -24,12 +24,7 @@
         width="80"
         label="序号"
         type="index">
-      </el-table-column>
-      <el-table-column
-        prop="userId"
-        header-align="center"
-        align="center"
-        label="id">
+        <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column
         prop="username"
