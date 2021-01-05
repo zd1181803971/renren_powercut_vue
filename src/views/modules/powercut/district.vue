@@ -104,6 +104,7 @@
         header-align="center"
         align="center"
         width="50">
+        <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column
         prop="company"
@@ -306,6 +307,7 @@
         }).then(({data}) => {
           if (data && data.code === 0) {
             this.dataList = data.page.list
+            console.log(this.dataList)
             this.totalPage = data.page.totalCount
           } else {
             this.dataList = []
