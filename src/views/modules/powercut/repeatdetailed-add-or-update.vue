@@ -86,8 +86,18 @@
       <el-form-item label="是否整改完成：">
         <el-input
           readonly
-          v-model="dataForm.isCorrectiveAction"
-          value="是">
+          v-if="dataForm.isCorrectiveAction == 0"
+          value="未整改">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 1"
+          value="整改中">
+        </el-input>
+        <el-input
+          readonly
+          v-if="dataForm.isCorrectiveAction == 2"
+          value="已整改">
         </el-input>
       </el-form-item>
       <el-form-item label="沟通回访情况：">
