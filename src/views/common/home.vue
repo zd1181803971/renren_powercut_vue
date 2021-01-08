@@ -3,7 +3,7 @@
       <el-tag size="big">总体情况</el-tag>
    <h2>
      {{ dataForm.startTime }}至{{ dataForm.stopTime }}，
-     公司共发生台区停电{{ dataForm.districtCount }}台次,涉及10千伏线路{{ dataForm.lineRoadCount }}条，其中公变台区停电{{ dataForm.commonTransformers }}台次、专变台区停电{{ dataForm.specialUse }}台次，
+     公司共发生台区停电{{ dataForm.districtCount }}台次，涉及10千伏线路{{ dataForm.lineRoadCount }}条，其中公变台区停电{{ dataForm.commonTransformers }}台次、专变台区停电{{ dataForm.specialUse }}台次，
      计划停电{{ dataForm.planCount }}台次、故障停电{{ dataForm.faultCount }}台次。
    </h2>
     <el-row :gutter="20">
@@ -118,7 +118,7 @@ export default {
       }).then(({data}) => {
         if (data && data.code === 0) {
           this.firstArry = []
-          for (let i = data.placeBlackoutDtos.length - 1; i > 0; i--) {
+          for (let i = data.placeBlackoutDtos.length - 1; i >= 0; i--) {
             this.firstArry.push({
               placeName: data.placeBlackoutDtos[i].placeName,
               publicCount: data.placeBlackoutDtos[i].publicCount,
@@ -323,14 +323,20 @@ export default {
         url: this.$http.adornUrl('/powercut/repeatdetailed/districtManager'),
         method: 'get'
       }).then(({data}) => {
+        console.log(data)
         if (data && data.code === 0) {
           this.thirdArry = []
-          for (let i = data.districtManagerDtos.length - 1; i > 0; i--) {
-            this.thirdArry.push({
-              blackoutCount: data.districtManagerDtos[i].blackoutCount,
-              managerName: data.districtManagerDtos[i].managerName
-            })
+          for (let i = data.districtManagerDtos.length - 1; i >= 0; i--) {
+            if (data.districtManagerDtos[i].managerName == 'null' || data.districtManagerDtos[i].managerName == null || data.districtManagerDtos[i].managerName == '') {
+              console.log('11')
+            } else {
+              this.thirdArry.push({
+                blackoutCount: data.districtManagerDtos[i].blackoutCount,
+                managerName: data.districtManagerDtos[i].managerName
+              })
+            }
           }
+          console.log('1111111:', this.thirdArry)
           var option = {
             title: {
               text: '台区经理重复停电统计',
@@ -353,7 +359,7 @@ export default {
             },
             xAxis: {
               type: 'value',
-              boundaryGap: [0, 0.01]
+              boundaryGap: [0, 2]
             },
             yAxis: {
               type: 'category',

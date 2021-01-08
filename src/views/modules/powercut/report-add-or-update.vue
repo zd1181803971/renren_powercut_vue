@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForm.id ? '新增' : '修改'"
+    :title="'新增页面'"
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()"
@@ -37,7 +37,8 @@
       <el-form-item label="台区经理:" prop="manager">
         <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
       </el-form-item>
-
+    </el-form>
+    <div v-if="buttonVisible">
       <el-table
         :data="dataList"
         border
@@ -114,10 +115,11 @@
         :total="totalPage"
         layout="total, sizes, prev, pager, next, jumper">
       </el-pagination>
-    </el-form>
+    </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">下一步</el-button>
+      <el-button v-if="!buttonVisible" type="primary" @click="nextGetData()">下一步</el-button>
+      <el-button v-if="buttonVisible" type="primary" @click="dataFormSubmit">生成报告</el-button>
     </span>
   </el-dialog>
 </template>
@@ -128,20 +130,19 @@ export default {
     return {
       visible: false,
       dataForm: {
-        id: 0,
         reportName: '',
         startTime: '',
         stopTime: '',
-        createTime: '',
         reportHref: '',
         remarks: '',
-        gmtCreate: '',
-        gmtModified: ''
+        station: '',
+        manager: ''
       },
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
       totalPage: 0,
+      buttonVisible: false,
       dataListLoading: false,
       dataListSelections: [],
       dataRule: {
@@ -158,6 +159,14 @@ export default {
     }
   },
   methods: {
+    nextGetData () {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.buttonVisible = true
+          this.getDataList()
+        }
+      })
+    },
     // 每页数
     sizeChangeHandle (val) {
       this.pageSize = val
@@ -173,11 +182,15 @@ export default {
     getDataList () {
       this.dataListLoading = true
       this.$http({
-        url: this.$http.adornUrl('/powercut/repeatdetailed/list'),
+        url: this.$http.adornUrl('/powercut/report/getRepeatDetailedList'),
         method: 'get',
         params: this.$http.adornParams({
           'page': this.pageIndex,
-          'limit': this.pageSize
+          'limit': this.pageSize,
+          'start_time': this.dataForm.startTime,
+          'stopTime': this.dataForm.stopTime,
+          'company': this.dataForm.company,
+          'manager': this.dataForm.manager
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
@@ -191,7 +204,7 @@ export default {
       })
     },
     init (id) {
-      this.getDataList()
+      this.buttonVisible = false
       this.dataForm.id = id || 0
       this.visible = true
       this.$nextTick(() => {
@@ -206,11 +219,8 @@ export default {
               this.dataForm.reportName = data.report.reportName
               this.dataForm.startTime = data.report.startTime
               this.dataForm.stopTime = data.report.stopTime
-              this.dataForm.createTime = data.report.createTime
               this.dataForm.reportHref = data.report.reportHref
               this.dataForm.remarks = data.report.remarks
-              this.dataForm.gmtCreate = data.report.gmtCreate
-              this.dataForm.gmtModified = data.report.gmtModified
             }
           })
         }
@@ -220,35 +230,32 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$http({
-            url: this.$http.adornUrl(`/powercut/report/${!this.dataForm.id ? 'save' : 'update'}`),
-            method: 'post',
-            data: this.$http.adornData({
-              'id': this.dataForm.id || undefined,
-              'reportName': this.dataForm.reportName,
-              'startTime': this.dataForm.startTime,
-              'stopTime': this.dataForm.stopTime,
-              'createTime': this.dataForm.createTime,
-              'reportHref': this.dataForm.reportHref,
-              'remarks': this.dataForm.remarks,
-              'gmtCreate': this.dataForm.gmtCreate,
-              'gmtModified': this.dataForm.gmtModified
-            })
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
-            }
-          })
+          this.$message.error('TOBECONTINUE')
+          // this.$http({
+          //   url: this.$http.adornUrl(`/powercut/report/save`),
+          //   method: 'post',
+          //   data: this.$http.adornData({
+          //     'id': this.dataForm.id || undefined,
+          //     'reportName': this.dataForm.reportName,
+          //     'startTime': this.dataForm.startTime,
+          //     'stopTime': this.dataForm.stopTime,
+          //     'remarks': this.dataForm.remarks
+          //   })
+          // }).then(({data}) => {
+          //   if (data && data.code === 0) {
+          //     this.$message({
+          //       message: '操作成功',
+          //       type: 'success',
+          //       duration: 1500,
+          //       onClose: () => {
+          //         this.visible = false
+          //         this.$emit('refreshDataList')
+          //       }
+          //     })
+          //   } else {
+          //     this.$message.error(data.msg)
+          //   }
+          // })
         }
       })
     },

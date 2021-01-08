@@ -14,7 +14,7 @@
       <el-form-item>
         <span>
           创建时间:
-      </span>
+        </span>
         <div class="block">
           <el-date-picker
             v-model="dataForm.timeList"
@@ -31,8 +31,6 @@
       <el-form-item>
         <el-button @click="getDataList()" type="success">查询</el-button>
         <el-button @click="clear()" type="warning">清空</el-button>
-        <el-button @click="">预览</el-button>
-        <el-button @click="">下载</el-button>
         <el-button v-if="isAuth('powercut:report:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
         <el-button v-if="isAuth('powercut:report:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
@@ -88,14 +86,22 @@
         label="备注">
       </el-table-column>
       <el-table-column
+        header-align="center"
+        align="center"
+        label="报告">>
+        <template slot-scope="scope">
+          <el-button type="danger" size="small" @click="showHandle(scope.row.id)">预览</el-button>
+          <el-button type="danger" size="small" @click="test()">下载</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
         fixed="right"
         header-align="center"
         align="center"
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="danger" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="danger" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="small" @click="updateHandle(scope.row.id)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,11 +116,15 @@
     </el-pagination>
     <!-- 弹窗, 新增 / 修改 -->
     <add-or-update v-if="addOrUpdateVisible" ref="addOrUpdate" @refreshDataList="getDataList"></add-or-update>
+    <update v-if="updateVisible" ref="update" @refreshDataList="getDataList"></update>
+    <show v-if="showVisible" ref="show"></show>
   </div>
 </template>
 
 <script>
   import AddOrUpdate from './report-add-or-update'
+  import update from './report-update'
+  import show from './report-show'
   export default {
     data () {
       return {
@@ -156,16 +166,23 @@
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
-        addOrUpdateVisible: false
+        addOrUpdateVisible: false,
+        updateVisible: false,
+        showVisible: false
       }
     },
     components: {
-      AddOrUpdate
+      AddOrUpdate,
+      update,
+      show
     },
     activated () {
       this.getDataList()
     },
     methods: {
+      test () {
+        this.$message.error('TOBECONTINUE')
+      },
       clear () {
         this.dataForm.reportName = ''
         this.dataForm.timeList = ''
@@ -215,6 +232,20 @@
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
+        })
+      },
+      // 修改
+      updateHandle (id) {
+        this.updateVisible = true
+        this.$nextTick(() => {
+          this.$refs.update.init(id)
+        })
+      },
+      // 预览
+      showHandle (id) {
+        this.showVisible = true
+        this.$nextTick(() => {
+          this.$refs.show.init(id)
         })
       },
       // 删除
