@@ -91,7 +91,7 @@
         label="报告">>
         <template slot-scope="scope">
           <el-button type="danger" size="small" @click="showHandle(scope.row.id)">预览</el-button>
-          <el-button type="danger" size="small" @click="test()">下载</el-button>
+          <el-button type="danger" size="small" @click="downLoad()">下载</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -180,8 +180,27 @@
       this.getDataList()
     },
     methods: {
-      test () {
-        this.$message.error('TOBECONTINUE')
+      downLoad () {
+        this.$http({
+          url: this.$http.adornUrl('/powercut/report/list'),
+          method: 'get',
+          params: this.$http.adornParams({
+            'page': this.pageIndex,
+            'limit': this.pageSize,
+            'reportName': this.dataForm.reportName || null,
+            'startTime': this.dataForm.timeList[0] || null,
+            'stopTime': this.dataForm.timeList[1] || null
+          })
+        }).then(({data}) => {
+          if (data && data.code === 0) {
+            this.dataList = data.page.list
+            this.totalPage = data.page.totalCount
+          } else {
+            this.dataList = []
+            this.totalPage = 0
+          }
+          this.dataListLoading = false
+        })
       },
       clear () {
         this.dataForm.reportName = ''

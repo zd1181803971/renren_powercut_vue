@@ -327,7 +327,7 @@ export default {
         if (data && data.code === 0) {
           this.thirdArry = []
           for (let i = data.districtManagerDtos.length - 1; i >= 0; i--) {
-            if (data.districtManagerDtos[i].managerName == 'null' || data.districtManagerDtos[i].managerName == null || data.districtManagerDtos[i].managerName == '') {
+            if (data.districtManagerDtos[i].managerName === 'null' || data.districtManagerDtos[i].managerName == null || data.districtManagerDtos[i].managerName === '') {
               console.log('11')
             } else {
               this.thirdArry.push({

@@ -12,7 +12,6 @@
         <el-input v-model="dataForm.remarks" placeholder="备注"></el-input>
       </el-form-item>
       <el-form-item label="统计开始时间:" prop="startTime">
-<!--        <el-input v-model="dataForm.startTime" placeholder="统计开始时间"></el-input>-->
         <div class="block">
           <el-date-picker
             v-model="dataForm.startTime"
@@ -22,7 +21,6 @@
         </div>
       </el-form-item>
       <el-form-item label="统计结束时间:" prop="stopTime">
-<!--        <el-input v-model="dataForm.stopTime" placeholder="统计结束时间"></el-input>-->
         <div class="block">
           <el-date-picker
             v-model="dataForm.stopTime"
@@ -117,9 +115,10 @@
       </el-pagination>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">取消</el-button>
+      <el-button v-if="!buttonVisible" @click="visible = false">取消</el-button>
+      <el-button v-if="buttonVisible"  @click="buttonVisible = false">上一步</el-button>
       <el-button v-if="!buttonVisible" type="primary" @click="nextGetData()">下一步</el-button>
-      <el-button v-if="buttonVisible" type="primary" @click="dataFormSubmit">生成报告</el-button>
+      <el-button v-if="buttonVisible" type="primary" @click="dataFormSubmit()">生成报告</el-button>
     </span>
   </el-dialog>
 </template>
@@ -230,7 +229,34 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$message.error('TOBECONTINUE')
+          // this.$message.error('TOBECONTINUE')
+          this.$http({
+            url: this.$http.adornUrl(`/powercut/report/getAnalysisInfo`),
+            method: 'get',
+            data: this.$http.adornData({
+              'id': this.dataForm.id || undefined,
+              'reportName': this.dataForm.reportName,
+              'startTime': this.dataForm.startTime,
+              'stopTime': this.dataForm.stopTime,
+              'remarks': this.dataForm.remarks,
+              'company': this.dataForm.company,
+              'manager': this.dataForm.manager
+            })
+          }).then(({data}) => {
+            if (data && data.code === 0) {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.visible = false
+                  this.$emit('refreshDataList')
+                }
+              })
+            } else {
+              this.$message.error(data.msg)
+            }
+          })
           // this.$http({
           //   url: this.$http.adornUrl(`/powercut/report/save`),
           //   method: 'post',
