@@ -323,12 +323,10 @@ export default {
         url: this.$http.adornUrl('/powercut/repeatdetailed/districtManager'),
         method: 'get'
       }).then(({data}) => {
-        console.log(data)
         if (data && data.code === 0) {
           this.thirdArry = []
           for (let i = data.districtManagerDtos.length - 1; i >= 0; i--) {
             if (data.districtManagerDtos[i].managerName === 'null' || data.districtManagerDtos[i].managerName == null || data.districtManagerDtos[i].managerName === '') {
-              console.log('11')
             } else {
               this.thirdArry.push({
                 blackoutCount: data.districtManagerDtos[i].blackoutCount,
@@ -336,7 +334,6 @@ export default {
               })
             }
           }
-          console.log('1111111:', this.thirdArry)
           var option = {
             title: {
               text: '台区经理重复停电统计',

@@ -34,9 +34,9 @@
     <el-form-item label="台区经理:" prop="manager">
       <el-input v-model="dataForm.manager" placeholder="台区经理"></el-input>
     </el-form-item>
-    <el-form-item label="用户数量:" prop="userCount">
-      <el-input v-model="dataForm.userCount" placeholder="用户数量"></el-input>
-    </el-form-item>
+<!--    <el-form-item label="用户数量:" prop="userCount">-->
+<!--      <el-input v-model="dataForm.userCount" placeholder="用户数量"></el-input>-->
+<!--    </el-form-item>-->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="visible = false">取消</el-button>

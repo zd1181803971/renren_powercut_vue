@@ -134,7 +134,7 @@
         prop="userName"
         header-align="center"
         align="center"
-        label="台区用户名称">
+        label="用户名称">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="showHandle(scope.row.id)">
             {{scope.row.userName}}
@@ -153,12 +153,12 @@
         align="center"
         label="台区经理">
       </el-table-column>
-      <el-table-column
-        prop="userCount"
-        header-align="center"
-        align="center"
-        label="用户数量">
-      </el-table-column>
+<!--      <el-table-column-->
+<!--        prop="userCount"-->
+<!--        header-align="center"-->
+<!--        align="center"-->
+<!--        label="用户数量">-->
+<!--      </el-table-column>-->
       <el-table-column
         fixed="right"
         header-align="center"

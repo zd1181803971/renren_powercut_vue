@@ -83,6 +83,12 @@
         label="单位名称">
       </el-table-column>
       <el-table-column
+        prop="company"
+        header-align="center"
+        align="center"
+        label="台区名称">
+      </el-table-column>
+      <el-table-column
         prop="blackoutTime"
         header-align="center"
         align="center"
@@ -129,7 +135,16 @@
         align="center"
         label="工作内容">
       </el-table-column>
-
+            <el-table-column
+              fixed="right"
+              header-align="center"
+              align="center"
+              width="150"
+              label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" size="small" @click="addOrUpdateHandle(scope.row.id)">审批</el-button>
+              </template>
+            </el-table-column>
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
