@@ -83,7 +83,7 @@
         label="单位名称">
       </el-table-column>
       <el-table-column
-        prop="company"
+        prop="districtName"
         header-align="center"
         align="center"
         label="台区名称">
@@ -227,10 +227,6 @@ export default {
     // 多选
     selectionChangeHandle (val) {
       this.dataListSelections = val
-    },
-    // 批量审批
-    approvalBatch () {
-      console.log()
     },
     clear () {
       this.dataForm.station = ''

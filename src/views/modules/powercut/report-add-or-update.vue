@@ -50,10 +50,11 @@
           width="50">
         </el-table-column>
         <el-table-column
-          prop="id"
+          prop="index"
           header-align="center"
           align="center"
           label="序号">
+          <template slot-scope="scope">{{ (pageIndex - 1) * pageSize + scope.$index + 1 }}</template>
         </el-table-column>
         <el-table-column
           prop="company"
@@ -528,8 +529,15 @@ export default {
       })
     },
     init (id) {
+      this.dataForm.startTime = ''
+      this.dataForm.stopTime = ''
+      this.dataForm.reportName = ''
+      this.dataForm.station = ''
+      this.dataForm.manager = ''
+      this.dataForm.remarks = ''
       this.formVisible = true
       this.buttonVisible = false
+      this.showVisible = false
       this.dataForm.id = id || 0
       this.visible = true
       this.$nextTick(() => {
@@ -553,36 +561,36 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
+      // this.$refs['dataForm'].validate((valid) => {
+      //   if (valid) {
           // this.$message.error('TOBECONTINUE')
-          this.$http({
-            url: this.$http.adornUrl(`/powercut/report/getAnalysisInfo`),
-            method: 'get',
-            data: this.$http.adornData({
-              'id': this.dataForm.id || undefined,
-              'reportName': this.dataForm.reportName,
-              'startTime': this.dataForm.startTime,
-              'stopTime': this.dataForm.stopTime,
-              'remarks': this.dataForm.remarks,
-              'company': this.dataForm.company,
-              'manager': this.dataForm.manager
-            })
-          }).then(({data}) => {
-            if (data && data.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success',
-                duration: 1500,
-                onClose: () => {
-                  this.visible = false
-                  this.$emit('refreshDataList')
-                }
-              })
-            } else {
-              this.$message.error(data.msg)
+      this.$http({
+        url: this.$http.adornUrl(`/powercut/report/getAnalysisInfo`),
+        method: 'get',
+        data: this.$http.adornData({
+          'id': this.dataForm.id || undefined,
+          'reportName': this.dataForm.reportName,
+          'startTime': this.dataForm.startTime,
+          'stopTime': this.dataForm.stopTime,
+          'remarks': this.dataForm.remarks,
+          'company': this.dataForm.company,
+          'manager': this.dataForm.manager
+        })
+      }).then(({data}) => {
+        if (data && data.code === 0) {
+          this.$message({
+            message: '操作成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.visible = false
+              this.$emit('refreshDataList')
             }
           })
+        } else {
+          this.$message.error(data.msg)
+        }
+      })
           // this.$http({
           //   url: this.$http.adornUrl(`/powercut/report/save`),
           //   method: 'post',
@@ -608,8 +616,8 @@ export default {
           //     this.$message.error(data.msg)
           //   }
           // })
-        }
-      })
+      //   }
+      // })
     },
     // 多选
     selectionChangeHandle (val) {
@@ -618,3 +626,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.customWidth{
+  width:80%;
+}
+</style>

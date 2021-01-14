@@ -357,7 +357,6 @@ export default {
                       show: true,
                       position: 'inside',
                       formatter: function (params) { // 标签内容
-                        console.log(params)
                         if (params.value === 0) {
                           return ''
                         } else return params.value
