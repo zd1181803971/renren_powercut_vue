@@ -145,6 +145,7 @@ export default {
               bottom: '3%',
               containLabel: true
             },
+            color: ['#1890FF', 'green'],
             xAxis: {
               type: 'value',
               boundaryGap: [0, 0.1],
@@ -164,21 +165,49 @@ export default {
                 name: '公变',
                 type: 'bar',
                 stack: '总量',
-                label: {
-                  show: true,
-                  position: 'inside'
-                },
                 data: this.firstArry.map(item => {
                   return item.publicCount
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.data === 0) {
+                          return ''
+                        } else return params.data
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               },
               {
                 name: '专变',
                 type: 'bar',
                 stack: '总量',
-                label: {
-                  show: true,
-                  position: 'insideRight'
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.data === 0) {
+                          return ''
+                        } else return params.data
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
                 },
                 data: this.firstArry.map(item => {
                   return item.privateCount
@@ -226,16 +255,13 @@ export default {
                 return item.category
               })
             },
+
             series: [
               {
                 name: '访问来源',
                 type: 'pie',
                 radius: ['50%', '70%'],
                 avoidLabelOverlap: false,
-                label: {
-                  show: false,
-                  position: 'center'
-                },
                 emphasis: {
                   label: {
                     show: true,
@@ -246,7 +272,25 @@ export default {
                 labelLine: {
                   show: false
                 },
-                data: this.arry
+                data: this.arry,
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.percent === 0) {
+                          return ''
+                        } else return params.percent
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 10,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               }
             ]
           }
@@ -285,6 +329,7 @@ export default {
               bottom: '3%',
               containLabel: true
             },
+            color: ['#1890FF'],
             xAxis: [
               {
                 type: 'category',
@@ -305,7 +350,26 @@ export default {
                 type: 'bar',
                 data: data.placeMatchingDtos.map(item => {
                   return item.matching
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        console.log(params)
+                        if (params.value === 0) {
+                          return ''
+                        } else return params.value
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               }
             ]
           }
@@ -354,9 +418,10 @@ export default {
               bottom: '3%',
               containLabel: true
             },
+            color: ['#1890FF'],
             xAxis: {
               type: 'value',
-              boundaryGap: [0, 2]
+              boundaryGap: [0, 0.1]
             },
             yAxis: {
               type: 'category',
@@ -370,7 +435,25 @@ export default {
                 type: 'bar',
                 data: this.thirdArry.map(item => {
                   return item.blackoutCount
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.value === 0) {
+                          return ''
+                        } else return params.value
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               }
             ]
           }
@@ -409,6 +492,7 @@ export default {
               bottom: '3%',
               containLabel: true
             },
+            color: ['#FACC14', 'green', '#1890FF'],
             xAxis: [
               {
                 type: 'category',
@@ -431,7 +515,25 @@ export default {
                 stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.noCorrectiveCount
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.value === 0) {
+                          return ''
+                        } else return params.value
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               },
               {
                 name: '进行中',
@@ -439,7 +541,25 @@ export default {
                 stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.carryOnCount
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.value === 0) {
+                          return ''
+                        } else return params.value
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               },
               {
                 name: '已整改',
@@ -447,7 +567,25 @@ export default {
                 stack: '搜索引擎',
                 data: data.correctiveActionDtos.map(item => {
                   return item.correctiveCount
-                })
+                }),
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: function (params) { // 标签内容
+                        if (params.value === 0) {
+                          return ''
+                        } else return params.value
+                      },
+                      textStyle: {
+                        color: 'black',
+                        fontSize: 18,
+                        fontWeight: 'bolder'
+                      }
+                    }
+                  }
+                }
               }
             ]
           }
