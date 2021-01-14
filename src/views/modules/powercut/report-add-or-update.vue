@@ -116,14 +116,16 @@
     </div>
     <div v-if="showVisible">
         <div style="text-align: center">
-          <h1>国网山东青州市供电公司台区停电分析报告</h1>
+          <h1>国网山东青州市供电公司</h1>
+          <h1>{{ reportCompany }}供电所</h1>
+          <h1>台区停电分析报告</h1>
           <span>（停电分析针对导入的停电明细进行分析）</span>
         </div>
         <h3> 一、总体情况</h3>
-        <h4>{{ paramOne1 }}至{{ paramOne2 }}，公司共发生台区停电{{ paramOne3 }}台次，涉及10千伏线路{{  paramOne4 }}条，其中公变台区停电{{  paramOne5 }}台次、专变台区停电{{ paramOne6 }}台次，计划停电{{ paramOne7 }}台次、故障停电{{ paramOne8 }}台次。</h4>
+        <h4>{{ paramOne1 }}至{{ paramOne2 }}，{{ reportCompany }}供电所共发生台区停电{{ paramOne3 }}台次，涉及10千伏线路{{  paramOne4 }}条，其中公变台区停电{{  paramOne5 }}台次、专变台区停电{{ paramOne6 }}台次，计划停电{{ paramOne7 }}台次、故障停电{{ paramOne8 }}台次。</h4>
         <h3>二、按责任单位划分</h3>
         <h4>
-          {{ paramTwo1 }}（单位）发生台区停电最多，达到{{ paramTwo2 }}台次；{{ paramTwo3 }}（单位）发生台区重复停电最多，达到{{ paramTwo4 }}台次；3次及以上重停台区数量最多的为{{ paramTwo5 }}（单位），上周新增3次及以上重复停电台区{{ paramTwo6 }}个，分别为{{ paramTwo7 }}（单位）{{ paramTwo8 }}（台区）。</h4>
+          {{ paramTwo1 }}至{{ paramTwo2 }}，共发生重复停电{{ paramTwo3 }}台次。</h4>
         <span>
        <el-table
          :data="twoTable"
@@ -188,7 +190,7 @@
       </span>
         <h3>三、按停电原因划分</h3>
         <h4>
-          {{ paramThree1 }}至{{ paramThree2 }}，公司共计发生计划停电台区{{ paramThree3 }}个，故障停电台区{{ paramThree4 }}个，其中用户原因停电台区{{ paramThree5 }}个、占比{{ paramThree6 }}%，自然因素停电台区{{ paramThree7 }}个、占比{{ paramThree8 }}%，外力因素停电台区{{ paramThree9 }}个、占比{{ paramThree10 }}%，运行维护停电台区{{ paramThree11 }}个、占比{{ paramThree12 }}%，设备原因停电台区{{ paramThree13 }}个、占比{{ paramThree14 }}%，设计施工停电台区{{ paramThree15 }}个、占比{{ paramThree16 }}%，低压表前故障停电台区{{ paramThree17 }}个，占比{{ paramThree18 }}%，低压表后故障停电台区{{ paramThree19 }}个、占比{{ paramThree20 }}%。</h4>
+          {{ paramThree1 }}至{{ paramThree2 }}，{{ reportCompany }}供电所共计发生计划停电台区{{ paramThree3 }}个，故障停电台区{{ paramThree4 }}个，其中用户原因停电台区{{ paramThree5 }}个、占比{{ paramThree6 }}%，自然因素停电台区{{ paramThree7 }}个、占比{{ paramThree8 }}%，外力因素停电台区{{ paramThree9 }}个、占比{{ paramThree10 }}%，运行维护停电台区{{ paramThree11 }}个、占比{{ paramThree12 }}%，设备原因停电台区{{ paramThree13 }}个、占比{{ paramThree14 }}%，设计施工停电台区{{ paramThree15 }}个、占比{{ paramThree16 }}%，低压表前故障停电台区{{ paramThree17 }}个，占比{{ paramThree18 }}%，低压表后故障停电台区{{ paramThree19 }}个、占比{{ paramThree20 }}%。</h4>
         <span>
         <el-table
           :data="threeTable"
@@ -258,7 +260,7 @@
       </el-table>
       </span>
         <h3>四、台区经理停电分析</h3>
-        <h4>{{ paramFour1 }}至{{ paramFour2 }}，停电台区涉及台区经理{{ paramFour3 }}名，其中存在重复停电的台区经理有{{ paramFour4 }}名，重复停电次数最多的台区经理为{{ paramFour5 }}所{{ paramFour6 }}（姓名）。</h4>
+        <h4>{{ paramFour1 }}至{{ paramFour2 }}，{{ reportCompany }}供电所停电台区涉及台区经理{{ paramFour3 }}名，其中存在重复停电的台区经理有{{ paramFour4 }}名，重复停电次数最多的台区经理为{{ paramFour5 }}。</h4>
         <span>
         <el-table
           :data="fourTable"
@@ -338,7 +340,7 @@
       </el-table>
       </span>
         <h3>六、停电报送核查</h3>
-        <h4>{{ paramSix1 }}至{{ paramSix2 }}，各单位累计报送停电台区{{ paramSix3 }}个，其中供电服务指挥系统可靠性模块累计集成、补录停电台区{{ paramSix4 }}个，通过与供服系统停电数据核对，公司总体停电台区报送偏差率为{{ paramSix5 }}%，报送偏差率最大的单位为{{ paramSix6 }}（单位），达到{{ paramSix7 }}%。</h4>
+        <h4>{{ paramSix1 }}至{{ paramSix2 }}，累计报送停电台区{{ paramSix3 }}个，其中供电服务指挥系统可靠性模块累计集成、补录停电台区{{ paramSix4 }}个，通过与供服系统停电数据核对，{{ reportCompany }}供电所总体停电台区报送偏差率为{{ paramSix5 }}%。</h4>
         <span>
         <el-table
           :data="sixTable"
@@ -398,6 +400,7 @@ export default {
         manager: ''
       },
       visible: false,
+      reportCompany: '',
       paramOne1: '',
       paramOne2: '',
       paramOne3: '',
@@ -439,7 +442,6 @@ export default {
       paramFour3: '',
       paramFour4: '',
       paramFour5: '',
-      paramFour6: '',
       paramFive1: '',
       paramFive2: '',
       paramFive3: '',
@@ -453,9 +455,6 @@ export default {
       paramSix3: '',
       paramSix4: '',
       paramSix5: '',
-      paramSix6: '',
-      paramSix7: '',
-
       twoTable: [],
       threeTable: [],
       fourTable: [],

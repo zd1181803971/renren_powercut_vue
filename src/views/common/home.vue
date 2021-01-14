@@ -166,7 +166,7 @@ export default {
                 stack: '总量',
                 label: {
                   show: true,
-                  position: 'insideRight'
+                  position: 'inside'
                 },
                 data: this.firstArry.map(item => {
                   return item.publicCount

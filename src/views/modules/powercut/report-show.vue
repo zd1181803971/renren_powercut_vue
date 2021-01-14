@@ -6,7 +6,10 @@
     <el-form :model="dataForm"  ref="dataForm"
              label-width="130px">
       <div style="text-align: center">
-        <h1>国网山东青州市供电公司台区停电分析报告</h1>
+        <h1>国网山东青州市供电公司</h1>
+        <h1> {{ company }}供电所</h1>
+        <h1>  台区停电分析报告
+        </h1>
         <span>（停电分析针对导入的停电明细进行分析）</span>
       </div>
      <h3> 一、总体情况</h3>
