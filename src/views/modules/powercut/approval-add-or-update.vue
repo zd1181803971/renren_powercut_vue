@@ -45,12 +45,12 @@
           v-model="dataForm.districtCount">
         </el-input>
       </el-form-item>
-      <el-form-item  label="影响用户数量：">
-        <el-input
-          readonly
-          v-model="dataForm.userCount">
-        </el-input>
-      </el-form-item>
+<!--      <el-form-item  label="影响用户数量：">-->
+<!--        <el-input-->
+<!--          readonly-->
+<!--          v-model="dataForm.userCount">-->
+<!--        </el-input>-->
+<!--      </el-form-item>-->
       <el-form-item  label="停电原因：">
         <el-input
           readonly
@@ -143,7 +143,6 @@ export default {
         blackoutTime: '',
         recoveryTime: '',
         districtCount: '',
-        userCount: '',
         reason: '',
         blackoutCount: '',
         jobContent: '',
@@ -168,7 +167,6 @@ export default {
             this.dataForm.blackoutTime = data.plan.blackoutTime
             this.dataForm.recoveryTime = data.plan.recoveryTime
             this.dataForm.districtCount = data.plan.districtCount
-            this.dataForm.userCount = data.plan.userCount
             this.dataForm.reason = data.plan.reason
             this.dataForm.blackoutCount = data.plan.blackoutCount
             this.dataForm.jobContent = data.plan.jobContent

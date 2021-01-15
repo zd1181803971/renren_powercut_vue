@@ -121,13 +121,18 @@
         <span>（停电分析针对导入的停电明细进行分析）</span>
       </div>
       <h3> 一、总体情况</h3>
-      <h4>{{ paramOne1 }}至{{ paramOne2 }}，公司共发生台区停电{{ paramOne3 }}台次，涉及10千伏线路{{  paramOne4 }}条，其中公变台区停电{{  paramOne5 }}台次、专变台区停电{{ paramOne6 }}台次，计划停电{{ paramOne7 }}台次、故障停电{{ paramOne8 }}台次。</h4>
+      <h4>{{ generalSituation.startTime }}至{{ generalSituation.stopTime }}，公司共发生台区停电{{ generalSituation.districtCount }}台次，涉及10千伏线路{{  generalSituation.lineRoadCount }}条，其中公变台区停电{{  generalSituation.commonTransformers }}台次、专变台区停电{{ generalSituation.specialUse }}台次，计划停电{{ generalSituation.planCount }}台次、故障停电{{ generalSituation.faultCount }}台次。</h4>
       <h3>二、按责任单位划分</h3>
       <h4>
-        {{ paramTwo1 }}（单位）发生台区停电最多，达到{{ paramTwo2 }}台次；{{ paramTwo3 }}（单位）发生台区重复停电最多，达到{{ paramTwo4 }}台次；3次及以上重停台区数量最多的为{{ paramTwo5 }}（单位），上周新增3次及以上重复停电台区{{ paramTwo6 }}个，分别为{{ paramTwo7 }}（单位）{{ paramTwo8 }}（台区）。</h4>
+        {{ stationFirstTest.companyMax }}（单位）发生台区停电最多，达到{{ stationFirstTest.countMax }}台次；
+        {{ stationFirstTest.repeatCompanyMax }}（单位）发生台区重复停电最多，
+        达到{{stationFirstTest.repeatCountMax}}台次；
+        3次及以上重停台区数量最多的为{{ stationFirstTest.threeRepeatMax }}（单位），
+        上周新增3次及以上重复停电台区{{ stationFirstTest.lastWeekRepeatCount }}个，
+        分别为{{ stationFirstTest.lastWeekRepeatCompany }}。</h4>
       <span>
        <el-table
-         :data="twoTable"
+         :data="reportFirst"
          border
          v-loading="dataListLoading"
          style="width: 100%;">
@@ -138,49 +143,49 @@
           label="单位名称">
         </el-table-column>
         <el-table-column
-          prop="lineRoadName"
+          prop="countPublic"
           header-align="center"
           align="center"
           label="台区停电总数公变">
         </el-table-column>
         <el-table-column
-          prop="userName"
+          prop="countPrivate"
           header-align="center"
           align="center"
           label="台区停电总数专变">
         </el-table-column>
         <el-table-column
-          prop="userNatrue"
+          prop="repeatCountPublic"
           header-align="center"
           align="center"
           label="重复停电数量公变">
         </el-table-column>
         <el-table-column
-          prop="startTime"
+          prop="repeatCountPrivate"
           header-align="center"
           align="center"
           label="重复停电数量专变">
         </el-table-column>
         <el-table-column
-          prop="stopTime"
+          prop="publicCountThree"
           header-align="center"
           align="center"
           label="公变台区重停3次及以上">
         </el-table-column>
         <el-table-column
-          prop="hourCount"
+          prop="publicCountFive"
           header-align="center"
           align="center"
           label="公变台区重停5次及以上">
         </el-table-column>
         <el-table-column
-          prop="repeatCount"
+          prop="privateCountThree"
           header-align="center"
           align="center"
           label="专变台区重停3次及以上">
         </el-table-column>
         <el-table-column
-          prop="repeatCount"
+          prop="privateCountFive"
           header-align="center"
           align="center"
           label="专变台区重停5次及以上">
@@ -189,10 +194,23 @@
       </span>
       <h3>三、按停电原因划分</h3>
       <h4>
-        {{ paramThree1 }}至{{ paramThree2 }}，公司共计发生计划停电台区{{ paramThree3 }}个，故障停电台区{{ paramThree4 }}个，其中用户原因停电台区{{ paramThree5 }}个、占比{{ paramThree6 }}%，自然因素停电台区{{ paramThree7 }}个、占比{{ paramThree8 }}%，外力因素停电台区{{ paramThree9 }}个、占比{{ paramThree10 }}%，运行维护停电台区{{ paramThree11 }}个、占比{{ paramThree12 }}%，设备原因停电台区{{ paramThree13 }}个、占比{{ paramThree14 }}%，设计施工停电台区{{ paramThree15 }}个、占比{{ paramThree16 }}%，低压表前故障停电台区{{ paramThree17 }}个，占比{{ paramThree18 }}%，低压表后故障停电台区{{ paramThree19 }}个、占比{{ paramThree20 }}%。</h4>
+        {{ stationCount.startTime }}至{{ stationCount.endTime }}，
+        公司共计发生计划停电台区{{stationCount.planCount  }}个，
+        故障停电台区{{stationCount.tempCount  }}个，
+        其中用户原因停电台区{{stationCount.userReasonCount  }}个、
+        占比{{stationCount.userReasonCount2  }}%，
+        自然因素停电台区{{stationCount.ziranCount  }}个、
+        占比{{stationCount.ziranCount2  }}%，
+        外力因素停电台区{{stationCount.wailiCount  }}个、
+        占比{{ stationCount.wailiCount2 }}%，
+        运行维护停电台区{{stationCount.yunweiCount  }}个、占比{{stationCount.yunweiCount2  }}%，
+        设备原因停电台区{{stationCount.shebeiCount  }}个、占比{{stationCount.shebeiCount2  }}%，
+        设计施工停电台区{{stationCount.shejiCount  }}个、占比{{stationCount.shejiCount2  }}%，
+        低压表前故障停电台区{{stationCount.biaoqianCount  }}个，占比{{stationCount.biaoqianCount2  }}%，
+        低压表后故障停电台区{{stationCount.biaohouCount  }}个、占比{{stationCount.biaohouCount2  }}%。</h4>
       <span>
         <el-table
-          :data="threeTable"
+          :data="secondReport"
           border
           v-loading="dataListLoading"
           style="width: 100%;">
@@ -203,55 +221,55 @@
           label="单位名称">
         </el-table-column>
         <el-table-column
-          prop="lineRoadName"
+          prop="planCount"
           header-align="center"
           align="center"
           label="计划停电">
         </el-table-column>
         <el-table-column
-          prop="userName"
+          prop="oneCount"
           header-align="center"
           align="center"
           label="用户原因">
         </el-table-column>
         <el-table-column
-          prop="userNatrue"
+          prop="twoCount"
           header-align="center"
           align="center"
           label="自然因素">
         </el-table-column>
         <el-table-column
-          prop="startTime"
+          prop="threeCount"
           header-align="center"
           align="center"
           label="外力因素">
         </el-table-column>
         <el-table-column
-          prop="stopTime"
+          prop="foreCount"
           header-align="center"
           align="center"
           label="运行维护">
         </el-table-column>
         <el-table-column
-          prop="hourCount"
+          prop="fiveCount"
           header-align="center"
           align="center"
           label="设备原因">
         </el-table-column>
         <el-table-column
-          prop="repeatCount"
+          prop="sixCount"
           header-align="center"
           align="center"
           label="设计施工">
         </el-table-column>
         <el-table-column
-          prop="repeatCount"
+          prop="sevenCount"
           header-align="center"
           align="center"
           label="低压表前">
         </el-table-column>
         <el-table-column
-          prop="repeatCount"
+          prop="eightCount"
           header-align="center"
           align="center"
           label="低压表后">
@@ -259,33 +277,42 @@
       </el-table>
       </span>
       <h3>四、台区经理停电分析</h3>
-      <h4>{{ paramFour1 }}至{{ paramFour2 }}，停电台区涉及台区经理{{ paramFour3 }}名，其中存在重复停电的台区经理有{{ paramFour4 }}名，重复停电次数最多的台区经理为{{ paramFour5 }}所{{ paramFour6 }}（姓名）。</h4>
+      <h4>{{managerName.startTime  }}至{{managerName.endTime  }}，
+        停电台区涉及台区经理{{managerName.managerCount  }}名，
+        其中存在重复停电的台区经理有{{managerName.repeatManagerCount  }}名，
+        重复停电次数最多的台区经理为{{ managerName.company }}所{{managerName.managerName  }}（姓名）。</h4>
       <span>
         <el-table
-          :data="fourTable"
+          :data="reportThree"
           border
           v-loading="dataListLoading"
           style="width: 100%;">
+          <el-table-column
+            prop="company"
+            header-align="center"
+            align="center"
+            label="单位">
+        </el-table-column>
         <el-table-column
-          prop="company"
+          prop="allManagerCount"
           header-align="center"
           align="center"
           label="全部台区经理数量">
         </el-table-column>
         <el-table-column
-          prop="lineRoadName"
+          prop="managerCount"
           header-align="center"
           align="center"
           label="停电台区经理数量">
         </el-table-column>
         <el-table-column
-          prop="userName"
+          prop="repeatManagerCount"
           header-align="center"
           align="center"
           label="重复停电台区经理数量">
         </el-table-column>
         <el-table-column
-          prop="userNatrue"
+          prop="repeatManagerName"
           header-align="center"
           align="center"
           label="重停次数最多的台区经理">
@@ -293,45 +320,57 @@
       </el-table>
       </span>
       <h3>五、重复停电整改情况</h3>
-      <h4>{{ paramFive1 }}至{{ paramFive2 }}，共计发生重复停电台区{{ paramFive3 }}个，其中已制定整改措施台区{{ paramFive4 }}个，已整改完成台区{{ paramFive5 }}个，整改完成率{{ paramFive6 }}%，重停台区沟通回访台区{{ paramFive7 }}个，沟通回访完成率{{ paramFive8 }}%。</h4>
+      <h4>{{five.startTime  }}至{{five.endTime  }}，
+        共计发生重复停电台区{{five.repeatCount }}个，
+        其中已制定整改措施台区{{five.reformCount  }}个，
+        已整改完成台区{{ five.finishCount }}个，
+        整改完成率{{five.finishCount2  }}%，
+        重停台区沟通回访台区{{ five.commCount }}个，
+        沟通回访完成率{{five.commCount2 }}%。</h4>
       <span>
         <el-table
-          :data="fiveTable"
+          :data="reportFour"
           border
           v-loading="dataListLoading"
           style="width: 100%;">
+       <el-table-column
+                    prop="company"
+                    header-align="center"
+                    align="center"
+                    label="单位">
+        </el-table-column>
         <el-table-column
-          prop="company"
+          prop="repeatCount"
           header-align="center"
           align="center"
           label="重停台区数量">
         </el-table-column>
         <el-table-column
-          prop="lineRoadName"
+          prop="reformCount"
           header-align="center"
           align="center"
           label="制定整改措施数量">
         </el-table-column>
         <el-table-column
-          prop="userName"
+          prop="finishCount"
           header-align="center"
           align="center"
           label="已整改数量">
         </el-table-column>
         <el-table-column
-          prop="userNatrue"
+          prop="finishCount2"
           header-align="center"
           align="center"
           label="整改完成率">
         </el-table-column>
         <el-table-column
-          prop="startTime"
+          prop="commCount"
           header-align="center"
           align="center"
           label="沟通回访数量">
         </el-table-column>
         <el-table-column
-          prop="stopTime"
+          prop="commCount2"
           header-align="center"
           align="center"
           label="沟通回访完成率">
@@ -339,33 +378,43 @@
       </el-table>
       </span>
       <h3>六、停电报送核查</h3>
-      <h4>{{ paramSix1 }}至{{ paramSix2 }}，各单位累计报送停电台区{{ paramSix3 }}个，其中供电服务指挥系统可靠性模块累计集成、补录停电台区{{ paramSix4 }}个，通过与供服系统停电数据核对，公司总体停电台区报送偏差率为{{ paramSix5 }}%，报送偏差率最大的单位为{{ paramSix6 }}（单位），达到{{ paramSix7 }}%。</h4>
+      <h4>{{ sixHeaderReport.startTime }}至{{sixHeaderReport.endTime  }}，
+        各单位累计报送停电台区{{sixHeaderReport.stationCount   }}个，
+        其中供电服务指挥系统可靠性模块累计集成、补录停电台区{{sixHeaderReport.stationCount2   }}个，
+        通过与供服系统停电数据核对，公司总体停电台区报送偏差率为{{sixHeaderReport.piancha   }}%，
+        报送偏差率最大的单位为{{sixHeaderReport.companyMax   }}（单位），达到{{sixHeaderReport.piancha2   }}%。</h4>
       <span>
         <el-table
-          :data="sixTable"
+          :data="reportSix"
           border
           v-loading="dataListLoading"
           style="width: 100%;">
+                  <el-table-column
+                    prop="company"
+                    header-align="center"
+                    align="center"
+                    label="单位">
+        </el-table-column>
         <el-table-column
-          prop="company"
+          prop="stationCount"
           header-align="center"
           align="center"
           label="报送停电台区数量">
         </el-table-column>
         <el-table-column
-          prop="lineRoadName"
+          prop="stationCount2"
           header-align="center"
           align="center"
           label="供服系统停电台区数量">
         </el-table-column>
         <el-table-column
-          prop="userName"
+          prop="chazhi"
           header-align="center"
           align="center"
           label="差值">
         </el-table-column>
         <el-table-column
-          prop="userNatrue"
+          prop="piancha"
           header-align="center"
           align="center"
           label="偏差率（%）">
@@ -378,7 +427,7 @@
       <el-button v-if="buttonVisible"  @click="buttonVisible = false">上一步</el-button>
 
       <el-button v-if="!buttonVisible && !showVisible" type="primary" @click="nextGetData()">下一步</el-button>
-      <el-button v-if="buttonVisible && !showVisible" type="primary" @click="buttonVisible = false;formVisible = false;showVisible = true">预览报告</el-button>
+      <el-button v-if="buttonVisible && !showVisible" type="primary" @click="buttonVisible = false;formVisible = false;showVisible = true;showDataList()">预览报告</el-button>
 
       <el-button v-if="showVisible" type="primary" @click="dataFormSubmit()">生成报告</el-button>
     </span>
@@ -399,68 +448,17 @@ export default {
         manager: ''
       },
       visible: false,
-      paramOne1: '',
-      paramOne2: '',
-      paramOne3: '',
-      paramOne4: '',
-      paramOne5: '',
-      paramOne6: '',
-      paramOne7: '',
-      paramOne8: '',
-      paramTwo1: '',
-      paramTwo2: '',
-      paramTwo3: '',
-      paramTwo4: '',
-      paramTwo5: '',
-      paramTwo6: '',
-      paramTwo7: '',
-      paramTwo8: '',
-      paramThree1: '',
-      paramThree2: '',
-      paramThree3: '',
-      paramThree4: '',
-      paramThree5: '',
-      paramThree6: '',
-      paramThree7: '',
-      paramThree8: '',
-      paramThree9: '',
-      paramThree10: '',
-      paramThree11: '',
-      paramThree12: '',
-      paramThree13: '',
-      paramThree14: '',
-      paramThree15: '',
-      paramThree16: '',
-      paramThree17: '',
-      paramThree18: '',
-      paramThree19: '',
-      paramThree20: '',
-      paramFour1: '',
-      paramFour2: '',
-      paramFour3: '',
-      paramFour4: '',
-      paramFour5: '',
-      paramFour6: '',
-      paramFive1: '',
-      paramFive2: '',
-      paramFive3: '',
-      paramFive4: '',
-      paramFive5: '',
-      paramFive6: '',
-      paramFive7: '',
-      paramFive8: '',
-      paramSix1: '',
-      paramSix2: '',
-      paramSix3: '',
-      paramSix4: '',
-      paramSix5: '',
-      paramSix6: '',
-      paramSix7: '',
-      twoTable: [],
-      threeTable: [],
-      fourTable: [],
-      fiveTable: [],
-      sixTable: [],
+      generalSituation: {},
+      stationFirstTest: {},
+      stationCount: {},
+      managerName: {},
+      five: {},
+      sixHeaderReport: {},
+      reportFirst: [],
+      secondReport: [],
+      reportThree: [],
+      reportFour: [],
+      reportSix: [],
       dataList: [],
       pageIndex: 1,
       pageSize: 10,
@@ -484,6 +482,49 @@ export default {
     }
   },
   methods: {
+    formatDateTime  (date) {
+      var y = date.getFullYear()
+      var m = date.getMonth() + 1
+      m = m < 10 ? ('0' + m) : m
+      var d = date.getDate()
+      d = d < 10 ? ('0' + d) : d
+      var h = date.getHours()
+      h = h < 10 ? ('0' + h) : h
+      var minute = date.getMinutes()
+      minute = minute < 10 ? ('0' + minute) : minute
+      var second = date.getSeconds()
+      second = second < 10 ? ('0' + second) : second
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second
+    },
+    // 报告预览
+    showDataList () {
+      // alert('ceshi ')
+      this.$http({
+        url: this.$http.adornUrl('/powercut/report/analysisView'),
+        method: 'post',
+        data: this.$http.adornData({
+          'reportName': this.dataForm.reportName,
+          'startTime': this.formatDateTime(this.dataForm.startTime),
+          'stopTime': this.formatDateTime(this.dataForm.stopTime),
+          'remarks': this.dataForm.remarks
+        })
+      }).then(({data}) => {
+        console.log(data)
+        if (data && data.code === 0) {
+          this.generalSituation = data.analysisView.generalSituation
+          this.stationFirstTest = data.analysisView.stationFirstTest
+          this.stationCount = data.analysisView.stationCount
+          this.managerName = data.analysisView.managerName
+          this.five = data.analysisView.five
+          this.sixHeaderReport = data.analysisView.sixHeaderReport
+          this.reportFirst = data.analysisView.reportFirst
+          this.secondReport = data.analysisView.secondReport
+          this.reportThree = data.analysisView.reportThree
+          this.reportFour = data.analysisView.reportFour
+          this.reportSix = data.analysisView.reportSix
+        }
+      })
+    },
     nextGetData () {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -561,20 +602,14 @@ export default {
     },
     // 表单提交
     dataFormSubmit () {
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-          // this.$message.error('TOBECONTINUE')
       this.$http({
         url: this.$http.adornUrl(`/powercut/report/getAnalysisInfo`),
-        method: 'get',
+        method: 'post',
         data: this.$http.adornData({
-          'id': this.dataForm.id || undefined,
           'reportName': this.dataForm.reportName,
-          'startTime': this.dataForm.startTime,
-          'stopTime': this.dataForm.stopTime,
-          'remarks': this.dataForm.remarks,
-          'company': this.dataForm.company,
-          'manager': this.dataForm.manager
+          'startTime': this.formatDateTime(this.dataForm.startTime),
+          'stopTime': this.formatDateTime(this.dataForm.stopTime),
+          'remarks': this.dataForm.remarks
         })
       }).then(({data}) => {
         if (data && data.code === 0) {
