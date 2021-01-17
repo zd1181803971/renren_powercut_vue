@@ -182,7 +182,8 @@
     },
     methods: {
       downLoad () {
-        this.$message.error('未完成')
+        window.location.href = 'http://111.231.204.126:8082/'
+        // this.$message.error('未完成')
         // this.$http({
         //   url: this.$http.adornUrl('/powercut/report/list'),
         //   method: 'get',

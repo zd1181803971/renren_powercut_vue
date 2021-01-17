@@ -498,6 +498,7 @@ export default {
     },
     // 报告预览
     showDataList () {
+      console.log(this.dataForm.startTime)
       // alert('ceshi ')
       this.$http({
         url: this.$http.adornUrl('/powercut/report/analysisView'),
