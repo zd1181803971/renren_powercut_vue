@@ -21,6 +21,12 @@
           <el-checkbox v-for="role in roleList" :key="role.roleId" :label="role.roleId">{{ role.roleName }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
+      <el-form-item label="职位" prop="isplace">
+        <el-radio-group v-model="dataForm.isplace">
+          <el-radio :label="0">分管领导</el-radio>
+          <el-radio :label="2">部门人员</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="状态" size="mini" prop="status">
         <el-radio-group v-model="dataForm.status">
           <el-radio :label="0">禁用</el-radio>
@@ -72,6 +78,7 @@
           comfirmPassword: '',
           salt: '',
           mobile: '',
+          isplace: '',
           roleIdList: [],
           status: 1
         },
@@ -113,12 +120,15 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
+              console.log(data)
+              console.log(this.roleList)
               if (data && data.code === 0) {
                 this.dataForm.userName = data.user.username
                 this.dataForm.salt = data.user.salt
                 this.dataForm.mobile = data.user.mobile
                 this.dataForm.roleIdList = data.user.roleIdList
                 this.dataForm.status = data.user.status
+                this.dataForm.isplace = data.user.isPlace
               }
             })
           }
@@ -138,6 +148,7 @@
                 'salt': this.dataForm.salt,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
+                'isPlace': this.dataForm.isplace,
                 'roleIdList': this.dataForm.roleIdList
               })
             }).then(({data}) => {

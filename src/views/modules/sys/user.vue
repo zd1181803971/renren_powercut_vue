@@ -43,6 +43,16 @@
         label="手机号">
       </el-table-column>
       <el-table-column
+        prop="isplace"
+        header-align="center"
+        align="center"
+        label="职位">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isPlace === 0" size="small">分管领导</el-tag>
+          <el-tag v-if="scope.row.isPlace === 2" size="small">部门人员</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="status"
         header-align="center"
         align="center"
@@ -121,7 +131,6 @@
             'username': this.dataForm.userName
           })
         }).then(({data}) => {
-          console.log(data)
           if (data && data.code === 0) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
