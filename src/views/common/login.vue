@@ -3,7 +3,7 @@
     <div class="site-content__wrapper">
       <div class="site-content">
         <div class="brand-info">
-          <h2 class="brand-info__text">国网山东青州市台区停电管控系统</h2>
+          <h2 class="brand-info__text">管控平台</h2>
           <p class="brand-info__intro">以减少台区重复停电为目的，建立一套能有效的进行台区停电统计、分析，量化评价不同地域台区重复停电问题的严重程度，宏观掌控台区重复停电情况的管控系统。从而加强对供电所工作的掌握。</p>
         </div>
         <div class="login-main">
