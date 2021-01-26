@@ -115,13 +115,13 @@
           class="upload-demo"
           ref="upload"
           accept=".xls, .xlsx, .csv"
-          :action=uploadUrl
-          :file-list=fileList
+          :action="uploadUrl"
+          :file-list="fileList"
           :auto-upload="false"
           :on-success="onSuccess"
           :on-error="onError"
           :show-file-list="true">
-          <el-button slot="trigger" size="small" type="primary" plain>选取文件</el-button>
+          <el-button id="test1" slot="trigger" size="small" type="primary" plain>选取文件</el-button>
           <el-button type="primary" @click="handleSubmit()">导入</el-button>
         </el-upload>
       </el-form-item>
@@ -310,7 +310,8 @@ export default {
       dataListLoading: false,
       dataListSelections: [],
       addOrUpdateVisible: false,
-      dataArray: ''
+      dataArray: '',
+      filename: ''
     }
   },
   components: {
@@ -321,14 +322,29 @@ export default {
     this.getRepeatruleInfo()
   },
   methods: {
-    onSuccess (res) {
+    test () {
+      document.getElementById('test1').click()
+      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=1'
+      this.$nextTick(() => {
+        this.$refs.upload.submit()
+      })
+    },
+    onSuccess (res, file) {
+      this.$refs.upload.clearFiles()
+      this.filename = file.name
+
       if (res.code === 500) {
-        this.$alert(res.msg, '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            console.log(res.msg)
-            console.log('上传失败')
-          }
+        this.$confirm(res.msg, '出现错误', {
+          confirmButtonText: '继续导入',
+          cancelButtonText: '取消导入',
+          type: 'warning'
+        }).then(() => {
+          this.test()
+        }).catch(() => {
+          this.$message({
+            type: 'warning',
+            message: '取消导入'
+          })
         })
       } if (res.code === 0) {
         this.$alert('上传成功', '提示', {
@@ -351,7 +367,7 @@ export default {
     },
     // 文件上传
     handleSubmit () {
-      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed'
+      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=0'
       this.$nextTick(() => {
         this.$refs.upload.submit()
       })

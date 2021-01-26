@@ -2,8 +2,8 @@
   <nav class="site-navbar" :class="'site-navbar--' + navbarLayoutType">
     <div class="site-navbar__header">
       <h1 class="site-navbar__brand" @click="$router.push({ name: 'home' })">
-        <a class="site-navbar__brand-lg" href="javascript:;">青州市台区停电管控系统</a>
-        <a class="site-navbar__brand-mini" href="javascript:;">管控</a>
+        <a class="site-navbar__brand-lg" href="javascript:;">管控平台</a>
+        <a class="site-navbar__brand-mini" href="javascript:;">管控平台</a>
       </h1>
     </div>
     <div class="site-navbar__body clearfix">
