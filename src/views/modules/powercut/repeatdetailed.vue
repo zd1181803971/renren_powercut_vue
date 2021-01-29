@@ -122,7 +122,7 @@
           :on-error="onError"
           :show-file-list="true">
           <el-button id="test1" slot="trigger" size="small" type="primary" plain>选取文件</el-button>
-          <el-button type="primary" @click="handleSubmit()">导入</el-button>
+          <el-button id="test2" type="primary" @click="handleSubmit()">导入</el-button>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -311,7 +311,8 @@ export default {
       dataListSelections: [],
       addOrUpdateVisible: false,
       dataArray: '',
-      filename: ''
+      filename: '',
+      flag: 0
     }
   },
   components: {
@@ -322,30 +323,32 @@ export default {
     this.getRepeatruleInfo()
   },
   methods: {
-    test () {
-      document.getElementById('test1').click()
-      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=1'
-      this.$nextTick(() => {
-        this.$refs.upload.submit()
-      })
-    },
+
     onSuccess (res, file) {
+      this.flag = 0
       this.$refs.upload.clearFiles()
       this.filename = file.name
-
       if (res.code === 500) {
         this.$confirm(res.msg, '出现错误', {
           confirmButtonText: '继续导入',
           cancelButtonText: '取消导入',
           type: 'warning'
         }).then(() => {
-          this.test()
+          // this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=1'
+          document.getElementById('test1').click()
+          this.flag = 1
+          console.log(this.uploadUrl)
+          this.handleSubmit()
+          // document.getElementById('test2').click()
+          this.flag = 0
         }).catch(() => {
           this.$message({
             type: 'warning',
             message: '取消导入'
           })
+          this.flag = 0
         })
+        this.getDataList()
       } if (res.code === 0) {
         this.$alert('上传成功', '提示', {
           confirmButtonText: '确定',
@@ -357,6 +360,7 @@ export default {
       }
     },
     onError (res) {
+      this.flag = 0
       this.$alert('上传失败', '提示', {
         confirmButtonText: '确定',
         callback: action => {
@@ -367,10 +371,11 @@ export default {
     },
     // 文件上传
     handleSubmit () {
-      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=0'
+      this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=' + this.flag
       this.$nextTick(() => {
         this.$refs.upload.submit()
       })
+      this.flag = 0
     },
     // 获取停电规则信息
     getRepeatruleInfo () {

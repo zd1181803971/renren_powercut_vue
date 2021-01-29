@@ -228,9 +228,9 @@
             confirmButtonText: '确定',
             callback: action => {
               console.log(res)
-              console.log('上传失败')
             }
           })
+          this.getDataList()
         } if (res.code === 0) {
           this.$alert('上传成功', '提示', {
             confirmButtonText: '确定',
