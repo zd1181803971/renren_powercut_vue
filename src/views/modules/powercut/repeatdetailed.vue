@@ -324,10 +324,13 @@ export default {
   },
   methods: {
 
-    onSuccess (res, file) {
+    onSuccess (res, file, fileList) {
+      // console.log(fileList)
+      // console.log(file)
       this.flag = 0
       this.$refs.upload.clearFiles()
-      this.filename = file.name
+      // this.filename = file.name
+      console.log(this.filename)
       if (res.code === 500) {
         this.$confirm(res.msg, '出现错误', {
           confirmButtonText: '继续导入',
@@ -337,6 +340,9 @@ export default {
           // this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=1'
           document.getElementById('test1').click()
           this.flag = 1
+          // this.timer = setTimeout(() => {   // 设置延迟执行
+          //   document.getElementById('test2').click()
+          // }, 3000)
           // document.getElementById('test2').click()
         }).catch(() => {
           this.$message({
@@ -345,13 +351,13 @@ export default {
           })
           this.flag = 0
         })
-        this.getDataList()
       } if (res.code === 0) {
         this.$alert('上传成功', '提示', {
           confirmButtonText: '确定',
           callback: action => {
             console.log(res)
             console.log('上传成功')
+            this.getDataList()
           }
         })
       }
