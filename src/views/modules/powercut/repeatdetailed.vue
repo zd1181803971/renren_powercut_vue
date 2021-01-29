@@ -372,6 +372,7 @@ export default {
     // 文件上传
     handleSubmit () {
       this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=' + this.flag
+      console.log(this.uploadUrl)
       this.$nextTick(() => {
         this.$refs.upload.submit()
       })
