@@ -337,10 +337,7 @@ export default {
           // this.uploadUrl = window.SITE_CONFIG['baseUrl'] + '/powercut/repeatdetailed/importRepeatDetailed?flag=1'
           document.getElementById('test1').click()
           this.flag = 1
-          console.log(this.uploadUrl)
-          this.handleSubmit()
           // document.getElementById('test2').click()
-          this.flag = 0
         }).catch(() => {
           this.$message({
             type: 'warning',
