@@ -25,8 +25,8 @@
         <span>次以上，记为重复停电</span>
       </el-form-item>
       <el-form-item>
-        <el-button @click="getRepeatruleUpdate()" type="info">保存</el-button>
-        <el-button @click="getRepeatruleInfo()" type="warning">取消</el-button>
+        <el-button v-if="isAuth('powercut:repeatrule:update')" @click="getRepeatruleUpdate()" type="info">保存</el-button>
+        <el-button v-if="isAuth('powercut:repeatrule:info')" @click="getRepeatruleInfo()" type="warning">取消</el-button>
       </el-form-item>
       <hr>
       <el-form-item>
